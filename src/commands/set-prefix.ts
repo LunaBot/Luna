@@ -23,6 +23,6 @@ export default {
 
         const store = getStore('default');
         store.prefix = prefix;
-        return `Set prefix to ${prefix}`;
+        return `set prefix to ${prefix}`;
     }
 };

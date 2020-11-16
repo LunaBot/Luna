@@ -52,18 +52,22 @@ export const messageHandler = async (message: Message) => {
 
       console.error(error);
       if (args.length >= 1) {
-        return `\`!${commandName} ${args.join(' ')}\` failed with error "${error.message}"`;
+        return `\`${store.prefix}${commandName} ${args.join(' ')}\` failed with error "${error.message}"`;
       }
 
-      return `\`!${commandName}\` failed with error "${error.message}"`;
+      return `\`${store.prefix}${commandName}\` failed with error "${error.message}"`;
     });
+
+    if (!result) {
+      throw new AppError('No command output');
+    }
 
     message.reply(result);
   } catch (error) {
     if (args.length >= 1) {
-      message.reply(`\`!${commandName} ${args.join(' ')}\` failed with error "${error.message}"`);
+      message.reply(`\`${store.prefix}${commandName} ${args.join(' ')}\` failed with error "${error.message}"`);
     } else {
-      message.reply(`\`!${commandName}\` failed with error "${error.message}"`);
+      message.reply(`\`${store.prefix}${commandName}\` failed with error "${error.message}"`);
     }
   }
 };

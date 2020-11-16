@@ -9,6 +9,9 @@ interface Store {
             roles: string[];
         }
     }
+    channels: {
+        botCommands: string;
+    }
 }
 
 const storeFilePath = path.resolve(__dirname, '..', 'store.json');
@@ -20,6 +23,9 @@ const stores: { [key: string]: Store } = loadJsonFile(storeFilePath, {
             help: {
                 roles: ['@everyone']
             }
+        },
+        channels: {
+            botCommands: ''
         }
     }
 });
