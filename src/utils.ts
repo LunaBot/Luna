@@ -1,6 +1,6 @@
 import fs from 'fs';
 import { client } from './client';
-import type { Command } from './types';
+import type { Command } from './command';
 
 export const getUserFromMention = (mention: string) => {
 	if (!mention) return;

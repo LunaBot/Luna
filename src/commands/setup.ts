@@ -1,9 +1,10 @@
 import { Message, CollectorFilter } from 'discord.js';
+import { Command } from '../command';
 import { AppError } from '../errors';
 import { getUserFromMention } from '../utils';
 
-const waitForAdminRoles = (message: Message) => {
-    const filter: CollectorFilter = (response) => !response.author.bot;
+const filter: CollectorFilter = (response) => !response.author.bot;
+const waitForAdminRoles = async (message: Message) => {
     return message.channel.awaitMessages(filter, { max: 1, time: 10000, errors: ['time'] }).then(collected => {
         return collected.map(answer => getUserFromMention(answer.content)).filter(Boolean);
     }).catch(_collected => {
@@ -11,17 +12,16 @@ const waitForAdminRoles = (message: Message) => {
     });
 };
 
-export default {
-    name: 'setup',
-    command: 'setup',
-    timeout: 5000,
-    description: 'Set me up captain!',
-    hidden: true,
-    owner: false,
-    examples: [],
-    roles: [
-        'test-role'
-    ],
+class Setup extends Command {
+    public name = 'setup';
+    public command = 'setup';
+    public timeout = 5000;
+    public description = 'Set me up captain!';
+    public hidden = true;
+    public owner = false;
+    public examples = [];
+    public roles = [ 'test-role'  ];
+
     async handler(_prefix: string, message: Message, _args: string[]) {
         // What roles do admins have?
             // Please tag the admin's role
@@ -49,3 +49,5 @@ export default {
         return `${mentioned.map(user => `@${user?.username}`)} have been marked as admin roles!`;
     }
 };
+
+export default new Setup();

@@ -1,18 +1,18 @@
 import { Message } from 'discord.js';
 import { AppError, InvalidCommandError } from '../errors';
 import { getServer } from '../servers';
+import { Command } from '../command';
 
-export default {
-    name: 'Set bot commands channel',
-    command: 'set-bot-commands-channel',
-    timeout: 5000,
-    description: 'Set the room where the bot should post startup/shutdown messages.',
-    hidden: false,
-    owner: false,
-    examples: [],
-    roles: [
-        'test-role'
-    ],
+class SetBotCommandsChannel extends Command {
+    public name =  'Set bot commands channel';
+    public command =  'set-bot-commands-channel';
+    public timeout =  5000;
+    public description =  'Set the room where the bot should post startup/shutdown messages.';
+    public hidden =  false;
+    public owner =  false;
+    public examples =  [];
+    public roles = [ 'test-role' ];
+
     async handler(prefix: string, _message: Message, args: string[]) {
         // We need at least 1 argument
         if (args.length === 0) {
@@ -30,3 +30,5 @@ export default {
         return `set commands channel to ${commandsChannel}`;
     }
 };
+
+export default new SetBotCommandsChannel();

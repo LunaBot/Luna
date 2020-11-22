@@ -1,35 +1,6 @@
-import { MessageEmbed, Message } from 'discord.js';
-import { InvalidCommandError } from '../errors';
+import { MessageEmbed } from 'discord.js'
 
-const generateHelp = (prefix: string) => {
-    return new MessageEmbed()
-        .setColor('#0099ff')
-        .setURL('https://discord.js.org/')
-        .setAuthor('@automod')
-        .addFields({
-            name: 'Moderator',
-            value: `\`${prefix}help moderator\``
-        }, {
-            name: 'Member',
-            value: `\`${prefix}help member\``
-        });
-};
-
-const generateMemberHelp = (prefix: string) => {
-    return new MessageEmbed()
-        .setColor('#0099ff')
-        .setURL('https://discord.js.org/')
-        .setAuthor('@automod')
-        .addFields({
-            name: 'Moderator',
-            value: `\`${prefix}help moderator\``
-        }, {
-            name: 'Member',
-            value: `\`${prefix}help member\``
-        });
-};
-
-const generateModHelp = (prefix: string) => {
+export const moderator = (prefix: string) => {
     return new MessageEmbed()
         .setColor('#0099ff')
         .setURL('https://discord.js.org/')
@@ -80,33 +51,4 @@ const generateModHelp = (prefix: string) => {
             name: '`!warn [member] (optional reason)`',
             value: 'Warns a member'
         });
-};
-
-export default {
-    name: 'help',
-    command: 'help',
-    timeout: 5000,
-    description: 'Show help',
-    hidden: false,
-    owner: false,
-    examples: [],
-    roles: [
-        '@everyone'
-    ],
-    async handler(prefix: string, _message: Message, args: string[]) {
-        const role = args[0];
-        if (!role) {
-            return generateHelp(prefix);
-        }
-
-        if (role === 'moderator') {
-            return generateModHelp(prefix);
-        }
-
-        if (role === 'member') {
-            return generateMemberHelp(prefix);
-        }
-
-        throw new InvalidCommandError(prefix, 'help', args);
-    }
 };

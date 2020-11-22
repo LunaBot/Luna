@@ -2,7 +2,7 @@ import { Message, MessageEmbed } from 'discord.js';
 import commands from './index';
 import { getServer } from '../servers';
 import { getCommandHelp } from '../utils';
-import type { Command } from '../types';
+import type { Command } from '../command';
 import { InvalidCommandError } from '../errors';
 import { log } from '../log';
 

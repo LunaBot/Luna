@@ -16,8 +16,6 @@ export const message = async (message: Message) => {
   // Skip bot messages
   if (message.author.bot) return;
 
-  log.debug('message.guild.id', message.guild?.id);
-
   // Skip messages without our prefix
   const server = getServer(message.guild!.id);
   if (!message.content.startsWith(server.prefix)) return;
@@ -72,7 +70,7 @@ export const message = async (message: Message) => {
     }
 
     // Run the command
-    const commandPromise = command.handler(server.prefix, message, args);
+    const commandPromise = Promise.resolve(command.handler(server.prefix, message, args));
     const result = await promiseTimeout(commandPromise, command.timeout ?? FIVE_SECONDS).catch(error => {
       if (error instanceof AppError) {
         return error.message;
@@ -87,6 +85,11 @@ export const message = async (message: Message) => {
 
     if (!result) {
       throw new AppError('No command output');
+    }
+
+    // If result is stirng and starts with a capital
+    if (typeof result === 'string' && /^[A-Z]/.test(result)) {
+      log.warn(`Command output started with a capital "${result}".`);
     }
 
     message.reply(result);

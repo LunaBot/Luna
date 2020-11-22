@@ -1,6 +1,5 @@
-// import { Message } from 'discord.js';
-// import pTimeout from 'p-timeout';
-// import { getServer } from '../servers';
+import { Message } from 'discord.js';
+import { getServer } from '../servers';
 // import _commands from '../commands';
 // import { config } from '../config';
 // import botCommand from '../commands/bot';
@@ -9,19 +8,16 @@ import { log } from '../log';
 
 // const getCommand = (commandName: string) => _commands.find(_command => _command.name === commandName);
 
-export const messageUpdate = async (...args: any[]) => {
-  log.info('messageUpdate', ...args);
-  // // Skip bot messages
-  // if (message.author.bot) return;
+export const messageUpdate = async (_oldMessage: Message, newMessage: Message) => {
+  // Skip bot messages
+  if (newMessage.author.bot) return;
 
-  // log.debug('message.guild.id', message.guild?.id);
+  // Skip messages without our prefix
+  const server = getServer(newMessage.guild!.id);
+  if (!newMessage.content.startsWith(server.prefix)) return;
 
-  // // Skip messages without our prefix
-  // const server = getServer(message.guild!.id);
-  // if (!message.content.startsWith(server.prefix)) return;
-
-  // // Log full message
-  // log.debug(`[${message.author.tag}]: ${message.content}`);
+  // Log full message
+  log.debug(`[${newMessage.author.tag}]: ${newMessage.content}`);
 
   // const _commandBody = message.content.slice(server.prefix.length);
   // const commandBody = _commandBody.split('\n')[0];

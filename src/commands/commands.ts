@@ -1,19 +1,18 @@
 import { MessageEmbed, Message } from 'discord.js';
 import commands from './index';
 import { getCommandHelp } from '../utils';
-import type { Command } from '../types';
+import { Command } from '../command';
 
-export default {
-    name: 'commands',
-    command: 'commands',
-    timeout: 5000,
-    description: 'Print all commands you have access to.',
-    hidden: false,
-    owner: false,
-    examples: [],
-    roles: [
-        '@everyone'
-    ],
+class Commands extends Command {
+    public name = 'commands';
+    public command = 'commands';
+    public timeout = 5000;
+    public description = 'Print all commands you have access to.';
+    public hidden = false;
+    public owner = false;
+    public examples = [];
+    public roles = [ '@everyone' ];
+
     async handler(_prefix: string, message: Message, _args: string[]) {
         const _commandsUserCanAccess = (commands as Command[]).filter(command => message.member?.roles.cache.some(role => command.roles.includes(role.name)));
         const commandsUserCanAccess = _commandsUserCanAccess.filter(command => !command.hidden);
@@ -28,3 +27,5 @@ export default {
         return embed;
     }
 };
+
+export default new Commands();

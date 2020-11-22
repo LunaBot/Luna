@@ -1,41 +1,36 @@
-
 import { Message } from 'discord.js';
+import { Command } from '../command';
 
-export default {
-    name: 'clear',
-    command: 'clear',
-    timeout: 5000,
-    description: 'Clear messages',
-    hidden: false,
-    owner: false,
-    examples: [
-        '!clear 1',
-        '!clear 10',
-        '!clear 25',
-        '!clear 100'
-    ],
-    roles: [
-        'server-mod'
-    ],
+class Clear extends Command {
+    public name = 'clear';
+    public command = 'clear';
+    public timeout = 5000;
+    public description = 'Clear messages';
+    public hidden = false;
+    public owner = false;
+    public examples = [ '!clear 1', '!clear 10', '!clear 25', '!clear 100' ];
+    public roles = [ 'server-mod' ];
+
     async handler(_prefix: string, message: Message, args: string[]) {
         // Amount of messages which should be deleted
         const amount = parseInt(args[0], 10);
         const channel = message.channel;
 
-        if (!amount) return 'You haven\'t given an amount of messages which should be deleted!';
-        if (isNaN(amount as unknown as number)) return 'The amount parameter isn`t a number!';
-
-        if (amount > 100) return 'You can`t delete more than 100 messages at once!';
-        if (amount < 1) return 'You have to delete at least 1 message!';
+        // Validate amount
+        if (!amount) return `you didn't provide a number of messages to be deleted!`;
+        if (amount > 100) return `you can't delete more than 100 messages at once!`;
+        if (amount < 1) return 'you have to delete at least 1 message!';
 
         // Don't allow clearing in DM channels
-        if (channel.type === 'dm') return `You can't use the \`clear\` command in a DM channel.`;
+        if (channel.type === 'dm') return 'you can\'t use the `clear` command in a DM channel.';
 
         const messages = await message.channel.messages.fetch({ limit: amount });
 
         // Bulk delete all messages that've been fetched and aren't older than 14 days (due to the Discord API)
-        await channel.bulkDelete(messages);
+        const { size: messageCount } = await channel.bulkDelete(messages);
 
-        return `deleted ${amount} messages!`;
+        return `deleted ${messageCount} messages!`;
     }
 };
+
+export default new Clear();

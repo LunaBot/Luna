@@ -34,7 +34,7 @@ const servers: Servers = loadJsonFile(serversFilePath, {
     }
 });
 
-export const serversCount = Object.keys(servers).length - 1;
+export const serversCount = servers ? Object.keys(servers).length - 1 : 0;
 
 export const getServer = (serverId: string): Server => {
     if (!Object.keys(servers).includes(serverId)) {

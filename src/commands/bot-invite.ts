@@ -3,15 +3,15 @@ import { client } from '../client';
 import { AppError } from '../errors';
 import { Command } from '../command';
 
-class Bot extends Command {
-    public name =  'bot';
-    public command =  'bot';
-    public timeout =  5000;
-    public description =  'Internal bot commands';
-    public hidden =  true;
-    public owner =  true;
-    public examples =  [ '!bot log-level', '!bot log-level info', '!bot log-level debug', '!bot log-level trace'];
-    public roles =  [];
+class BotInvite extends Command {
+    public name = 'bot-invite';
+    public command = 'bot-invite';
+    public timeout = 1000;
+    public description = 'Generate an invite for this bot';
+    public hidden = false;
+    public owner = false;
+    public examples = [ '!bot-invite' ];
+    public roles = [ '@everyone' ];
 
     async handler(_prefix: string, _message: Message, _args: string[]) {
         const clientId = client.user?.id;
@@ -23,4 +23,4 @@ class Bot extends Command {
     } 
 };
 
-export default new Bot();
+export default new BotInvite();

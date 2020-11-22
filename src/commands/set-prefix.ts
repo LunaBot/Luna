@@ -1,18 +1,18 @@
 import { Message } from 'discord.js';
 import { AppError, InvalidCommandError } from '../errors';
 import { getServer, saveServers } from '../servers';
+import { Command } from '../command';
 
-export default {
-    name: 'set-prefix',
-    command: 'set-prefix',
-    timeout: 5000,
-    description: 'Change the bot\'s prefix. The default is `!`. Use `@automod reset-prefix` to reset.',
-    hidden: false,
-    owner: false,
-    examples: [],
-    roles: [
-        'test-role'
-    ],
+class SetPrefix extends Command {
+    public name = 'set-prefix';
+    public command = 'set-prefix';
+    public timeout = 5000;
+    public description = 'Change the bot\'s prefix. The default is `!`. Use `@automod reset-prefix` to reset.';
+    public hidden = false;
+    public owner = false;
+    public examples = [];
+    public roles = [ 'test-role' ];
+
     async handler(_prefix: string, _message: Message, args: string[]) {
         // We need at least 1 argument
         if (args.length === 0) {
@@ -31,3 +31,5 @@ export default {
         return `set prefix to ${prefix}`;
     }
 };
+
+export default new SetPrefix();

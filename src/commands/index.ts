@@ -1,4 +1,5 @@
 import bot from './bot';
+import botInvite from './bot-invite';
 import clear from './clear';
 import command from './command';
 import commandHelp from './command-help';
@@ -8,10 +9,12 @@ import ping from './ping';
 import setBotCommandsChannel from './set-bot-commands-channel';
 import setPrefix from './set-prefix';
 import setup from './setup';
-import type { Command } from '../types';
+import random from './random';
+import type { Command } from '../command';
 
 const _commands: Command[] = [
     bot,
+    botInvite,
     clear,
     command,
     commandHelp,
@@ -20,7 +23,8 @@ const _commands: Command[] = [
     ping,
     setBotCommandsChannel,
     setPrefix,
-    setup
+    setup,
+    random
 ];
 
 export default _commands;
