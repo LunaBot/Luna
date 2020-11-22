@@ -5,10 +5,18 @@ export default {
     name: 'clear',
     command: 'clear',
     description: 'Clear messages',
+    hidden: false,
+    owner: false,
+    examples: [
+        '!clear 1',
+        '!clear 10',
+        '!clear 25',
+        '!clear 100'
+    ],
     roles: [
         'server-mod'
     ],
-    async handler(message: Message, args: string[]) {
+    async handler(_prefix: string, message: Message, args: string[]) {
         // Amount of messages which should be deleted
         const amount = parseInt(args[0], 10);
         const channel = message.channel;

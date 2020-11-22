@@ -1,0 +1,28 @@
+{
+  "default": {
+    "prefix": "!",
+    "commands": {
+      "help": {
+        "roles": [
+          "@everyone"
+        ]
+      }
+    },
+    "channels": {
+      "botCommands": "777464389728862271"
+    }
+  },
+  "777464389728862268": {
+    "prefix": "$",
+    "commands": {
+      "help": {
+        "roles": [
+          "@everyone"
+        ]
+      }
+    },
+    "channels": {
+      "botCommands": "777464389728862271"
+    }
+  }
+}

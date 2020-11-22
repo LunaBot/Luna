@@ -1,10 +1,12 @@
+import { format } from 'util';
+
 /**
  * Generic application error.
  */
 export class AppError extends Error {
-	constructor(message: string) {
+	constructor(message: string, ...args: any[]) {
 		// Calling parent constructor of base Error class.
-		super(message);
+		super(format(message, ...args));
 
 		// Saving class name in the property of our custom error as a shortcut.
 		this.name = this.constructor.name;

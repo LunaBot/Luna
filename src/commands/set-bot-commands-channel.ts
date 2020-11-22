@@ -1,18 +1,21 @@
 import { Message } from 'discord.js';
 import { AppError, InvalidCommandError } from '../errors';
-import { getStore } from '../store';
+import { getServer } from '../servers';
 
 export default {
-    name: 'set-bot-commands-channel',
+    name: 'Set bot commands channel',
     command: 'set-bot-commands-channel',
     description: 'Set the room where the bot should post startup/shutdown messages.',
+    hidden: false,
+    owner: false,
+    examples: [],
     roles: [
         'test-role'
     ],
-    async handler(message: Message, args: string[]) {
+    async handler(prefix: string, _message: Message, args: string[]) {
         // We need at least 1 argument
         if (args.length === 0) {
-            throw new InvalidCommandError('set-bot-commands-channel', args);
+            throw new InvalidCommandError(prefix, 'set-bot-commands-channel', args);
         }
 
         // We need no more than 32 characters
@@ -21,7 +24,7 @@ export default {
             throw new AppError('Invalid channel ID!');
         }
 
-        const store = getStore('default');
+        const store = getServer(_message.guild?.id || 'default');
         store.channels.botCommands = commandsChannel;
         return `set commands channel to ${commandsChannel}`;
     }

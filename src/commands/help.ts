@@ -1,44 +1,41 @@
 import { MessageEmbed, Message } from 'discord.js';
 import { InvalidCommandError } from '../errors';
-import { getStore } from '../store';
 
-const generateHelp = () => {
-    const store = getStore('default');
+const generateHelp = (prefix: string) => {
     return new MessageEmbed()
         .setColor('#0099ff')
         .setURL('https://discord.js.org/')
         .setAuthor('@automod')
         .addFields({
             name: 'Moderator',
-            value: `\`${store.prefix}help moderator\``
+            value: `\`${prefix}help moderator\``
         }, {
             name: 'Member',
-            value: `\`${store.prefix}help member\``
+            value: `\`${prefix}help member\``
         });
 };
 
-const generateMemberHelp = () => {
-    const store = getStore('default');
+const generateMemberHelp = (prefix: string) => {
     return new MessageEmbed()
         .setColor('#0099ff')
         .setURL('https://discord.js.org/')
         .setAuthor('@automod')
         .addFields({
             name: 'Moderator',
-            value: `\`${store.prefix}help moderator\``
+            value: `\`${prefix}help moderator\``
         }, {
             name: 'Member',
-            value: `\`${store.prefix}help member\``
+            value: `\`${prefix}help member\``
         });
 };
 
-const generateModHelp = () => {
+const generateModHelp = (prefix: string) => {
     return new MessageEmbed()
         .setColor('#0099ff')
         .setURL('https://discord.js.org/')
         .setAuthor('Moderator Plugin')
         .addFields({
-            name: '`!ban [member] (optional reason)`',
+            name: `\`${prefix}ban [member] (optional reason)\``,
             value: 'Bans a member from the server'
         }, {
             name: '`!tempban [member] [duration] (optional reason)`',
@@ -89,23 +86,26 @@ export default {
     name: 'help',
     command: 'help',
     description: 'Show help',
+    hidden: false,
+    owner: false,
+    examples: [],
     roles: [
         '@everyone'
     ],
-    async handler(message: Message, args: string[]) {
+    async handler(prefix: string, _message: Message, args: string[]) {
         const role = args[0];
         if (!role) {
-            return generateHelp();
+            return generateHelp(prefix);
         }
 
         if (role === 'moderator') {
-            return generateModHelp();
+            return generateModHelp(prefix);
         }
 
         if (role === 'member') {
-            return generateMemberHelp();
+            return generateMemberHelp(prefix);
         }
 
-        throw new InvalidCommandError('help', args);
+        throw new InvalidCommandError(prefix, 'help', args);
     }
 };

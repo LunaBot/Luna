@@ -1,6 +1,5 @@
 import fs from 'fs';
 import { client } from './client';
-import { getStore } from './store';
 import type { Command } from './types';
 
 export const getUserFromMention = (mention: string) => {
@@ -17,10 +16,9 @@ export const getUserFromMention = (mention: string) => {
 	}
 };
 
-export const getCommandHelp = (command: Command, prefix?: string) => {
-	const store = getStore('default');
+export const getCommandHelp = (command: Command, prefix: string ='!') => {
 	return {
-		name: `\`${prefix ?? store.prefix}${command.name}\``,
+		name: `\`${prefix}${command.command}\``,
 		value: command.description
 	};
 };
