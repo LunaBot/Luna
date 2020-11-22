@@ -5,6 +5,7 @@ import { getServer } from '../servers';
 export default {
     name: 'Set bot commands channel',
     command: 'set-bot-commands-channel',
+    timeout: 5000,
     description: 'Set the room where the bot should post startup/shutdown messages.',
     hidden: false,
     owner: false,

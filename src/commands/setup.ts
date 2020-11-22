@@ -14,6 +14,7 @@ const waitForAdminRoles = (message: Message) => {
 export default {
     name: 'setup',
     command: 'setup',
+    timeout: 5000,
     description: 'Set me up captain!',
     hidden: true,
     owner: false,

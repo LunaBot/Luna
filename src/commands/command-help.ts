@@ -7,6 +7,7 @@ import { InvalidCommandError } from '../errors';
 export default {
     name: 'Command help',
     command: 'command-help',
+    timeout: 5000,
     description: 'Show command help.',
     hidden: false,
     owner: false,

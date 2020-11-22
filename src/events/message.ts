@@ -1,13 +1,16 @@
 import { Message } from 'discord.js';
-import pTimeout from 'p-timeout';
 import { getServer } from '../servers';
 import _commands from '../commands';
 import { config } from '../config';
 import botCommand from '../commands/bot';
 import { log } from '../log';
+import { promiseTimeout } from '../utils';
 import { AppError, InvalidCommandError, CommandPermissionError, MultiLinePermissionError } from '../errors';
 
 const getCommand = (commandName: string) => _commands.find(_command => _command.name === commandName);
+
+// In milliseconds
+const FIVE_SECONDS = 5000;
 
 export const message = async (message: Message) => {
   // Skip bot messages
@@ -70,7 +73,7 @@ export const message = async (message: Message) => {
 
     // Run the command
     const commandPromise = command.handler(server.prefix, message, args);
-    const result = await pTimeout(commandPromise, 300).catch(error => {
+    const result = await promiseTimeout(commandPromise, command.timeout ?? FIVE_SECONDS).catch(error => {
       if (error instanceof AppError) {
         return error.message;
       }

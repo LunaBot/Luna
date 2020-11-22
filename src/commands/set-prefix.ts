@@ -5,6 +5,7 @@ import { getServer, saveServers } from '../servers';
 export default {
     name: 'set-prefix',
     command: 'set-prefix',
+    timeout: 5000,
     description: 'Change the bot\'s prefix. The default is `!`. Use `@automod reset-prefix` to reset.',
     hidden: false,
     owner: false,

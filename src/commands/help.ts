@@ -85,6 +85,7 @@ const generateModHelp = (prefix: string) => {
 export default {
     name: 'help',
     command: 'help',
+    timeout: 5000,
     description: 'Show help',
     hidden: false,
     owner: false,

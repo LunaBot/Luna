@@ -3,6 +3,10 @@ import { Message, APIMessageContentResolvable, MessageOptions, MessageAdditions 
 export interface Command {
     name: string;
     command: string;
+    /**
+     * How long this command should wait in <ms> before timing out
+     */
+    timeout: number;
     description: string;
     /**
      * Which server roles have access

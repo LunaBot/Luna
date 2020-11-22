@@ -34,7 +34,7 @@ class Logger {
     private _log(level: typeof levels[number], message: string, args: any[]) {
         const prefix = `[${this.addColourToString(this.colour(level), level)}] [${this.name}] `;
         const _message = util.format(message, ...args);
-        console[level].call(console, _message.split('\n').map(line => `${prefix}${line}`).join('\n'));
+        console[level].call(console, `${prefix}${_message}`);
     }
 
     private _getLineInfo(offset = 0) {

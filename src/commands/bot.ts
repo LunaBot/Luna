@@ -1,9 +1,9 @@
 import { Message } from 'discord.js';
-import { AppError } from '../errors';
 
 export default {
     name: 'bot',
     command: 'bot',
+    timeout: 5000,
     description: 'Internal bot commands',
     hidden: true,
     owner: true,
@@ -15,6 +15,10 @@ export default {
     ],
     roles: [],
     async handler(_prefix: string, _message: Message, _args: string[]) {
-        throw new AppError('test!');
+        setTimeout(() => {
+            process.exit(0);
+        }, 500);
+
+        return 'restarting bot, please wait...';
     }
 };

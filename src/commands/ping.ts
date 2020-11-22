@@ -3,6 +3,7 @@ import { Message } from 'discord.js';
 export default {
     name: 'ping',
     command: 'ping',
+    timeout: 5000,
     description: 'Check the bot\'s latency.',
     hidden: false,
     owner: false,

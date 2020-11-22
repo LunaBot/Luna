@@ -9,6 +9,7 @@ import { log } from '../log';
 export default {
     name: 'command',
     command: 'command',
+    timeout: 5000,
     description: 'Show command help.',
     hidden: false,
     owner: false,

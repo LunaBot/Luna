@@ -4,6 +4,7 @@ import { Message } from 'discord.js';
 export default {
     name: 'clear',
     command: 'clear',
+    timeout: 5000,
     description: 'Clear messages',
     hidden: false,
     owner: false,

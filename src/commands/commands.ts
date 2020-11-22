@@ -6,6 +6,7 @@ import type { Command } from '../types';
 export default {
     name: 'commands',
     command: 'commands',
+    timeout: 5000,
     description: 'Print all commands you have access to.',
     hidden: false,
     owner: false,
