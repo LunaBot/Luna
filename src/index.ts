@@ -17,10 +17,10 @@ try {
     });
 
     // Login to the bot
-    client.login(config.BOT_TOKEN);
-
-    // Success we're online!
-    log.debug('@automod online!');
+    client.login(config.BOT_TOKEN).then(() => {
+        // Success we're online!
+        log.debug('@automod online!');
+    });
 } catch (error) {
     log.error('Failed to load bot: %s', error.message);
 }

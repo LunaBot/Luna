@@ -1,4 +1,4 @@
-import { Message, APIMessageContentResolvable, MessageOptions, MessageAdditions } from 'discord.js';
+import type { Message, APIMessageContentResolvable, MessageOptions, MessageAdditions } from 'discord.js';
 
 const ONE_SECOND = 1000;
 const FIVE_SECONDS = ONE_SECOND * 5;

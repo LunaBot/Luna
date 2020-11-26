@@ -1,4 +1,4 @@
-import { Message, CollectorFilter } from 'discord.js';
+import type { Message, CollectorFilter } from 'discord.js';
 import { Command } from '../command';
 import { AppError } from '../errors';
 import { getUserFromMention } from '../utils';

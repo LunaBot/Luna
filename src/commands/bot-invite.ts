@@ -1,4 +1,4 @@
-import { Message } from 'discord.js';
+import type { Message } from 'discord.js';
 import { client } from '../client';
 import { AppError } from '../errors';
 import { Command } from '../command';

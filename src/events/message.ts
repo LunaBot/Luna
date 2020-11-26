@@ -1,4 +1,4 @@
-import { Message } from 'discord.js';
+import type { Message } from 'discord.js';
 import { getServer } from '../servers';
 import _commands from '../commands';
 import { config } from '../config';
