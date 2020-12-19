@@ -1,7 +1,6 @@
 import * as events from './events';
 import { client } from './client';
 import { config } from './config';
-import { saveServers } from './servers';
 import { log } from './log';
 import { AppError } from './errors';
 
@@ -34,10 +33,5 @@ try {
     });
 } catch (error) {
     log.error('Failed to load bot: %s', error.message);
-}
-
-// Offload store to file on exit
-process.on('SIGINT', () => {
-    saveServers();
     process.exit();
-});
+}
