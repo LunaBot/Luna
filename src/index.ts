@@ -3,8 +3,19 @@ import { client } from './client';
 import { config } from './config';
 import { saveServers } from './servers';
 import { log } from './log';
+import { AppError } from './errors';
 
 try {
+    // No discord token
+    if (!process.env.BOT_TOKEN) {
+        throw new AppError('No BOT_TOKEN env set!');
+    }
+
+    // No discord owner info
+    if (!process.env.OWNER_ID|| !process.env.OWNER_SERVER) {
+        throw new AppError('OWNER_ID and OWNER_SERVER envs both need to be set!');
+    }
+
     // Register all events
     Object.entries(events).forEach(([eventName, eventHandler]) => {
         client.on(eventName, (...args: any[]) => {
