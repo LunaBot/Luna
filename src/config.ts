@@ -1,14 +1,15 @@
-import path from 'path';
-import { loadJsonFile } from './utils';
-
 interface config {
-    BOT_TOKEN: string;
+    BOT_TOKEN?: string;
     OWNER: {
-        ID: string;
-        SERVER: string;
+        ID?: string;
+        SERVER?: string;
     };
 }
 
-// @ts-ignore
-export const config: config = loadJsonFile(path.resolve(__dirname, '..', 'config.json'));
-// export const config: typeof import('../config.json') = loadJsonFile(path.resolve(__dirname, '..', 'config.json'));
+export const config: config = {
+    BOT_TOKEN: process.env.BOT_TOKEN,
+    OWNER: {
+        ID: process.env.OWNER_ID,
+        SERVER: process.env.OWNER_SERVER
+    }
+};
