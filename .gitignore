@@ -2,3 +2,5 @@ node_modules
 dist
 config.json
 servers.json
+.ultra.cache.json
+.DS_Store
