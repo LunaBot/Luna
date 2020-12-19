@@ -4,7 +4,7 @@
   "description": "",
   "main": "dist/index.js",
   "scripts": {
-    "prestart": "npm run build",
+    "prestart": "npm run bundle",
     "prestart-debug": "npm run bundle",
     "start": "node dist/index.js",
     "start-debug": "DEBUG=true LOG_LEVEL=silly node dist/index.js",
