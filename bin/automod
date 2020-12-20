@@ -8,7 +8,7 @@ const log = new Logger();
 try {
     const entryFile = path.resolve(__dirname, 'dist', 'index.js');
 
-    // Files not built
+    // Files aren't built
     if (!fs.existsSync(entryFile)) {
         throw new Error(`Entry file "${entryFile}" is missing.`);
     }
@@ -16,7 +16,7 @@ try {
     // Run bot
     require(entryFile);
 } catch (error) {
-    log.trace(error);
+    log.info(error.stack);
     process.exitCode = 1;
     process.exit();
 }

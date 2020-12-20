@@ -2,10 +2,9 @@
   "name": "automod",
   "version": "0.0.1",
   "description": "",
-  "main": "index.js",
   "scripts": {
-    "start": "node index.js",
-    "start-debug": "DEBUG=true LOG_LEVEL=silly node dist/index.js",
+    "start": "./bin/automod",
+    "start-debug": "DEBUG=true LOG_LEVEL=silly ./bin/automod",
     "test": "echo \"Error: no test specified\" && exit 1",
     "build": "npm run bundle-minify",
     "bundle": "npx tsup ./src/index.ts",
