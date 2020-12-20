@@ -32,7 +32,7 @@ export const loadJsonFile = (fileLocation: string, object?: object) => {
         if (error.code === 'ENOENT') {
 			if (object) {
 				fs.writeFileSync(fileLocation, JSON.stringify(object, null, 2));
-				return;
+				return object;
 			}
             throw new Error(`Config file missing at ${fileLocation}`);
         }
