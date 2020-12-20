@@ -6,7 +6,7 @@ const { Logger } = require('logger');
 const log = new Logger();
 
 try {
-    const entryFile = path.resolve(__dirname, 'dist', 'index.js');
+    const entryFile = path.resolve(__dirname, '..', 'dist', 'index.js');
 
     // Files aren't built
     if (!fs.existsSync(entryFile)) {
