@@ -16,7 +16,7 @@ try {
     // Run bot
     require(entryFile);
 } catch (error) {
-    log.error(error);
+    log.trace(error);
     process.exitCode = 1;
     process.exit();
 }
