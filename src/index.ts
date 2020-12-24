@@ -1,8 +1,10 @@
+import importToArray from 'import-to-array';
 import * as events from './events';
 import { client } from './client';
 import { envs } from './envs';
 import { log } from './log';
 import { AppError } from './errors';
+import * as endpoints from './endpoints';
 
 try {
     // No discord token
@@ -14,6 +16,11 @@ try {
     if (!process.env.OWNER_ID|| !process.env.OWNER_SERVER) {
         throw new AppError('OWNER_ID and OWNER_SERVER envs both need to be set!');
     }
+
+    // Start web endpoints
+    importToArray(endpoints).forEach(endpoint => {
+        endpoint();
+    });
 
     // Register all events
     Object.entries(events ?? {}).forEach(([eventName, eventHandler]) => {

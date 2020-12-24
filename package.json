@@ -26,7 +26,9 @@
     "dedent": "^0.7.0",
     "discord.js": "^12.5.1",
     "dotenv": "^8.2.0",
+    "express": "^4.17.1",
     "get-current-line": "^6.3.0",
+    "import-to-array": "^1.0.0",
     "logger": "github:unraid/logger#master",
     "ml-sentiment": "^2.0.7",
     "njstrace": "^1.2.0",
@@ -39,6 +41,7 @@
   "devDependencies": {
     "@databases/pg-migrations": "^3.1.1",
     "@types/dedent": "^0.7.0",
+    "@types/express": "^4.17.9",
     "@types/node": "^14.14.16",
     "@types/node-fetch": "^2.5.7",
     "@types/pg": "^7.14.7",
