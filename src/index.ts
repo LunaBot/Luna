@@ -26,8 +26,8 @@ try {
             app.use(endpoint);
         });
     
-        app.listen(() => {
-            log.debug(`Server: https://localhost:${port}/`);
+        app.listen(port, () => {
+            log.debug(`Server: http://localhost:${port}/`);
         });
     }
 
