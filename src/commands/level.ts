@@ -25,9 +25,9 @@ class Level extends Command {
   public examples = [ '!level' ];
   public roles = [ '@everyone' ];
 
-  async handler(_prefix: string, message: Message, args: string[]) {
+  async handler(_prefix: string, message: Message, _args: string[]) {
     const server = getServer(message.guild!.id);
-    const user = server.getUser(message.author.id);
+    const user = await server.getUser(message.author.id);
 
     // All users
     // if (args[0] === 'all') {
