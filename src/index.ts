@@ -1,4 +1,5 @@
 import importToArray from 'import-to-array';
+import express from 'express';
 import * as events from './events';
 import { client } from './client';
 import { envs } from './envs';
@@ -17,10 +18,25 @@ try {
         throw new AppError('OWNER_ID and OWNER_SERVER envs both need to be set!');
     }
 
+    const startWebEndpoints = () => {
+        const app = express();
+        const port = envs.WEB.PORT || 0;
+        
+        importToArray(endpoints).forEach(endpoint => {
+            app.use(endpoint);
+        });
+    
+        app.listen(() => {
+            log.debug(`Server: https://localhost:${port}/`);
+        });
+    }
+
     // Start web endpoints
-    importToArray(endpoints).forEach(endpoint => {
-        endpoint();
-    });
+    try {
+        startWebEndpoints();
+    } catch (error) {
+        log.error('Failed loading web endpoints', error);
+    }
 
     // Register all events
     Object.entries(events ?? {}).forEach(([eventName, eventHandler]) => {

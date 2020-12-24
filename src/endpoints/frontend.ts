@@ -1,17 +1,17 @@
-import express from 'express';
-import { envs } from '../envs';
-import { log } from '../log';
+import { Router } from 'express';
 
-export const frontend = () => {
-    const app = express();
-    const port = envs.FRONTEND.PORT || 0;
+const frontend = Router();
 
-    // Home page
-    app.get('/', (_req, res) => {
-        res.send('Coming soon...');
-    });
+// Home page
+frontend.get('/', (_req, res) => {
+    res.send('Coming soon...');
+});
 
-    return app.listen(port, () => {
-        log.debug(`Frontend started at http://localhost:${port}/`);
-    });
+// Health
+frontend.get('/health', (_req, res) => {
+    res.send('OK');
+});
+
+export {
+    frontend
 };
