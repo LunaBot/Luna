@@ -1,9 +1,9 @@
 import { getServer, serversCount } from '../servers';
 import { client } from '../client';
-import { config } from '../config';
+import { envs } from '../envs';
 
 export const ready = async () => {
-    const store = getServer(config.OWNER.SERVER);
+    const store = getServer(envs.OWNER.SERVER);
     const botCommandsChannel = store.channels.botCommands;
 
     if (!botCommandsChannel) {

@@ -1,6 +1,6 @@
 import * as events from './events';
 import { client } from './client';
-import { config } from './config';
+import { envs } from './envs';
 import { log } from './log';
 import { AppError } from './errors';
 
@@ -27,7 +27,7 @@ try {
     });
 
     // Login to the bot
-    client.login(config.BOT_TOKEN).then(() => {
+    client.login(envs.BOT_TOKEN).then(() => {
         // Success we're online!
         log.debug('@automod online!');
     });
