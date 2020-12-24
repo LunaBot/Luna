@@ -16,7 +16,7 @@ try {
     }
 
     // Register all events
-    Object.entries(events).forEach(([eventName, eventHandler]) => {
+    Object.entries(events ?? {}).forEach(([eventName, eventHandler]) => {
         client.on(eventName, (...args: any[]) => {
             // Emit "error" event on promise rejection
             // @ts-expect-error
