@@ -1,6 +1,10 @@
 import fs from 'fs';
 import path from 'path';
+import { sql } from '@databases/pg';
 import { loadJsonFile } from './utils';
+import { database } from './database';
+import { AppError } from './errors';
+import { User as UserOptions } from './types';
 
 interface Command {
     roles: string[];
@@ -22,28 +26,29 @@ class LevelManager {
       while (LevelManager.LevelToExperience(level) < experience) level++;
       return level;
     }
-}
-
-interface UserOptions {
-    id: string;
-    experience: number;
-}
+};
 
 export class User {
     public id: string;
     public experience = 0;
 
-    constructor(options: Partial<UserOptions> & { id: UserOptions['id'] }) {
+    constructor(options: Partial<UserOptions> & { id: User['id'] }) {
         this.id = options.id;
         this.experience = options.experience ?? 0;
     }
 
-    public addExperience(experience: number) {
+    public async addExperience(experience: number) {
+        // Update local cache
         this.experience += experience;
+        // Update database
+        await database.query<User>(sql`UPDATE users SET experience=${experience} WHERE id=${this.id}`);
     }
     
-    public resetExperience() {
+    public async resetExperience() {
+        // Update local cache
         this.experience = 0;
+        // Update database
+        await database.query<User>(sql`UPDATE users SET experience=0 WHERE id=${this.id}`);
     }
 
     get level() {
@@ -88,21 +93,36 @@ export class Server {
         this.prefix = options.prefix ?? '!';
         this.commands = options.commands ?? {};
         this.channels = options.channels ?? {};
-        this.users = Object.fromEntries(Object.entries(options.users as any).map(([id, user]) => [id, new User(user as any)])) ?? {};
+        this.users = Object.fromEntries(Object.entries((options.users ?? {}) as any).map(([id, user]) => [id, new User(user as any)])) ?? {};
         this.aliases = options.aliases ?? {};
     }
 
-    public getUser(userId: string) {
-        const user = this.users[userId]
-        if (!user) {
-            const newUser = new User({
-                id: userId
-            });
-            this.users[userId] = newUser;
-            return newUser;
+    public async getUser(id: User['id']) {
+        const users = await database.query<User>(sql`SELECT * FROM users WHERE id=${id};`);
+
+        // No user found
+        if (users.length === 0) {
+            return this.createUser(id);
         }
 
-        return user instanceof User ? user : new User(user);
+        // Return existing user
+        return new User(users[0]);
+    }
+
+    public async createUser(id: string) {
+        // Create user
+        await database.query(sql`INSERT INTO users(id) VALUES (${id});`).catch(error => {
+            throw new AppError(`Failed to create user ${id}`);
+        });
+
+        // Failed to create user
+        const users = await database.query<User>(sql`SELECT * FROM users WHERE id=${id};`);
+        if (users.length === 0) {
+            throw new AppError(`Failed to create user ${id}`);
+        }
+
+        // Return new user
+        return new User(users[0]);
     }
 }
 
