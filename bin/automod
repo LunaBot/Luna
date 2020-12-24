@@ -1,11 +1,17 @@
 #!/usr/bin/env node
 
+// Load .env file
+require('dotenv').config();
+
 const fs = require('fs');
 const path = require('path');
 const { Logger } = require('logger');
+
+// Create main logger
 const log = new Logger();
 
 try {
+    // Build entry file path
     const entryFile = path.resolve(__dirname, '..', 'dist', 'index.js');
 
     // Files aren't built

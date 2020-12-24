@@ -1,53 +1,17 @@
-import ml from 'ml-sentiment';
 import type { Message } from 'discord.js';
-import { getServer } from '../servers';
-import _commands from '../commands';
-import { config } from '../config';
-import botCommand from '../commands/bot';
-import { log } from '../log';
-import { promiseTimeout } from '../utils';
-import { AppError, InvalidCommandError, CommandPermissionError, MultiLinePermissionError } from '../errors';
-import announce from '../commands/announce';
-import type { Server } from '../servers';
+import { getServer } from '../../servers';
+import _commands from '../../commands';
+import { envs } from '../../envs';
+import botCommand from '../../commands/bot';
+import { log } from '../../log';
+import { promiseTimeout } from '../../utils';
+import { AppError, InvalidCommandError, CommandPermissionError, MultiLinePermissionError } from '../../errors';
+import type { Server } from '../../servers';
+import { processUserExperience } from './processUserExperience';
 
 const getCommand = (commandName: string) => _commands.find(_command => _command.name === commandName);
 const isCommandAlias = (server: Server, commandName: string) => Object.keys(server.aliases).includes(commandName);
-const capValue = (number: number, min: number, max: number) => Math.max(min, Math.min(number, max));
-
-const processUserExperience = async (message: Message) => {
-  const server = getServer(message.guild!.id);
-  const user = server.getUser(message.author.id);
-
-  // Analyse sentiment value of message
-  const sentiment = ml().classify(message.content);
-
-  // Add experience based on message sentiment
-  const oldLevel = user.level;
-  const baseXp = 20;
-  const sentimentPercentage = sentiment / 100;
-  const experience = capValue(1 + (baseXp * sentimentPercentage), -20, 20);
-  user.addExperience(experience);
-  log.debug('%s gained %s exp for "%s"', message.author.tag, experience, message.content);
-  
-  // Announce level ups/downs
-  const newLevel = user.level;
-
-  // Mute user as they fell under level 0
-  if (oldLevel !== 0 && newLevel === 0) {
-    await announce.handler(server.prefix, message, `<#776990572052742175> <@!${message.author.id}> you've been muted, please re-read the rules!`.split(' '));
-    return;
-  }
-
-  // User has gone up a level
-  if (oldLevel < newLevel) {
-    await announce.handler(server.prefix, message, `<#776990572052742175> <@!${message.author.id}> is now level ${newLevel}`.split(' '));
-  }
-
-  // User has gone down a level
-  if (oldLevel > newLevel) {
-    await announce.handler(server.prefix, message, `<#776990572052742175> <@!${message.author.id}> watch your language you've just gone down to level ${newLevel}`.split(' '));
-  }
-};
+export const capValue = (number: number, min: number, max: number) => Math.max(min, Math.min(number, max));
 
 // In milliseconds
 const FIVE_SECONDS = 5000;
@@ -110,19 +74,19 @@ export const message = async (message: Message) => {
     // These should only work for the person that created the bot
     if (commandName === botCommand.command) {
       // Non-owner user tried accessing bot commands, throw error
-      if (config.OWNER.ID !== message.member?.id) {
+      if (envs.OWNER.ID !== message.member?.id) {
         log.warn('%s tried accessing the bot commands via server %s', message.member?.id, message.guild?.id);
         throw new CommandPermissionError(commandName);
       }
 
       // Owner tried bot commands on wrong server, warn them
-      if (config.OWNER.SERVER !== message.guild?.id) {
+      if (envs.OWNER.SERVER !== message.guild?.id) {
         throw new AppError('wrong server! %sbot can only be used on the server listed in `config.json`', server.prefix);
       }
     }
 
     // Don't check permissions if this is the owner of the bot
-    if (config.OWNER.ID !== message.member?.id) {
+    if (envs.OWNER.ID !== message.member?.id) {
       // Check we have permission to run this
       if (!message.member?.roles.cache.some(role => command.roles.includes(role.name))) {
         throw new CommandPermissionError(commandName);
@@ -163,7 +127,7 @@ export const message = async (message: Message) => {
     // Reply with error
     if (process.env.DEBUG) {
       // Show debugging to owner
-      if (config.OWNER.ID === message.member?.id) {
+      if (envs.OWNER.ID === message.member?.id) {
         message.channel.send('```json\n' + JSON.stringify(error, null, 2) + '\n```');
         return;
       }
