@@ -51,7 +51,7 @@ export class User {
         // Update local cache
         this.experience += experience;
         // Update database
-        await database.query<User>(sql`UPDATE users SET experience=${this.experience} WHERE id=${this.id}`);
+        await database.query<User>(sql`UPDATE users SET experience=experience+${experience} WHERE id=${this.id}`);
     }
     
     public async resetExperience() {
