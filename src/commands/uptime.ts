@@ -1,3 +1,4 @@
+import humanizeDuration from 'humanize-duration';
 import type { Message } from 'discord.js';
 import { Command } from '../command';
 
@@ -12,8 +13,8 @@ class Uptime extends Command {
     public roles = [ '@everyone' ];
 
     async handler(_prefix: string, _message: Message) {
-        const uptime = Math.floor(process.uptime());
-        return `This bot has been up for ${uptime}ms.`;
+        const uptime = humanizeDuration(Math.floor(process.uptime()) * 1000);
+        return `This bot has been up for ${uptime}s.`;
     }
 };
 

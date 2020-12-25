@@ -30,6 +30,7 @@
     "express": "^4.17.1",
     "express-promise-router": "^4.0.1",
     "get-current-line": "^6.3.0",
+    "humanize-duration": "^3.25.0",
     "import-to-array": "^1.0.0",
     "logger": "github:unraid/logger#master",
     "ml-sentiment": "^2.0.7",
