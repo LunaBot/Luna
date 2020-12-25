@@ -6,7 +6,7 @@ import { sql } from '@databases/pg';
 
 export const ready = async () => {
     // Set bot's activity status
-    const serversCount = await database.query(sql`SELECT COUNT(id) FROM servers;`).then(rows => rows[0]);
+    const serversCount = await database.query<{ count: number }>(sql`SELECT COUNT(id) FROM servers;`).then(rows => rows[0].count);
     await client.user?.setActivity(`moderating ${serversCount} server${serversCount === 1 ? '' : 's'}`);
 
     // Post "online" update in owner's server

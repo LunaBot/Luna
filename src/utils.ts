@@ -1,20 +1,5 @@
 import fs from 'fs';
-import { client } from './client';
 import type { Command } from './command';
-
-export const getUserFromMention = (mention: string) => {
-	if (!mention) return;
-
-	if (mention.startsWith('<@') && mention.endsWith('>')) {
-		mention = mention.slice(2, -1);
-
-		if (mention.startsWith('!')) {
-			mention = mention.slice(1);
-		}
-
-		return client.users.cache.get(mention);
-	}
-};
 
 export const getCommandHelp = (command: Command, prefix: string ='!') => {
 	return {
