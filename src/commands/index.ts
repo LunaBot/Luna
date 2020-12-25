@@ -10,13 +10,14 @@ import help from './help';
 import image from './image';
 import level from './level';
 import ping from './ping';
+import random from './random';
 import setBotCommandsChannel from './set-bot-commands-channel';
 import setPrefix from './set-prefix';
 import setup from './setup';
 import spank from './spank';
 import spoiler from './spoiler';
-import random from './random';
 import type { Command } from '../command';
+import uptime from './uptime';
 
 const _commands: Command[] = [
     alias,
@@ -31,12 +32,13 @@ const _commands: Command[] = [
     image,
     level,
     ping,
+    random,
     setBotCommandsChannel,
     setPrefix,
     setup,
     spank,
     spoiler,
-    random
+    uptime,
 ];
 
 export default _commands;
