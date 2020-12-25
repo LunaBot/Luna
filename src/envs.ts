@@ -1,3 +1,5 @@
+import uuidAPIKey from 'uuid-apikey';
+
 export const envs = {
     WEB: {
         PORT: process.env.PORT ?? 52952,
@@ -14,6 +16,9 @@ export const envs = {
     OWNER: {
         ID: process.env.OWNER_ID ?? '',
         SERVER: process.env.OWNER_SERVER ?? '',
+    },
+    ADMIN: {
+        API_KEY: process.env.ADMIN_API_KEY ?? uuidAPIKey.create().apiKey,
     },
 };
 

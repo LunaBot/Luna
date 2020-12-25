@@ -24,6 +24,12 @@ export const config = {
 
         const authentication = `${envs.DATABASE.USERNAME}:${envs.DATABASE.PASSWORD}@`;
         return `postgres://${authentication}${envs.DATABASE.HOSTNAME}:${envs.DATABASE.PORT}/${envs.DATABASE.DATABASE_NAME}`;
+    },
+    get ADMIN_API_KEY() {
+        return envs.ADMIN.API_KEY;
+    },
+    get API_KEY_WAS_GENERATED() {
+        return process.env.ADMIN_API_KEY === undefined || process.env.ADMIN_API_KEY.trim() === '';
     }
 };
 
