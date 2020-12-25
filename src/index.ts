@@ -36,14 +36,15 @@ try {
             const message = error.message ?? 'Internal Server Error';
             response.status(code);
 
-            // Development/debug mode
-            if (envs.NODE_ENV) {
-                response.send({ status: { code, message }, error });
+            
+            // Production
+            if (envs.NODE_ENV === 'production') {
+                response.send({ status: { code, message }, error: { name, message } });
                 return;
             }
 
-            // Production
-            response.send({ status: { code, message }, error: { name, message } });
+            // Development/debug mode
+            response.send({ status: { code, message }, error });
         });
     
         app.listen(port, () => {
