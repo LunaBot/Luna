@@ -110,14 +110,6 @@ const servers = Object.fromEntries(Object.entries(loadJsonFile(serversFilePath, 
 
 export const serversCount = servers ? Object.keys(servers).length - 1 : 0;
 
-export const getServer = (serverId: string): Server => {
-    if (!Object.keys(servers).includes(serverId)) {
-        servers[serverId] = servers.default;
-    }
-
-    return servers[serverId];
-};
-
 export const saveServers = () => {
     fs.writeFileSync(serversFilePath, JSON.stringify(servers, null, 2));
 };

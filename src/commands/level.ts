@@ -1,6 +1,6 @@
-import dedent from 'dedent';
 import type { Message } from 'discord.js';
-import { getServer, User } from '../servers';
+import { Server } from '../servers';
+import { User } from '../user';
 import { Command } from '../command';
 
 class Leaderboard {
@@ -26,7 +26,7 @@ class Level extends Command {
   public roles = [ '@everyone' ];
 
   async handler(_prefix: string, message: Message, _args: string[]) {
-    const server = getServer(message.guild!.id);
+    const server = await Server.Find({ id: message.guild!.id });
     const user = await server.getUser({
       id: message.author.id
     });
