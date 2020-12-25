@@ -14,7 +14,7 @@ class Uptime extends Command {
 
     async handler(_prefix: string, _message: Message) {
         const uptime = humanizeDuration(Math.floor(process.uptime()) * 1000);
-        return `This bot has been up for ${uptime}s.`;
+        return `This bot has been up for ${uptime}.`;
     }
 };
 
