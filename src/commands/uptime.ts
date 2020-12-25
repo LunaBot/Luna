@@ -12,7 +12,7 @@ class Uptime extends Command {
     public roles = [ '@everyone' ];
 
     async handler(_prefix: string, _message: Message) {
-        const uptime = process.uptime();
+        const uptime = Math.floor(process.uptime());
         return `This bot has been up for ${uptime}ms.`;
     }
 };
