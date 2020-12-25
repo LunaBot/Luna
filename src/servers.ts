@@ -4,61 +4,16 @@ import { sql } from '@databases/pg';
 import { loadJsonFile } from './utils';
 import { database } from './database';
 import { AppError } from './errors';
-import { User as UserOptions } from './types';
+import { User } from './user';
 
 interface Command {
     roles: string[];
 }
 
-class LevelManager {
-    static Equate(experience: number) {
-      return Math.floor(experience + 300 * Math.pow(2, experience / 7));
-    }
-  
-    static LevelToExperience(level: number) {
-      let experience = 0;
-      for (let i = 1; i < level; i++) experience += this.Equate(i);
-      return Math.floor(experience / 4);
-    }
-  
-    static ExperienceToLevel(experience: number) {
-      let level = 0;
-      while (LevelManager.LevelToExperience(level) < experience) level++;
-      return level;
-    }
-};
-
-export class User {
-    public id: string;
-    public experience = 0;
-
-    constructor(options: Partial<UserOptions> & { id: User['id'] }) {
-        this.id = options.id;
-        this.experience = options.experience ?? 0;
-    }
-
-    public async addExperience(experience: number) {
-        // Update local cache
-        this.experience += experience;
-        // Update database
-        await database.query<User>(sql`UPDATE users SET experience=${experience} WHERE id=${this.id}`);
-    }
-    
-    public async resetExperience() {
-        // Update local cache
-        this.experience = 0;
-        // Update database
-        await database.query<User>(sql`UPDATE users SET experience=0 WHERE id=${this.id}`);
-    }
-
-    get level() {
-        return LevelManager.ExperienceToLevel(this.experience);
-    }
-}
-
 type Alias = string;
 
 interface ServerOptions {
+    id: string;
     prefix: string;
     commands: {
         [key: string]: Command
@@ -75,6 +30,7 @@ interface ServerOptions {
 }
 
 export class Server {
+    public id: string;
     public prefix: string;
     public commands: {
         [key: string]: Command
@@ -89,7 +45,8 @@ export class Server {
         [command: string]: Alias
     }
 
-    constructor(options: Partial<ServerOptions>) {
+    constructor(options: Partial<ServerOptions> & { id: ServerOptions['id'] }) {
+        this.id = options.id;
         this.prefix = options.prefix ?? '!';
         this.commands = options.commands ?? {};
         this.channels = options.channels ?? {};
@@ -98,31 +55,11 @@ export class Server {
     }
 
     public async getUser(id: User['id']) {
-        const users = await database.query<User>(sql`SELECT * FROM users WHERE id=${id};`);
-
-        // No user found
-        if (users.length === 0) {
-            return this.createUser(id);
-        }
-
-        // Return existing user
-        return new User(users[0]);
+        return User.getUser(this.id, id);
     }
 
     public async createUser(id: string) {
-        // Create user
-        await database.query(sql`INSERT INTO users(id) VALUES (${id});`).catch(error => {
-            throw new AppError(`Failed to create user ${id}`);
-        });
-
-        // Failed to create user
-        const users = await database.query<User>(sql`SELECT * FROM users WHERE id=${id};`);
-        if (users.length === 0) {
-            throw new AppError(`Failed to create user ${id}`);
-        }
-
-        // Return new user
-        return new User(users[0]);
+        return User.createUser(this.id, id);
     }
 }
 

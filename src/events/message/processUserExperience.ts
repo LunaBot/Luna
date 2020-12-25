@@ -23,6 +23,11 @@ export const processUserExperience = async (message: Message) => {
   // Announce level ups/downs
   const newLevel = user.level;
 
+  // Nothing happened, bail
+  if (oldLevel === newLevel) {
+    return;
+  }
+
   // Mute user as they fell under level 0
   if (oldLevel !== 0 && newLevel === 0) {
     await announce.handler(server.prefix, message, `<#776990572052742175> <@!${message.author.id}> you've been muted, please re-read the rules!`.split(' '));

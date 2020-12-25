@@ -1,6 +1,12 @@
 {
     "files.exclude": {
         "**/node_modules": true,
-        "**/dist": true
+        "**/dist": true,
+        "**/config.json": true,
+        "**/servers.json": true,
+        "**/.ultra.cache.json": true,
+        "**/.DS_Store": true,
+        "**/.env": true,
+        "**/ca-certificate.crt": true
     }
 }
