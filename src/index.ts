@@ -25,6 +25,17 @@ try {
         importToArray(endpoints).forEach(endpoint => {
             app.use(endpoint);
         });
+
+        app.use((error: any, _request: any, response: any, next: any) => {
+            if (response.headersSent) {
+                return next(error);
+            }
+
+            const code = error.statusCode ?? 500;
+            const message = error.message ?? 'Internal Server Error';
+            response.status(code);
+            response.send({ status: { code, message }, error });
+        });
     
         app.listen(port, () => {
             log.debug(`Server: http://localhost:${port}/`);
