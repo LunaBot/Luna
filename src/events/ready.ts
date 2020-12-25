@@ -3,8 +3,11 @@ import { client } from '../client';
 import { envs } from '../envs';
 
 export const ready = async () => {
-    const store = getServer(envs.OWNER.SERVER);
-    const botCommandsChannel = store.channels.botCommands;
+    // Set bot's activity status
+    await client.user?.setActivity(`moderating ${serversCount} server${serversCount === 1 ? '' : 's'}`);
+
+    const server = getServer(envs.OWNER.SERVER);
+    const botCommandsChannel = server.channels.botCommands;
 
     if (!botCommandsChannel) {
         return;
@@ -14,7 +17,4 @@ export const ready = async () => {
         // @ts-ignore
         channel?.send(`I'm online!`);
     }
-
-    // Set bot's activity status
-    await client.user?.setActivity(`moderating ${serversCount} server${serversCount === 1 ? '' : 's'}`);
 };

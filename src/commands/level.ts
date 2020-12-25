@@ -27,7 +27,9 @@ class Level extends Command {
 
   async handler(_prefix: string, message: Message, _args: string[]) {
     const server = getServer(message.guild!.id);
-    const user = await server.getUser(message.author.id);
+    const user = await server.getUser({
+      id: message.author.id
+    });
 
     // All users
     // if (args[0] === 'all') {

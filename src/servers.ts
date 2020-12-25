@@ -54,12 +54,39 @@ export class Server {
         this.aliases = options.aliases ?? {};
     }
 
-    public async getUser(id: User['id']) {
-        return User.getUser(this.id, id);
+    public async getUser({ id }: { id: User['id'] }) {
+        return User.Find({ id, serverId: this.id });
     }
 
-    public async createUser(id: string) {
-        return User.createUser(this.id, id);
+    public async createUser({ id }: { id: User['id'] }) {
+        return User.Create({ id, serverId: this.id });
+    }
+
+    public static async Find({ id }: { id: Server['id'] } ) {
+        const servers = await database.query<ServerOptions>(sql`SELECT * FROM servers WHERE id=${id};`);
+
+        // No server found
+        if (servers.length === 0) {
+            return this.Create({ id });
+        }
+
+        // Return existing server
+        return new Server(servers[0]);
+    }
+
+    public static async Create({ id }: { id: Server['id'] } ) {
+        // Create server
+        const prefix = '!';
+        await database.query(sql`INSERT INTO servers(id,prefix) VALUES (${id},${prefix});`);
+
+        // Failed to create server
+        const servers = await database.query<ServerOptions>(sql`SELECT * FROM servers WHERE id=${id};`);
+        if (servers.length === 0) {
+            throw new AppError(`Failed to create server ${id}`);
+        }
+ 
+        // Return new server
+        return new Server(servers[0]);
     }
 }
 

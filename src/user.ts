@@ -19,26 +19,26 @@ export class User {
         this.experience = options.experience ?? 0;
     }
 
-    public static async getUser(serverId: Server['id'], userId: User['id']) {
-        const users = await database.query<User>(sql`SELECT * FROM users WHERE serverId=${serverId} AND id=${userId};`);
+    public static async Find({ serverId, id }: { serverId: Server['id'], id: User['id'] } ) {
+        const users = await database.query<User>(sql`SELECT * FROM users WHERE serverId=${serverId} AND id=${id};`);
 
         // No user found
         if (users.length === 0) {
-            return this.createUser(serverId, userId);
+            return this.Create({ serverId, id });
         }
 
         // Return existing user
         return new User(users[0]);
     }
 
-    public static async createUser(serverId: Server['id'], userId: string) {
+    public static async Create({ serverId, id }: { serverId: Server['id'], id: User['id'] } ) {
         // Create user
-        await database.query(sql`INSERT INTO users(serverId,id) VALUES (${serverId},${userId});`);
+        await database.query(sql`INSERT INTO users(serverId,id) VALUES (${serverId},${id});`);
 
         // Failed to create user
-        const users = await database.query<User>(sql`SELECT * FROM users WHERE serverId=${serverId} AND id=${userId};`);
+        const users = await database.query<User>(sql`SELECT * FROM users WHERE serverId=${serverId} AND id=${id};`);
         if (users.length === 0) {
-            throw new AppError(`Failed to create user ${userId}`);
+            throw new AppError(`Failed to create user ${id}`);
         }
 
         // Return new user
