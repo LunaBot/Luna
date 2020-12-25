@@ -26,8 +26,12 @@ class SetPrefix extends Command {
         }
 
         const server = await Server.Find({ id: message.guild!.id });
-        server.prefix = prefix;
-        return `set prefix to ${prefix}`;
+        try {
+            await server.setPrefix(prefix);
+            return `Set prefix to \`${prefix}\``;
+        } catch (error) {
+            return `Failed updating prefix to \`${prefix}\``;
+        }
     }
 };
 

@@ -51,6 +51,16 @@ export class Server {
         this.aliases = options.aliases ?? {};
     }
 
+    public async setPrefix(prefix: string) {
+        // Prefix must be under 50 chars
+        if (prefix.length >= 50) {
+            throw new AppError('Prefix is too long, it must be under 50 characters.');
+        }
+
+        this.prefix = prefix;
+        await database.query(sql`UPDATE servers SET prefix=${prefix} WHERE id=${this.id}`);
+    }
+
     public async getUser({ id }: { id: User['id'] }) {
         return User.Find({ id, serverId: this.id });
     }
