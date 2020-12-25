@@ -1,6 +1,6 @@
-import { Router } from 'express';
+import router from 'express-promise-router';
 
-const frontend = Router();
+const frontend = router();
 
 // Home page
 frontend.get('/', (_req, res) => {

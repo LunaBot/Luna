@@ -1,9 +1,9 @@
-import { Router } from 'express';
+import router from 'express-promise-router';
 import { config } from '../config';
 import { envs } from '../envs';
 import { AppError } from '../errors';
 
-const api = Router();
+const api = router();
 
 // Root path
 api.get('/api', (_req, res) => {
