@@ -1,13 +1,13 @@
 import ml from 'ml-sentiment';
 import { Message } from 'discord.js';
-import { getServer } from '../../servers';
+import { Server } from '../../servers';
 import { log } from '../../log';
 import announce from '../../commands/announce';
 import { capValue } from './index';
 
 export const processUserExperience = async (message: Message) => {
-  const server = getServer(message.guild!.id);
-  const user = await server.getUser(message.author.id);
+  const server = await Server.Find({ id: message.guild!.id });
+  const user = await server.getUser({ id: message.author.id });
 
   // Analyse sentiment value of message
   const sentiment = ml().classify(message.content);

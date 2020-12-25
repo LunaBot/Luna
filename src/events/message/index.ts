@@ -1,5 +1,5 @@
 import type { Message } from 'discord.js';
-import { getServer } from '../../servers';
+import { Server } from '../../servers';
 import _commands from '../../commands';
 import { envs } from '../../envs';
 import botCommand from '../../commands/bot';
@@ -20,7 +20,7 @@ export const message = async (message: Message) => {
   let silent = false;
 
   // Get our server
-  const server = getServer(message.guild!.id);
+  const server = await Server.Find({ id: message.guild!.id });
 
   // Skip bot messages
   if (message.author.bot) return;

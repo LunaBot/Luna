@@ -1,6 +1,6 @@
 import type { Message } from 'discord.js';
 import { AppError, InvalidCommandError } from '../errors';
-import { getServer } from '../servers';
+import { Server } from '../servers';
 import { Command } from '../command';
 
 class SetBotCommandsChannel extends Command {
@@ -13,7 +13,7 @@ class SetBotCommandsChannel extends Command {
     public examples =  [];
     public roles = [ 'test-role' ];
 
-    async handler(prefix: string, _message: Message, args: string[]) {
+    async handler(prefix: string, message: Message, args: string[]) {
         // We need at least 1 argument
         if (args.length === 0) {
             throw new InvalidCommandError(prefix, 'set-bot-commands-channel', args);
@@ -25,8 +25,8 @@ class SetBotCommandsChannel extends Command {
             throw new AppError('Invalid channel ID!');
         }
 
-        const store = getServer(_message.guild?.id || 'default');
-        store.channels.botCommands = commandsChannel;
+        const server = await Server.Find({ id: message.guild!.id });
+        server.channels.botCommands = commandsChannel;
         return `set commands channel to ${commandsChannel}`;
     }
 };

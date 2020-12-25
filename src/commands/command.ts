@@ -1,6 +1,6 @@
 import { Message, MessageEmbed } from 'discord.js';
 import commands from './index';
-import { getServer } from '../servers';
+import { Server } from '../servers';
 import { getCommandHelp } from '../utils';
 import type { Command } from '../command';
 import { InvalidCommandError } from '../errors';
@@ -24,7 +24,7 @@ export default {
         'server-mod'
     ],
     async handler(prefix: string, message: Message, args: string[]) {
-        const server = getServer(message.guild!.id);
+        const server = await Server.Find({ id: message.guild!.id });
         const commandName = args[0]; // help
         const command = args[1]; // toggle-role
         const role = args[2]; // test-role

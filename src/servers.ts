@@ -1,7 +1,4 @@
-import fs from 'fs';
-import path from 'path';
 import { sql } from '@databases/pg';
-import { loadJsonFile } from './utils';
 import { database } from './database';
 import { AppError } from './errors';
 import { User } from './user';
@@ -88,28 +85,4 @@ export class Server {
         // Return new server
         return new Server(servers[0]);
     }
-}
-
-const serversFilePath = path.resolve(__dirname, '..', 'servers.json');
-
-const servers = Object.fromEntries(Object.entries(loadJsonFile(serversFilePath, {
-    default: {
-        prefix: '!',
-        commands: {
-            help: {
-                roles: ['@everyone']
-            }
-        },
-        channels: {
-            botCommands: ''
-        },
-        users: {},
-        aliases: {}
-    }
-})).map(([serverId, server]) => [serverId, new Server(server as any)]));
-
-export const serversCount = servers ? Object.keys(servers).length - 1 : 0;
-
-export const saveServers = () => {
-    fs.writeFileSync(serversFilePath, JSON.stringify(servers, null, 2));
 };
