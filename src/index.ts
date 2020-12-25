@@ -31,10 +31,19 @@ try {
                 return next(error);
             }
 
+            const name = error.name ?? 'Error';
             const code = error.statusCode ?? 500;
             const message = error.message ?? 'Internal Server Error';
             response.status(code);
-            response.send({ status: { code, message }, error });
+
+            // Development/debug mode
+            if (envs.NODE_ENV) {
+                response.send({ status: { code, message }, error });
+                return;
+            }
+
+            // Production
+            response.send({ status: { code, message }, error: { name, message } });
         });
     
         app.listen(port, () => {
