@@ -16,7 +16,7 @@ export class User {
 
     constructor(options: Partial<UserOptions> & { id: User['id'] }) {
         this.id = options.id;
-        this.experience = options.experience ?? 0;
+        this.experience = Number(options.experience) ?? 0;
     }
 
     public static async Find({ serverId, id }: { serverId: Server['id'], id: User['id'] } ) {
