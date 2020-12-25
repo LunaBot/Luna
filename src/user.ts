@@ -33,7 +33,8 @@ export class User {
 
     public static async Create({ serverId, id }: { serverId: Server['id'], id: User['id'] } ) {
         // Create user
-        await database.query(sql`INSERT INTO users(serverId,id) VALUES (${serverId},${id});`);
+        const experience = 0;
+        await database.query(sql`INSERT INTO users(serverId,id,experience) VALUES (${serverId},${id},${experience});`);
 
         // Failed to create user
         const users = await database.query<User>(sql`SELECT * FROM users WHERE serverId=${serverId} AND id=${id};`);
