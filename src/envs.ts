@@ -1,6 +1,7 @@
 import uuidAPIKey from 'uuid-apikey';
 
 export const envs = {
+    NODE_ENV: process.env.NODE_ENV,
     WEB: {
         PORT: process.env.PORT ?? 52952,
     },
