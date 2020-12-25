@@ -13,7 +13,7 @@ class Ping extends Command {
 
     async handler(_prefix: string, message: Message) {
         const timeTaken = Date.now() - message.createdTimestamp;
-        return `pong! This message had a latency of ${timeTaken}ms.`;
+        return `Pong! This message had a latency of ${timeTaken}ms.`;
     }
 };
 
