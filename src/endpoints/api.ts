@@ -21,7 +21,9 @@ api.get('/api/health', (_req, res) => {
 
 api.get('/api/dump', (req, res) => {
     if (req.query.apiKey !== config.ADMIN_API_KEY) {
-        throw new AppError('Invalid API key!');
+        const error = new AppError('Invalid API key!');
+        error.setCode(401);
+        throw error;
     }
 
     res.send({
