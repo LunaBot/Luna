@@ -4,6 +4,9 @@ import { format } from 'util';
  * Generic application error.
  */
 export class AppError extends Error {
+	/** HTTP status code */
+	public code = 500;
+
 	constructor(message: string, ...args: any[]) {
 		// Calling parent constructor of base Error class.
 		super(format(message, ...args));
@@ -16,6 +19,11 @@ export class AppError extends Error {
 
 		// Set the prototype explicitly.
         Object.setPrototypeOf(this, AppError.prototype);
+	}
+
+	/** Set the HTTP status code. */
+	setCode(code: number) {
+		this.code = code;
 	}
 
 	/**
