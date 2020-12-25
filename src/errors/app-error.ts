@@ -4,6 +4,8 @@ import { format } from 'util';
  * Generic application error.
  */
 export class AppError extends Error {
+	public name = 'AppError';
+
 	/** HTTP status code */
 	public code = 500;
 
