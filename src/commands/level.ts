@@ -27,7 +27,7 @@ class Level extends Command {
 
   async handler(_prefix: string, message: Message, _args: string[]) {
     const server = await Server.Find({ id: message.guild!.id });
-    const user = await server.getUser({
+    const user = await User.Find({
       id: message.author.id
     });
 
@@ -49,15 +49,22 @@ class Level extends Command {
     //     ${negativeLeaderboard.toString()}
     //   `;
     // }
+    try {
 
-    // Multiple user objects
-    if (Array.isArray(user)) {
-      const level = user.reduce((level, user) => level + user.level, 0);
-      const experience = user.reduce((experience, user) => experience + user.experience, 0);
-      return `Level ${level}. Total experience ${experience}`;
+      // User's only on one server
+      if (user.length === 1) {
+        return `Level ${user[0].level}. Total experience ${user[0].experience ?? 0}`;
+      }
+
+      // User's on multiple servers
+      const globalLevel = user.reduce((level, user) => level + user.level, 0);
+      const globalExperience = Math.floor(user.reduce((experience, user) => experience + user.experience, 0));
+      const localUser = user.find(user => user.serverId === server.id)!;
+      return `Global level ${globalLevel}. Global experience ${globalExperience}\nLocal level ${localUser.level}. Local experience ${Math.floor(localUser.experience)}`;
+    } catch (error) {
+      console.error(error);
+      return 'Failed getting level';
     }
-
-    return `Level ${user.level}. Total experience ${user.experience ?? 0}`;
   }
 };
 

@@ -1,3 +1,4 @@
+import humanizeDuration from 'humanize-duration';
 import type { Message } from 'discord.js';
 import { Server } from '../../servers';
 import _commands from '../../commands';
@@ -6,7 +7,6 @@ import botCommand from '../../commands/bot';
 import { log } from '../../log';
 import { promiseTimeout } from '../../utils';
 import { AppError, InvalidCommandError, CommandPermissionError, MultiLinePermissionError } from '../../errors';
-import type { Server } from '../../servers';
 import { processUserExperience } from './processUserExperience';
 
 const getCommand = (commandName: string) => _commands.find(_command => _command.name === commandName);
@@ -16,7 +16,26 @@ export const capValue = (number: number, min: number, max: number) => Math.max(m
 // In milliseconds
 const FIVE_SECONDS = 5000;
 
+let isStarting = true;
+
 export const message = async (message: Message) => {
+  // In development mode only allow the bot's own server to process
+  if (envs.NODE_ENV === 'development' && message.guild?.id !== envs.OWNER.SERVER) {
+    return;
+  }
+
+  // Skip if bot is still starting up
+  if (isStarting) {
+    // Will be false after 10s of uptime
+    isStarting = process.uptime() <= 10;
+
+    // Is still under 10s bail
+    if (isStarting) {
+      log.silly(`Skipping message as bot has only been up for ${humanizeDuration(process.uptime() * 1000)}.`);
+      return;
+    }
+  }
+
   let silent = false;
 
   // Get our server

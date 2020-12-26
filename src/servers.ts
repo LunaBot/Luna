@@ -62,7 +62,7 @@ export class Server {
     }
 
     public async getUser({ id }: { id: User['id'] }) {
-        return User.Find({ id, serverId: this.id });
+        return User.Find({ id, serverId: this.id }).then(users => users[0]);
     }
 
     public async createUser({ id }: { id: User['id'] }) {

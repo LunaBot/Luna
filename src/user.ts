@@ -18,12 +18,14 @@ export class User {
 
     constructor(options: Partial<UserOptions> & { id: User['id'], serverId: User['serverId'] }) {
         this.id = options.id;
-        this.serverId = options.serverId;
+        // serverId is the correct field
+        // serverid is returned from the database
+        this.serverId = options.serverId ?? (options as any).serverid;
         this.experience = Number(options.experience) ?? 0;
     }
 
-    public static async Find({ serverId, id }: { serverId: Server['id'], id: User['id'] } ) {
-        const users = await database.query<User>(sql`SELECT * FROM users WHERE id=${id};`);
+    private static async _Find({ serverId, id }: { serverId: Server['id'], id: User['id'] } ) {
+        const users = await database.query<User>(sql`SELECT * FROM users WHERE serverId=${serverId} AND id=${id};`);
 
         // No user found
         if (users.length === 0) {
@@ -31,7 +33,23 @@ export class User {
         }
 
         // Return existing user
+        return new User(users[0]);
+    }
+
+    private static async _FindAll({ id }: { id: User['id'] } ) {
+        const users = await database.query<User>(sql`SELECT * FROM users WHERE id=${id};`);
+
+        // Return existing user
         return users.map(user => new User(user));
+    }
+
+    public static async Find({ id, serverId, }: { id: User['id'], serverId?: Server['id'], } ) {
+        // Get specific user instance
+        if (serverId) {
+            return [await this._Find({ id, serverId, })];
+        }
+
+        return this._FindAll({ id });
     }
 
     public static async Create({ serverId, id }: { serverId: Server['id'], id: User['id'] } ) {
