@@ -50,6 +50,13 @@ class Level extends Command {
     //   `;
     // }
 
+    // Multiple user objects
+    if (Array.isArray(user)) {
+      const level = user.reduce((level, user) => level + user.level, 0);
+      const experience = user.reduce((experience, user) => experience + user.experience, 0);
+      return `Level ${level}. Total experience ${experience}`;
+    }
+
     return `Level ${user.level}. Total experience ${user.experience ?? 0}`;
   }
 };

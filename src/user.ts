@@ -7,20 +7,23 @@ import { Server } from './servers';
 
 interface UserOptions {
     id: string;
+    serverId: string;
     experience: number;
 };
 
 export class User {
     public id: string;
+    public serverId: string;
     public experience = 0;
 
-    constructor(options: Partial<UserOptions> & { id: User['id'] }) {
+    constructor(options: Partial<UserOptions> & { id: User['id'], serverId: User['serverId'] }) {
         this.id = options.id;
+        this.serverId = options.serverId;
         this.experience = Number(options.experience) ?? 0;
     }
 
     public static async Find({ serverId, id }: { serverId: Server['id'], id: User['id'] } ) {
-        const users = await database.query<User>(sql`SELECT * FROM users WHERE serverId=${serverId} AND id=${id};`);
+        const users = await database.query<User>(sql`SELECT * FROM users WHERE id=${id};`);
 
         // No user found
         if (users.length === 0) {
@@ -28,7 +31,7 @@ export class User {
         }
 
         // Return existing user
-        return new User(users[0]);
+        return users.map(user => new User(user));
     }
 
     public static async Create({ serverId, id }: { serverId: Server['id'], id: User['id'] } ) {
@@ -52,7 +55,7 @@ export class User {
         // Update local cache
         this.experience += experience;
         // Update database
-        await database.query<User>(sql`UPDATE users SET experience=experience+${experience} WHERE id=${this.id}`);
+        await database.query<User>(sql`UPDATE users SET experience=experience+${experience} WHERE serverId=${this.serverId} AND id=${this.id}`);
     }
     
     public async resetExperience() {
