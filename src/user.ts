@@ -48,6 +48,8 @@ export class User {
         return this._findAll({ id });
     }
 
+    public static async findOrCreate({ id, }: { id: User['id'], } ): Promise<User[]>;
+    public static async findOrCreate({ id, serverId, }: { id: User['id'], serverId?: Server['id'], } ): Promise<User>;
     public static async findOrCreate({ id, serverId, }: { id: User['id'], serverId?: Server['id'], } ) {
         // Get specific user instance
         if (serverId) {
@@ -59,7 +61,7 @@ export class User {
             }
 
             // Return existing user
-            return [new User(users[0])];
+            return new User(users[0]);
         }
 
         return this._findAll({ id });

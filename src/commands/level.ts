@@ -1,5 +1,6 @@
 import type { Message } from 'discord.js';
 import { User } from '../user';
+import { Server } from '../servers';
 import { Command } from '../command';
 import { isDMChannelMessage, isTextChannelMessage } from '../guards';
 import { AppError } from '../errors';
@@ -14,9 +15,9 @@ export class Level extends Command {
   public examples = [ '!level' ];
   public roles = [ '@everyone' ];
 
-  private async getLocalLevel({ id, serverId, }: { id: User['id'], serverId: User['id'], }) {
+  private async getLocalLevel({ id, serverId, }: { id: User['id'], serverId: Server['id'], }) {
     const user = await User.findOrCreate({ id, serverId });
-    return `Level ${user[0].level}. Total experience ${user[0].experience ?? 0}`;
+    return `Level ${user.level}. Total experience ${user.experience ?? 0}`;
   }
 
   private async getGlobalLevel({ id, }: { id: User['id'], }) {
