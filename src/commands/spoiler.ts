@@ -1,4 +1,3 @@
-import fetch from 'node-fetch';
 import { Message, MessageAttachment, MessageEmbed } from 'discord.js';
 import { Command } from '../command';
 import axios from 'axios';

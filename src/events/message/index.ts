@@ -95,7 +95,7 @@ export const message = async (message: Message) => {
       // Non-owner user tried accessing bot commands, throw error
       if (envs.OWNER.ID !== message.member?.id) {
         log.warn('%s tried accessing the bot commands via server %s', message.member?.id, message.guild?.id);
-        throw new CommandPermissionError(commandName);
+        throw new CommandPermissionError(server.prefix, commandName);
       }
 
       // Owner tried bot commands on wrong server, warn them
@@ -108,7 +108,7 @@ export const message = async (message: Message) => {
     if (envs.OWNER.ID !== message.member?.id) {
       // Check we have permission to run this
       if (!message.member?.roles.cache.some(role => command.roles.includes(role.name))) {
-        throw new CommandPermissionError(commandName);
+        throw new CommandPermissionError(server.prefix, commandName);
       }
     }
 
