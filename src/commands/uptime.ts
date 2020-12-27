@@ -1,6 +1,7 @@
 import humanizeDuration from 'humanize-duration';
 import type { Message } from 'discord.js';
 import { Command } from '../command';
+import { envs } from '../envs';
 
 class Uptime extends Command {
     public name = 'uptime';
@@ -14,7 +15,7 @@ class Uptime extends Command {
 
     async handler(_prefix: string, _message: Message) {
         const uptime = humanizeDuration(Math.floor(process.uptime()) * 1000);
-        return `This bot has been up for ${uptime}.`;
+        return `Hi I'm ${envs.BOT.COMMIT_HASH} and I've been alive for ${uptime}.`;
     }
 };
 
