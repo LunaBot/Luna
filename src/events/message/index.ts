@@ -141,18 +141,18 @@ export const message = async (message: Message) => {
     if (silent) return;
 
     // Respond with command output
-    message.channel.send(result as string);
+    await message.channel.send(result as string);
   } catch (error) {
     // Reply with error
     if (process.env.DEBUG) {
       // Show debugging to owner
       if (envs.OWNER.ID === message.member?.id) {
-        message.channel.send('```json\n' + JSON.stringify(error, null, 2) + '\n```');
+        await message.channel.send('```json\n' + JSON.stringify(error, null, 2) + '\n```');
         return;
       }
     }
 
     log.error(error);
-    message.channel.send(error.message);
+    await message.channel.send(error.message);
   }
 };
