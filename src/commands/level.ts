@@ -1,7 +1,7 @@
 import type { Message } from 'discord.js';
 import { User } from '../user';
 import { Command } from '../command';
-import { isDMChannel, isTextChannel } from '../guards';
+import { isDMChannelMessage, isTextChannelMessage } from '../guards';
 import { AppError } from '../errors';
 
 export class Level extends Command {
@@ -30,12 +30,12 @@ export class Level extends Command {
     const userId = message.author.id;
 
     // Global level
-    if (isDMChannel(message)) {
+    if (isDMChannelMessage(message)) {
       return this.getGlobalLevel({ id: userId });
     }
 
     // Server dependant level
-    if (isTextChannel(message)) {
+    if (isTextChannelMessage(message)) {
       const serverId = message.guild.id;
       const localLevel = await this.getLocalLevel({ id: userId, serverId });
       const globalLevel = await this.getGlobalLevel({ id: userId });

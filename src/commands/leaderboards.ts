@@ -4,7 +4,7 @@ import type { Message } from 'discord.js';
 import { User } from '../user';
 import { Server } from '../servers';
 import { Command } from '../command';
-import { isDMChannel, isTextChannel } from '../guards';
+import { isDMChannelMessage, isTextChannelMessage } from '../guards';
 import { AppError, CommandPermissionError } from '../errors';
 import { database } from '../database';
 import { envs } from '../envs';
@@ -63,12 +63,12 @@ export class Leaderboards extends Command {
 
   async handler(_prefix: string, message: Message, _args: string[]) {
     // Global leaderboards
-    if (isDMChannel(message)) {
+    if (isDMChannelMessage(message)) {
       return this.getGlobalLeaderboards();
     }
 
     // Server dependant leaderboards
-    if (isTextChannel(message)) {
+    if (isTextChannelMessage(message)) {
       // Only owner can show leaderboards for now
       if (message.author.id !== envs.OWNER.ID) {
         const server = await Server.Find({ id: message.guild?.id });
