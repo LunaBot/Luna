@@ -17,6 +17,7 @@ export const envs = {
     OWNER: {
         ID: process.env.OWNER_ID ?? '',
         SERVER: process.env.OWNER_SERVER ?? '',
+        BOT_CHANNEL: process.env.OWNER_BOT_CHANNEL ?? '',
     },
     ADMIN: {
         API_KEY: process.env.ADMIN_API_KEY ?? uuidAPIKey.create().apiKey,
