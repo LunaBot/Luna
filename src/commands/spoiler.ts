@@ -3,7 +3,7 @@ import { Command } from '../command';
 import axios from 'axios';
 
 const match = (string: string) => {
-  const groups = string.match(/\[(?<type>cw|tw|content|trigger)\: (?<warning>.*)\] (?<message>.*)/i)?.groups;
+  const groups = string.match(/\[(?<warning>.*)\] (?<message>.*)/i)?.groups;
   if (groups) {
     return { ...groups };
   }
@@ -78,12 +78,8 @@ class Spoiler extends Command {
       // };
     }).array());
 
-    console.log('success', images);
-
     // Remove original message
     await message.delete();
-
-    console.log('done');
 
     // No content just images
     if (content.length === 0) {
@@ -100,8 +96,7 @@ class Spoiler extends Command {
 
     // Trigger/Content warning
     embed.setColor('#FF0000');
-    embed.setTitle(`[${spoilerInfo.type}]: ${spoilerInfo.warning}`);
-    console.log('no content, tw');
+    embed.setTitle(spoilerInfo.warning);
     return [embed, ...images];
   }
 };
