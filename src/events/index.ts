@@ -33,7 +33,7 @@ export * from './message';
 // export * from './messageReactionRemove';
 export * from './message-update';
 // export * from './presenceUpdate';
-// export * from './rateLimit';
+export * from './rate-limit';
 export * from './ready';
 // export * from './invalidated';
 // export * from './roleCreate';
