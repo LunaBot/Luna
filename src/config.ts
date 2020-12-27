@@ -32,7 +32,7 @@ export const config = {
         return process.env.ADMIN_API_KEY === undefined || process.env.ADMIN_API_KEY.trim() === '';
     },
     get PUBLIC_URL() {
-        return process.env.PUBLIC_URL || `http://localhost:${process.env.PORT}/`;
+        return process.env.PUBLIC_URL || `http://localhost:${envs.WEB.PORT}\/`;
     }
 };
 
