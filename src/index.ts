@@ -9,12 +9,12 @@ import * as endpoints from './endpoints';
 
 try {
     // No discord token
-    if (!process.env.BOT_TOKEN) {
+    if (!envs.BOT.TOKEN) {
         throw new AppError('No BOT_TOKEN env set!');
     }
 
     // No discord owner info
-    if (!process.env.OWNER_ID|| !process.env.OWNER_SERVER) {
+    if (!envs.OWNER.ID|| !envs.OWNER.SERVER) {
         throw new AppError('OWNER_ID and OWNER_SERVER envs both need to be set!');
     }
 
@@ -71,7 +71,7 @@ try {
     });
 
     // Login to the bot
-    client.login(envs.BOT_TOKEN).then(() => {
+    client.login(envs.BOT.TOKEN).then(() => {
         // Success we're online!
         log.debug('@automod online!');
     });

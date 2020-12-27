@@ -5,7 +5,10 @@ export const envs = {
     WEB: {
         PORT: process.env.PORT ?? 52952,
     },
-    BOT_TOKEN: process.env.BOT_TOKEN ?? '',
+    BOT: {
+        COMMIT_HASH: process.env.COMMIT_HASH ?? '',
+        TOKEN: process.env.BOT_TOKEN ?? '',
+    },
     DATABASE: {
         CONNECTION_STRING: process.env.DATABASE_CONNECTION_STRING ?? '',
         DATABASE_NAME: process.env.DATABASE_NAME ?? '',
