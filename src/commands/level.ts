@@ -1,21 +1,10 @@
 import type { Message } from 'discord.js';
-import { Server } from '../servers';
 import { User } from '../user';
 import { Command } from '../command';
+import { isDMChannel, isTextChannel } from '../guards';
+import { AppError } from '../errors';
 
-class Leaderboard {
-  constructor(private users: User[]) {}
-
-  toString() {
-    return this.users.slice(0, 10).map(user => `<@${user.id}> with ${user.experience} exp at level ${user.level}`).join('\n');
-  }
-
-  toJSON() {
-    return this.toString();
-  }
-}
-
-class Level extends Command {
+export class Level extends Command {
   public name = 'level';
   public command = 'level';
   public timeout = 5000;
@@ -25,46 +14,36 @@ class Level extends Command {
   public examples = [ '!level' ];
   public roles = [ '@everyone' ];
 
+  private async getLocalLevel({ id, serverId, }: { id: User['id'], serverId: User['id'], }) {
+    const user = await User.Find({ id, serverId });
+    return `Level ${user[0].level}. Total experience ${user[0].experience ?? 0}`;
+  }
+
+  private async getGlobalLevel({ id, }: { id: User['id'], }) {
+    const user = await User.Find({ id });
+    const level = user.reduce((level, user) => level + user.level, 0);
+    const experience = Math.floor(user.reduce((experience, user) => experience + user.experience, 0));
+    return `Global level ${level}. Global experience ${experience}.`;
+  }
+
   async handler(_prefix: string, message: Message, _args: string[]) {
-    const server = await Server.Find({ id: message.guild!.id });
-    const user = await User.Find({
-      id: message.author.id
-    });
+    const userId = message.author.id;
 
-    // All users
-    // if (args[0] === 'all') {
-    //   const leaderboard = Object.values(server.users).sort((userA, userB) => {
-    //     if (userA.experience < userB.experience) return 1;
-    //     if (userA.experience > userB.experience) return -1;
-    //     return 0;
-    //   });
-    //   const positveLeaderboard = new Leaderboard(leaderboard.filter(user => user.experience >= 0));
-    //   const negativeLeaderboard = new Leaderboard(leaderboard.filter(user => user.experience < 0));
-
-    //   return dedent`
-    //     **Top members**
-    //     ${positveLeaderboard.toString()}
-
-    //     **Salty bitches**
-    //     ${negativeLeaderboard.toString()}
-    //   `;
-    // }
-    try {
-
-      // User's only on one server
-      if (user.length === 1) {
-        return `Level ${user[0].level}. Total experience ${user[0].experience ?? 0}`;
-      }
-
-      // User's on multiple servers
-      const globalLevel = user.reduce((level, user) => level + user.level, 0);
-      const globalExperience = Math.floor(user.reduce((experience, user) => experience + user.experience, 0));
-      const localUser = user.find(user => user.serverId === server.id)!;
-      return `Global level ${globalLevel}. Global experience ${globalExperience}\nLocal level ${localUser.level}. Local experience ${Math.floor(localUser.experience)}`;
-    } catch (error) {
-      console.error(error);
-      return 'Failed getting level';
+    // Global level
+    if (isDMChannel(message)) {
+      return this.getGlobalLevel({ id: userId });
     }
+
+    // Server dependant level
+    if (isTextChannel(message)) {
+      const serverId = message.guild.id;
+      const localLevel = await this.getLocalLevel({ id: userId, serverId });
+      const globalLevel = await this.getGlobalLevel({ id: userId });
+
+      return `${localLevel}\n${globalLevel}`;
+    }
+
+    throw new AppError('Invalid channel type "%s".', message.channel.type);
   }
 };
 

@@ -8,6 +8,7 @@ import commandHelp from './command-help';
 import commands from './commands';
 import help from './help';
 import image from './image';
+import leaderboards from './leaderboards';
 import level from './level';
 import ping from './ping';
 import random from './random';
@@ -30,6 +31,7 @@ const _commands: Command[] = [
     commands,
     help,
     image,
+    leaderboards,
     level,
     ping,
     random,
