@@ -11,6 +11,7 @@ import image from './image';
 import leaderboards from './leaderboards';
 import level from './level';
 import ping from './ping';
+import profile from './profile';
 import random from './random';
 import setBotCommandsChannel from './set-bot-commands-channel';
 import setPrefix from './set-prefix';
@@ -34,6 +35,7 @@ const _commands: Command[] = [
     leaderboards,
     level,
     ping,
+    profile,
     random,
     setBotCommandsChannel,
     setPrefix,
