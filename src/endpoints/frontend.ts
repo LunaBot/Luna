@@ -22,7 +22,7 @@ frontend.get('/dashboard', (_req, res) => {
 // Dashboards
 frontend.get('/dashboard/:serverId', async (req, res) => {
     const serverId = req.params.serverId;
-    const server = await Server.Find({ id: serverId });
+    const server = await Server.find({ id: serverId });
     if (!server) {
         throw new AppError('Invalid server ID');
     }

@@ -24,35 +24,48 @@ export class User {
         this.experience = Number(options.experience) ?? 0;
     }
 
-    private static async _Find({ serverId, id }: { serverId: Server['id'], id: User['id'] } ) {
-        const users = await database.query<User>(sql`SELECT * FROM users WHERE serverId=${serverId} AND id=${id};`);
-
-        // No user found
-        if (users.length === 0) {
-            return this.Create({ serverId, id });
-        }
-
-        // Return existing user
-        return new User(users[0]);
-    }
-
-    private static async _FindAll({ id }: { id: User['id'] } ) {
+    private static async _findAll({ id }: { id: User['id'] } ) {
         const users = await database.query<User>(sql`SELECT * FROM users WHERE id=${id};`);
 
         // Return existing user
         return users.map(user => new User(user));
     }
 
-    public static async Find({ id, serverId, }: { id: User['id'], serverId?: Server['id'], } ) {
+    public static async find({ id, serverId, }: { id: User['id'], serverId?: Server['id'], } ) {
         // Get specific user instance
         if (serverId) {
-            return [await this._Find({ id, serverId, })];
+            const users = await database.query<User>(sql`SELECT * FROM users WHERE serverId=${serverId} AND id=${id};`);
+
+            // No user found
+            if (users.length === 1) {
+                return;
+            }
+
+            // Return existing user
+            return [new User(users[0])];
         }
 
-        return this._FindAll({ id });
+        return this._findAll({ id });
     }
 
-    public static async Create({ serverId, id }: { serverId: Server['id'], id: User['id'] } ) {
+    public static async findOrCreate({ id, serverId, }: { id: User['id'], serverId?: Server['id'], } ) {
+        // Get specific user instance
+        if (serverId) {
+            const users = await database.query<User>(sql`SELECT * FROM users WHERE serverId=${serverId} AND id=${id};`);
+
+            // No user found
+            if (users.length === 0) {
+                return this.create({ serverId, id });
+            }
+
+            // Return existing user
+            return [new User(users[0])];
+        }
+
+        return this._findAll({ id });
+    }
+
+    public static async create({ serverId, id }: { serverId: Server['id'], id: User['id'] } ) {
         // Create user
         const experience = 0;
         await database.query(sql`INSERT INTO users(serverId,id,experience) VALUES (${serverId},${id},${experience});`);

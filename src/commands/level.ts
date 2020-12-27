@@ -15,12 +15,12 @@ export class Level extends Command {
   public roles = [ '@everyone' ];
 
   private async getLocalLevel({ id, serverId, }: { id: User['id'], serverId: User['id'], }) {
-    const user = await User.Find({ id, serverId });
+    const user = await User.findOrCreate({ id, serverId });
     return `Level ${user[0].level}. Total experience ${user[0].experience ?? 0}`;
   }
 
   private async getGlobalLevel({ id, }: { id: User['id'], }) {
-    const user = await User.Find({ id });
+    const user = await User.findOrCreate({ id });
     const level = user.reduce((level, user) => level + user.level, 0);
     const experience = Math.floor(user.reduce((experience, user) => experience + user.experience, 0));
     return `Global level ${level}. Global experience ${experience}.`;

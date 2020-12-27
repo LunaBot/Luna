@@ -25,7 +25,7 @@ class SetPrefix extends Command {
             throw new AppError('prefix can only be a single character!');
         }
 
-        const server = await Server.Find({ id: message.guild!.id });
+        const server = await Server.findOrCreate({ id: message.guild!.id });
         try {
             await server.setPrefix(prefix);
             return `Set prefix to \`${prefix}\``;

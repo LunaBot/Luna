@@ -62,26 +62,35 @@ export class Server {
     }
 
     public async getUser({ id }: { id: User['id'] }) {
-        return User.Find({ id, serverId: this.id }).then(users => users[0]);
+        return User.findOrCreate({ id, serverId: this.id }).then(users => users[0]);
     }
 
     public async createUser({ id }: { id: User['id'] }) {
-        return User.Create({ id, serverId: this.id });
+        return User.create({ id, serverId: this.id });
     }
 
-    public static async Find({ id }: { id: Server['id'] } ) {
+    public static async find({ id }: { id: Server['id'] } ) {
         const servers = await database.query<ServerOptions>(sql`SELECT * FROM servers WHERE id=${id};`);
 
+        // Return existing server
+        if (servers.length === 1) {        
+            return new Server(servers[0]);
+        }
+    }
+
+    public static async findOrCreate({ id }: { id: Server['id'] } ) {
+        const server = await this.find({ id });
+
         // No server found
-        if (servers.length === 0) {
-            return this.Create({ id });
+        if (!server) {
+            return this.create({ id });
         }
 
         // Return existing server
-        return new Server(servers[0]);
+        return server;
     }
 
-    public static async Create({ id }: { id: Server['id'] } ) {
+    public static async create({ id }: { id: Server['id'] } ) {
         // Create server
         const prefix = '!';
         await database.query(sql`INSERT INTO servers(id,prefix) VALUES (${id},${prefix});`);

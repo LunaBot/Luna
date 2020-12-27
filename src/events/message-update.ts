@@ -13,7 +13,7 @@ export const messageUpdate = async (_oldMessage: Message, newMessage: Message) =
   if (newMessage.author.bot) return;
 
   // Skip messages without our prefix
-  const server = await Server.Find({ id: newMessage.guild!.id });
+  const server = await Server.findOrCreate({ id: newMessage.guild!.id });
   if (!newMessage.content.startsWith(server.prefix)) return;
 
   // Log full message

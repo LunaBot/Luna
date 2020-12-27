@@ -24,7 +24,7 @@ export default {
         'server-mod'
     ],
     async handler(prefix: string, message: Message, args: string[]) {
-        const server = await Server.Find({ id: message.guild!.id });
+        const server = await Server.findOrCreate({ id: message.guild!.id });
         const commandName = args[0]; // help
         const command = args[1]; // toggle-role
         const role = args[2]; // test-role

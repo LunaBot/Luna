@@ -25,7 +25,7 @@ class SetBotCommandsChannel extends Command {
             throw new AppError('Invalid channel ID!');
         }
 
-        const server = await Server.Find({ id: message.guild!.id });
+        const server = await Server.findOrCreate({ id: message.guild!.id });
         server.channels.botCommands = commandsChannel;
         return `set commands channel to ${commandsChannel}`;
     }

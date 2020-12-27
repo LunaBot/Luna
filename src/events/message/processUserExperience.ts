@@ -6,7 +6,7 @@ import announce from '../../commands/announce';
 import { capValue } from './index';
 
 export const processUserExperience = async (message: Message) => {
-  const server = await Server.Find({ id: message.guild!.id });
+  const server = await Server.findOrCreate({ id: message.guild!.id });
   const user = await server.getUser({ id: message.author.id });
 
   // Analyse sentiment value of message

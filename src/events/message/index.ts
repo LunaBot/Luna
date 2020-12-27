@@ -39,7 +39,7 @@ export const message = async (message: Message) => {
   let silent = false;
 
   // Get our server
-  const server = await Server.Find({ id: message.guild!.id });
+  const server = await Server.findOrCreate({ id: message.guild!.id });
 
   // Skip bot messages
   if (message.author.bot) return;

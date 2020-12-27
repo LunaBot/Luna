@@ -71,7 +71,7 @@ export class Leaderboards extends Command {
     if (isTextChannelMessage(message)) {
       // Only owner can show leaderboards for now
       if (message.author.id !== envs.OWNER.ID) {
-        const server = await Server.Find({ id: message.guild?.id });
+        const server = await Server.findOrCreate({ id: message.guild?.id });
         throw new CommandPermissionError(server.prefix, 'leaderboards');
       }
 
