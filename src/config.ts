@@ -30,6 +30,9 @@ export const config = {
     },
     get API_KEY_WAS_GENERATED() {
         return process.env.ADMIN_API_KEY === undefined || process.env.ADMIN_API_KEY.trim() === '';
+    },
+    get PUBLIC_URL() {
+        return process.env.PUBLIC_URL;
     }
 };
 
