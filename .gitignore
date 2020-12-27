@@ -6,3 +6,4 @@ servers.json
 .DS_Store
 .env
 ca-certificate.crt
+.nyc_output
