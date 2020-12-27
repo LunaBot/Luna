@@ -83,18 +83,16 @@ class Spoiler extends Command {
 
     // No content just images
     if (content.length === 0) {
-      console.log('no content, just images');
       return [...images];
     }
 
     // Generic spoiler
     if (!spoilerInfo) {
-      console.log('content');
       embed.setTitle(`Spoiler`);
       return [embed, ...images];
     }
 
-    // Trigger/Content warning
+    // Warning
     embed.setColor('#FF0000');
     embed.setTitle(spoilerInfo.warning);
     return [embed, ...images];
