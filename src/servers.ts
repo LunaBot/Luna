@@ -62,7 +62,7 @@ export class Server {
     }
 
     public async getUser({ id }: { id: User['id'] }) {
-        return User.findOrCreate({ id, serverId: this.id }).then(users => users[0]);
+        return User.findOrCreate({ id, serverId: this.id });
     }
 
     public async createUser({ id }: { id: User['id'] }) {
