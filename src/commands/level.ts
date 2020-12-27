@@ -1,9 +1,11 @@
 import type { Message } from 'discord.js';
+import join from 'url-join';
 import { User } from '../user';
 import { Server } from '../servers';
 import { Command } from '../command';
 import { isDMChannelMessage, isTextChannelMessage } from '../guards';
 import { AppError } from '../errors';
+import { config } from '../config';
 
 export class Level extends Command {
   public name = 'level';
@@ -40,8 +42,9 @@ export class Level extends Command {
       const serverId = message.guild.id;
       const localLevel = await this.getLocalLevel({ id: userId, serverId });
       const globalLevel = await this.getGlobalLevel({ id: userId });
+      const leaderboardsLink = join(config.PUBLIC_URL, 'leaderboard', serverId);
 
-      return `${localLevel}\n${globalLevel}`;
+      return `${localLevel}\n${globalLevel}\n${leaderboardsLink}`;
     }
 
     throw new AppError('Invalid channel type "%s".', message.channel.type);
