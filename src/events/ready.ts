@@ -22,7 +22,7 @@ export const ready = async () => {
         const channel = client.channels.cache.get(envs.OWNER.BOT_CHANNEL);
         if (channel && (isTextChannel(channel) || isNewsChannel(channel))) {
             const replies = [
-                `I'm online!`,
+                `New version deployed!`,
                 `Uptime: ${humanizeDuration(process.uptime() * 1000)}`,
                 envs.BOT.COMMIT_HASH ? `Commit: ${envs.BOT.COMMIT_HASH}` : false,
             ].filter(Boolean).join('\n');
