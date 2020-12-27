@@ -1,10 +1,11 @@
+import humanizeDuration from 'humanize-duration';
 import { client } from '../client';
 import { envs } from '../envs';
 import { database } from '../database';
 import { sql } from '@databases/pg';
 import { config } from '../config';
 import { log } from '../log';
-import { isTextChannel } from '../guards';
+import { isNewsChannel, isTextChannel } from '../guards';
 
 export const ready = async () => {
     // Set bot's activity status
@@ -19,8 +20,13 @@ export const ready = async () => {
     // Post "online" update in owner's server
     if (envs.OWNER.BOT_CHANNEL) {
         const channel = client.channels.cache.get(envs.OWNER.BOT_CHANNEL);
-        if (channel && isTextChannel(channel)) {
-            channel.send(`I'm online!`);
+        if (channel && (isTextChannel(channel) || isNewsChannel(channel))) {
+            const replies = [
+                `I'm online!`,
+                `Uptime: ${humanizeDuration(process.uptime() * 1000)}`,
+                envs.BOT.COMMIT_HASH ? `Commit: ${envs.BOT.COMMIT_HASH}` : false,
+            ].filter(Boolean).join('\n');
+            await channel.send(replies);
         }
     }
 };
