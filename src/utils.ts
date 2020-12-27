@@ -1,7 +1,7 @@
 import fs from 'fs';
 import type { Command } from './command';
 
-export const getCommandHelp = (command: Command, prefix: string ='!') => {
+export const getCommandHelp = (prefix: string, command: Command) => {
 	return {
 		name: `\`${prefix}${command.command}\``,
 		value: command.description
