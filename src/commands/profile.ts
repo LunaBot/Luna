@@ -1,3 +1,4 @@
+import join from 'url-join';
 import { Message } from 'discord.js';
 import { Command } from '../command';
 import { config } from '../config';
@@ -18,10 +19,10 @@ class Profile extends Command {
     async handler(_prefix: string, message: Message, _args: string[]) {
         const mention = (message.mentions.users as any)[0];
         if (mention) {
-            return `${config.PUBLIC_URL}/${mention.id}`;
+            return join(config.PUBLIC_URL, 'profile', mention.id);
         }
 
-        return `${config.PUBLIC_URL}/${message.author.id}`;
+        return join(config.PUBLIC_URL, 'profile', message.author.id);
     } 
 };
 
