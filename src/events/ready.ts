@@ -1,10 +1,10 @@
-import { Server } from '../servers';
 import { client } from '../client';
 import { envs } from '../envs';
 import { database } from '../database';
 import { sql } from '@databases/pg';
 import { config } from '../config';
 import { log } from '../log';
+import { isTextChannel } from '../guards';
 
 export const ready = async () => {
     // Set bot's activity status
@@ -17,14 +17,10 @@ export const ready = async () => {
     }
 
     // Post "online" update in owner's server
-    const server = await Server.Find({ id: envs.OWNER.SERVER });
-    const botCommandsChannel = server.channels.botCommands;
-    if (!botCommandsChannel) {
-        return;
-    }
-    const channel = client.channels.cache.get(botCommandsChannel);
-    if (channel?.type === 'text') {
-        // @ts-ignore
-        channel?.send(`I'm online!`);
+    if (envs.OWNER.BOT_CHANNEL) {
+        const channel = client.channels.cache.get(envs.OWNER.BOT_CHANNEL);
+        if (channel && isTextChannel(channel)) {
+            channel.send(`I'm online!`);
+        }
     }
 };
