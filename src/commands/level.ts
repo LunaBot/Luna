@@ -42,9 +42,9 @@ export class Level extends Command {
       const serverId = message.guild.id;
       const localLevel = await this.getLocalLevel({ id: userId, serverId });
       const globalLevel = await this.getGlobalLevel({ id: userId });
-      const leaderboardsLink = join(config.PUBLIC_URL, 'leaderboard', serverId);
+      const leaderboardLink = `Leaderboard: ${join(config.PUBLIC_URL, 'leaderboard', serverId)}`;
 
-      return `${localLevel}\n${globalLevel}\n${leaderboardsLink}`;
+      return `${localLevel}\n${globalLevel}\n${leaderboardLink}`;
     }
 
     throw new AppError('Invalid channel type "%s".', message.channel.type);
