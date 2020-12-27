@@ -1,4 +1,4 @@
-import type { Message, Guild, Channel, TextChannel } from 'discord.js';
+import type { Message, Guild, Channel, TextChannel, NewsChannel } from 'discord.js';
 
 export type DmMessage = Message & {
     guild: null;
@@ -13,3 +13,4 @@ export const isNewsChannelMessage = (message: Message): message is TextMessage =
 export const isTextChannelMessage = (message: Message): message is TextMessage => message.channel.type === 'text';
 
 export const isTextChannel = (channel: Channel): channel is TextChannel => channel.type === 'text';
+export const isNewsChannel = (channel: Channel): channel is NewsChannel => channel.type === 'news';
