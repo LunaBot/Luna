@@ -7,12 +7,14 @@ import { Server } from './servers';
 
 interface UserOptions {
     id: string;
+    displayName: string;
     serverId: string;
     experience: number;
 };
 
 export class User {
     public id: string;
+    public displayName: string;
     public serverId: string;
     public experience = 0;
 
@@ -21,6 +23,9 @@ export class User {
         // serverId is the correct field
         // serverid is returned from the database
         this.serverId = options.serverId ?? (options as any).serverid;
+        // displayName is the correct field
+        // displayname is returned from the database
+        this.displayName = options.displayName ?? (options as any).displayname;
         this.experience = Number(options.experience) ?? 0;
     }
 
@@ -100,5 +105,13 @@ export class User {
 
     get level() {
         return LevelManager.ExperienceToLevel(this.experience);
+    }
+
+    public async setDisplayName(displayName: string) {
+        // Update local cache
+        this.displayName = displayName;
+
+        // Update database
+        await database.query<User>(sql`UPDATE users SET displayName=${displayName} WHERE serverId=${this.serverId} AND id=${this.id}`);
     }
 };

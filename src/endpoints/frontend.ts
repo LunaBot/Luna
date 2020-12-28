@@ -82,7 +82,7 @@ frontend.get('/leaderboard/:serverId', async (req, res) => {
                                 <img class="h-8 w-8 rounded-full object-cover" src="https://randomuser.me/api/portraits/women/10.jpg" alt="" />
                             </td>
                             <td>
-                                <span class="text-center ml-2 font-semibold">${user.id}</span>
+                                <span class="text-center ml-2 font-semibold">${user.displayName || user.id}</span>
                             </td>
                             <td class="px-16 py-2">
                                 <span class="text-center">${user.experience}</span>

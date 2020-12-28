@@ -7,7 +7,7 @@ import botCommand from '../../commands/bot';
 import { log } from '../../log';
 import { promiseTimeout } from '../../utils';
 import { AppError, InvalidCommandError, CommandPermissionError, MultiLinePermissionError } from '../../errors';
-import { processUserExperience } from './processUserExperience';
+import { UserExperience } from './user-experience';
 
 const getCommand = (commandName: string) => _commands.find(_command => _command.name === commandName);
 const isCommandAlias = (server: Server, commandName: string) => Object.keys(server.aliases).includes(commandName);
@@ -50,7 +50,22 @@ export const message = async (message: Message) => {
   }
 
   // Process user experience
-  await processUserExperience(message).catch(error => {
+  const user = await server.getUser({ id: message.author.id });
+  const userExperience = new UserExperience(server, user, message);
+  await userExperience.process().catch(error => {
+    console.log(error);
+  });
+
+  // Update our cache with the user's display name
+  if (!user.displayName) {
+    console.log('setting displayName');
+    const displayName = message.guild?.members.cache.get(user.id)?.displayName || message.guild?.members.cache.get(user.id)?.user.username;
+    if (displayName) {
+      await user.setDisplayName(displayName);
+    }
+  }
+
+  await userExperience.process().catch(error => {
     console.log(error);
   });
 

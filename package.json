@@ -11,7 +11,7 @@
     "bundle": "npx tsup ./src/index.ts",
     "bundle-minify": "npx tsup ./src/index.ts --minify",
     "migrate": "node -r dotenv/config ./node_modules/.bin/pg-migrations apply --directory ./migrations",
-    "migrate-reapply": "node -r dotenv/config ./node_modules/.bin/pg-migrations mark-unapplied -m 1 --directory ./migrations"
+    "migrate-reapply": "node -r dotenv/config ./node_modules/.bin/pg-migrations mark-unapplied --directory ./migrations -m"
   },
   "keywords": [],
   "author": "Alexis Tyler <xo@wvvw.me>",
@@ -38,6 +38,7 @@
     "njstrace": "^1.2.0",
     "number-to-color": "^0.4.1",
     "p-timeout": "^4.0.1",
+    "parse-human-date": "^1.2.0",
     "pluralize": "^8.0.0",
     "sentiment": "^5.0.2",
     "typescript": "^4.1.3",
