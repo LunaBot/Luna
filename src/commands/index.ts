@@ -10,6 +10,7 @@ import help from './help';
 import image from './image';
 import leaderboards from './leaderboards';
 import level from './level';
+import mute from './mute';
 import ping from './ping';
 import profile from './profile';
 import random from './random';
@@ -34,6 +35,7 @@ const _commands: Command[] = [
     image,
     leaderboards,
     level,
+    mute,
     ping,
     profile,
     random,
