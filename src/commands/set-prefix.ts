@@ -1,7 +1,7 @@
-import type { Message } from 'discord.js';
+import { Command } from '../command';
 import { AppError, InvalidCommandError } from '../errors';
 import { Server } from '../servers';
-import { Command } from '../command';
+import type { Message } from 'discord.js';
 
 class SetPrefix extends Command {
     public name = 'set-prefix';

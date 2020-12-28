@@ -1,6 +1,6 @@
-import type { Message, CollectorFilter } from 'discord.js';
 import { Command } from '../command';
 import { AppError } from '../errors';
+import type { Message, CollectorFilter } from 'discord.js';
 
 const filter: CollectorFilter = (response) => !response.author.bot;
 const waitForAdminRoles = async (message: Message) => {

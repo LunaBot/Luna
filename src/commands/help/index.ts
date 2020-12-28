@@ -1,8 +1,8 @@
 import { Message } from 'discord.js';
-import { InvalidCommandError } from '../../errors';
-import { member as generateMemberRoleHelp, moderator as generateModeratorRoleHelp } from './generators/roles';
-import { menu as generateHelp } from './generators';
 import { Command } from '../../command';
+import { InvalidCommandError } from '../../errors';
+import { menu as generateHelp } from './generators';
+import { member as generateMemberRoleHelp, moderator as generateModeratorRoleHelp } from './generators/roles';
 
 class Help extends Command {
     public name = 'help';

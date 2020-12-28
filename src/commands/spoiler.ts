@@ -1,9 +1,9 @@
-import { Message, MessageAttachment, MessageEmbed } from 'discord.js';
-import { Command } from '../command';
 import axios from 'axios';
+import { Message, MessageAttachment, MessageEmbed } from 'discord.js';
 import { client } from '../client';
-import { isTextChannelMessage } from '../guards';
+import { Command } from '../command';
 import { AppError } from '../errors';
+import { isTextChannelMessage } from '../guards';
 
 const match = (string: string) => {
   const groups = string.match(/\[(?<warning>.*)\] (?<message>.*)/i)?.groups;

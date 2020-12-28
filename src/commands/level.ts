@@ -1,11 +1,11 @@
-import type { Message } from 'discord.js';
 import join from 'url-join';
-import { User } from '../user';
-import { Server } from '../servers';
 import { Command } from '../command';
-import { isDMChannelMessage, isTextChannelMessage } from '../guards';
-import { AppError } from '../errors';
 import { config } from '../config';
+import { AppError } from '../errors';
+import { isDMChannelMessage, isTextChannelMessage } from '../guards';
+import { Server } from '../servers';
+import { User } from '../user';
+import type { Message } from 'discord.js';
 
 export class Level extends Command {
   public name = 'level';

@@ -1,8 +1,8 @@
 import { Message, MessageEmbed } from 'discord.js';
-import commands from './index';
-import { getCommandHelp } from '../utils';
-import type { Command } from '../command';
 import { InvalidCommandError } from '../errors';
+import { getCommandHelp } from '../utils';
+import commands from './index';
+import type { Command } from '../command';
 
 export default {
     name: 'Command help',

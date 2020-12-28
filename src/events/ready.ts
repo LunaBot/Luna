@@ -1,11 +1,11 @@
+import { sql } from '@databases/pg';
 import humanizeDuration from 'humanize-duration';
 import { client } from '../client';
-import { envs } from '../envs';
-import { database } from '../database';
-import { sql } from '@databases/pg';
 import { config } from '../config';
-import { log } from '../log';
+import { database } from '../database';
+import { envs } from '../envs';
 import { isNewsChannel, isTextChannel } from '../guards';
+import { log } from '../log';
 
 export const ready = async () => {
     // Set bot's activity status

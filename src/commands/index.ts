@@ -19,8 +19,8 @@ import setPrefix from './set-prefix';
 import setup from './setup';
 import spank from './spank';
 import spoiler from './spoiler';
-import type { Command } from '../command';
 import uptime from './uptime';
+import type { Command } from '../command';
 
 const _commands: Command[] = [
     alias,

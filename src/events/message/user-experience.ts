@@ -1,10 +1,10 @@
-import ml from 'ml-sentiment';
 import { Message } from 'discord.js';
-import { Server } from '../../servers';
-import { log } from '../../log';
+import ml from 'ml-sentiment';
 import announce from '../../commands/announce';
-import { capValue } from './index';
+import { log } from '../../log';
+import { Server } from '../../servers';
 import { User } from '../../user';
+import { capValue } from './index';
 
 export class UserExperience {
   constructor(private server: Server, private user: User, private message: Message) {}

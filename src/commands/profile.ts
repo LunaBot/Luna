@@ -1,5 +1,5 @@
-import join from 'url-join';
 import { Message } from 'discord.js';
+import join from 'url-join';
 import { Command } from '../command';
 import { config } from '../config';
 

@@ -1,7 +1,7 @@
 import humanizeDuration from 'humanize-duration';
-import type { Message } from 'discord.js';
 import { Command } from '../command';
 import { envs } from '../envs';
+import type { Message } from 'discord.js';
 
 class Uptime extends Command {
     public name = 'uptime';

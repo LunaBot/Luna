@@ -1,9 +1,9 @@
 import parseDate from 'parse-human-date';
-import type { Message } from 'discord.js';
 import { Command } from '../command';
+import { AppError, CommandPermissionError } from '../errors';
 import { isTextChannelMessage } from '../guards';
 import { Server } from '../servers';
-import { AppError, CommandPermissionError } from '../errors';
+import type { Message } from 'discord.js';
 
 class Mute extends Command {
     public name = 'mute';

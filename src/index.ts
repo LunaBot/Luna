@@ -1,11 +1,11 @@
-import importToArray from 'import-to-array';
 import express from 'express';
-import * as events from './events';
+import importToArray from 'import-to-array';
 import { client } from './client';
-import { envs } from './envs';
-import { log } from './log';
-import { AppError } from './errors';
 import * as endpoints from './endpoints';
+import { envs } from './envs';
+import { AppError } from './errors';
+import * as events from './events';
+import { log } from './log';
 
 try {
     // No discord token

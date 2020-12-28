@@ -1,5 +1,5 @@
-import type { GuildChannel, Message, TextChannel } from 'discord.js';
 import { Command } from '../command';
+import type { GuildChannel, Message, TextChannel } from 'discord.js';
 
 const isChannelText = (channel?: GuildChannel): channel is TextChannel => channel?.type === 'text';
 

@@ -4,8 +4,6 @@ import { database } from '../database';
 import { AppError } from '../errors';
 import { Server } from '../servers';
 import { User } from '../user';
-import { Leaderboard } from '../commands/leaderboards';
-import dedent from 'dedent';
 
 const frontend = router();
 

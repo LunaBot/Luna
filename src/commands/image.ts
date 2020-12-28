@@ -1,5 +1,5 @@
-import fetch, { Response } from 'node-fetch';
 import { Message } from 'discord.js';
+import fetch, { Response } from 'node-fetch';
 import pluralize from 'pluralize';
 import { Command } from '../command';
 import { AppError } from '../errors';

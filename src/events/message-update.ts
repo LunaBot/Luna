@@ -1,9 +1,9 @@
-import type { Message } from 'discord.js';
+import { log } from '../log';
 import { Server } from '../servers';
+import type { Message } from 'discord.js';
 // import _commands from '../commands';
 // import { config } from '../config';
 // import botCommand from '../commands/bot';
-import { log } from '../log';
 // import { AppError, InvalidCommandError, CommandPermissionError, MultiLinePermissionError } from '../errors';
 
 // const getCommand = (commandName: string) => _commands.find(_command => _command.name === commandName);

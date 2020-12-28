@@ -1,7 +1,7 @@
 import pluralize from 'pluralize';
-import type { Message } from 'discord.js';
 import { Command } from '../command';
 import { AppError } from '../errors';
+import type { Message } from 'discord.js';
 
 interface Permissions {
     allowed: string[];

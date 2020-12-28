@@ -1,5 +1,5 @@
-import type { Message } from 'discord.js';
 import { Command } from '../command';
+import type { Message } from 'discord.js';
 
 class Ping extends Command {
     public name = 'ping';

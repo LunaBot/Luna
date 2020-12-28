@@ -1,4 +1,4 @@
-import { MessageEmbed } from 'discord.js'
+import { MessageEmbed } from 'discord.js';
 
 export const member = (prefix: string) => {
     return new MessageEmbed()

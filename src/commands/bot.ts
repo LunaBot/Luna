@@ -1,7 +1,7 @@
-import type { Message } from 'discord.js';
 import { client } from '../client';
-import { AppError } from '../errors';
 import { Command } from '../command';
+import { AppError } from '../errors';
+import type { Message } from 'discord.js';
 
 class Bot extends Command {
     public name =  'bot';

@@ -1,10 +1,10 @@
-import { MessageEmbed, Message } from 'discord.js';
-import commands from './index';
-import { getCommandHelp } from '../utils';
+import { Message, MessageEmbed } from 'discord.js';
 import { Command } from '../command';
-import { Server } from '../servers';
-import { isTextChannelMessage } from '../guards';
 import { AppError } from '../errors';
+import { isTextChannelMessage } from '../guards';
+import { Server } from '../servers';
+import { getCommandHelp } from '../utils';
+import commands from './index';
 
 class Commands extends Command {
     public name = 'commands';
