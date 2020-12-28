@@ -1,13 +1,15 @@
 import dedent from 'dedent';
+import join from 'url-join';
 import { sql } from '@databases/pg';
 import type { Message } from 'discord.js';
 import { User } from '../user';
 import { Server } from '../servers';
 import { Command } from '../command';
 import { isDMChannelMessage, isTextChannelMessage } from '../guards';
-import { AppError, CommandPermissionError } from '../errors';
+import { AppError } from '../errors';
 import { database } from '../database';
 import { envs } from '../envs';
+import { config } from '../config';
 
 class Leaderboard {
   constructor(private users: User[]) {}
@@ -72,7 +74,7 @@ export class Leaderboards extends Command {
       // Only owner can show leaderboards for now
       if (message.author.id !== envs.OWNER.ID) {
         const server = await Server.findOrCreate({ id: message.guild?.id });
-        throw new CommandPermissionError(server.prefix, 'leaderboards');
+        return `Leaderboard: ${join(config.PUBLIC_URL, 'leaderboard', server.id)}`;
       }
 
       const serverId = message.guild.id;
