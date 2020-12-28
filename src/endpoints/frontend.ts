@@ -53,6 +53,7 @@ frontend.get('/leaderboard/:serverId', async (req, res) => {
     const positiveLeaderboardUsers = leaderboard.filter(user => user.experience >= 0);
     const negativeLeaderboardUsers = leaderboard.filter(user => user.experience < 0);
 
+    const fallbackImage = 'https://discordapp.com/assets/dd4dbc0016779df1378e7812eabaa04d.png';
     const createLeaderboardHtml = (title: string, users: User[]) => {
         return `<div class="p-8">
             <h1 class="text-3xl">${title}</h1>
@@ -77,7 +78,7 @@ frontend.get('/leaderboard/:serverId', async (req, res) => {
                     ${users.map(user => {
                         return `<tr class="bg-white border-4 border-gray-200">
                             <td class="px-16 py-2 flex flex-row items-center">
-                                <img class="h-8 w-8 rounded-full object-cover" src="https://randomuser.me/api/portraits/women/10.jpg" alt="" />
+                                <img class="h-8 w-8 rounded-full object-cover" src="${user.displayImage || fallbackImage}" alt="" />
                             </td>
                             <td>
                                 <span class="text-center ml-2 font-semibold">${user.displayName || user.id}</span>
