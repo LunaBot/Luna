@@ -1,5 +1,3 @@
-DROP TABLE panels;
-
 -- Create panels table
 CREATE TABLE IF NOT EXISTS panels (
     id VARCHAR(256) PRIMARY KEY,
