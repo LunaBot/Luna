@@ -25,15 +25,17 @@ class Spoiler extends Command {
   public name = 'spoiler';
   public command = 'spoiler';
   public timeout = 1000;
-  public description = 'Create a spoiler image';
+  public description = 'Create a spoiler. This works on mobile with images!';
   public hidden = false;
   public owner = false;
-  public examples = [ '!spoiler' ];
+  public examples = [
+    '!spoiler',
+    '!spoiler [CW: This is a test post] Well this is neat!',
+    '!spoiler [TW: This is a test post] Well this is neat!',
+    '!spoiler Well this is neat!',
+  ];
   public roles = [ '@everyone' ];
 
-  // !spoiler [CW: This is a test post] Well this is neat!
-  // !spoiler [TW: This is a test post] Well this is neat!
-  // !spoiler Well this is neat!
   async handler(_prefix: string, message: Message, _args: string[]) {
     if (isTextChannelMessage(message)) {
       // Parse message
