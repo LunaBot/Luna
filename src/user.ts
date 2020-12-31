@@ -29,7 +29,11 @@ interface UserOptions {
 // In milliseconds
 const FIVE_SECONDS = 5000;
 
-const getCommand = (commandName: string) => _commands.find(_command => _command.name === commandName);
+const getCommand = (commandName: string) => {
+    const command = _commands.find(_command => _command.command === commandName);
+    log.silly('Searching for %s, found %s', commandName, JSON.stringify(command));
+    return command;
+};
 const isCommandAlias = (server: Server, commandName: string) => Object.keys(server.aliases).includes(commandName);
 
 export class User {
