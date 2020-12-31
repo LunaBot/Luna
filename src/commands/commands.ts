@@ -22,7 +22,7 @@ class Commands extends Command {
             const commandsUserCanAccess = _commandsUserCanAccess.filter(command => !command.hidden);
             const fields = commandsUserCanAccess.map(command => {
                 return {
-                    name: `\`${server.prefix ?? '!'}${command.name}\``,
+                    name: `\`${server.prefix ?? '!'}${command.command}\``,
                     value: command.description
                 };
             });
