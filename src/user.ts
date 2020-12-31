@@ -150,7 +150,6 @@ export class User {
     }
 
     public async setDisplayImage(displayImage?: string) {
-        console.log(displayImage);
         if (displayImage) {
             if (!this.displayImage || this.displayImage !== displayImage) {
                 // Update local cache
