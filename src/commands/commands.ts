@@ -3,7 +3,6 @@ import { Command } from '../command';
 import { AppError } from '../errors';
 import { isTextChannelMessage } from '../guards';
 import { Server } from '../servers';
-import { getCommandHelp } from '../utils';
 import commands from './index';
 
 class Commands extends Command {
@@ -21,7 +20,12 @@ class Commands extends Command {
             const server = await Server.findOrCreate({ id: message.guild.id });
             const _commandsUserCanAccess = (commands as Command[]).filter(command => message.member?.roles.cache.some(role => command.roles.includes(role.name)));
             const commandsUserCanAccess = _commandsUserCanAccess.filter(command => !command.hidden);
-            const fields = commandsUserCanAccess.map(command => getCommandHelp(server.prefix || '!', command));
+            const fields = commandsUserCanAccess.map(command => {
+                return {
+                    name: `\`${server.prefix ?? '!'}${command.name}\``,
+                    value: command.description
+                };
+            });
     
             const embed = new MessageEmbed()
                 .setColor('#0099ff')
