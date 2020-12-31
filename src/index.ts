@@ -65,6 +65,10 @@ try {
             // Emit "error" event on promise rejection
             // @ts-expect-error
             Promise.resolve(eventHandler.call(eventHandler, ...args)).catch(error => {
+                // Add event name so we can more easily identify this when we log it out
+                error.extras = {
+                    eventName
+                };
                 client.emit('error', error);
             });
         });
