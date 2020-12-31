@@ -221,21 +221,6 @@ export class User {
                 throw new MultiLinePermissionError();
             }
 
-            // Internal bot commands
-            // These should only work for the person that created the bot
-            if (commandName === botCommand.command) {
-                // Non-owner user tried accessing bot commands, throw error
-                if (envs.OWNER.ID !== message.member?.id) {
-                    log.warn('%s tried accessing the bot commands via server %s', message.member?.id, message.guild?.id);
-                    throw new CommandPermissionError(server.prefix, commandName);
-                }
-
-                // Owner tried bot commands on wrong server, warn them
-                if (envs.OWNER.SERVER !== message.guild?.id) {
-                    throw new AppError('wrong server! %sbot can only be used on the server listed in `config.json`', server.prefix);
-                }
-            }
-
             // Don't check permissions if this is the owner of the bot
             if (envs.OWNER.ID !== message.member?.id) {
                 // Check we have permission to run this
