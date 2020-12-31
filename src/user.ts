@@ -230,7 +230,7 @@ export class User {
             }
 
             // Ensure we have the right amount of args
-            if (command.arguments.minimum !== undefined || command.arguments.maximum !== undefined) {
+            if (command.arguments?.minimum !== undefined || command.arguments?.maximum !== undefined) {
                 if (args.length < command.arguments.minimum) {
                     throw new AppError('Not enough args, %s requires at least %s args.', command.name, command.arguments.minimum);
                 }
