@@ -27,7 +27,7 @@ interface RoleAndAction {
 const isRoleAndAction = (object: any): object is RoleAndAction => object.role instanceof Role;
 
 export const guildMemberUpdate = async (oldMember: GuildMember, newMember: GuildMember) => {
-    const autoRoles = await database.query<AutoRole>(sql`SELECT * FROM autoRoles WHERE serverId=${oldMember.guild.id}`);
+    const autoRoles = await database.query<AutoRole>(sql`SELECT * FROM autoRoles WHERE enabled=true AND serverId=${oldMember.guild.id}`);
 
     // No auto roles setup
     if (autoRoles.length === 0) {
