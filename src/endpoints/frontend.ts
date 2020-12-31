@@ -22,7 +22,8 @@ const createVueEndpoint = ({
     context: {}
 }) => {
     const template = templatePath ? fs.readFileSync(templatePath, 'utf-8') : dedent`
-        <html>
+        <!DOCTYPE html>
+        <html lang="en">
             <head>
                 <meta charset="utf-8">
                 <title>{{ title }}</title>
@@ -183,7 +184,7 @@ frontend.get('/leaderboard/:serverId', async (request, response) => {
                         </tr>
                     </thead>
                     <tbody class="bg-gray-200">
-                        <leaderboard-row v-for="(user, index) in users" :key="user.id" v-bind="{ rank: index, user }" />
+                        <leaderboard-row v-for="(user, index) in users" :key="user.id" v-bind="{ rank: index + 1, user }" />
                     </tbody>
                 </table>
             </div>
@@ -191,6 +192,7 @@ frontend.get('/leaderboard/:serverId', async (request, response) => {
     });
     return createVueEndpoint({
         app: new Vue({
+            name: 'App',
             data() {
                 return {
                     positiveLeaderboardUsers,
@@ -201,9 +203,9 @@ frontend.get('/leaderboard/:serverId', async (request, response) => {
                 Leaderboard,
             },
             template: `
-            <div>
+            <div id="app">
                 <leaderboard v-bind="{ title: 'Top members!', users: positiveLeaderboardUsers }" />
-                <leaderboard v-bind="{ title: 'Salty bitches!', users: negativeLeaderboardUsers }" />
+                <leaderboard v-if="negativeLeaderboardUsers.length >= 1" v-bind="{ title: 'Salty bitches!', users: negativeLeaderboardUsers }" />
             </div>
             `,
         }),
