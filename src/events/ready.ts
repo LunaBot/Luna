@@ -1,4 +1,5 @@
 import { sql } from '@databases/pg';
+import git from 'git-rev-sync';
 import humanizeDuration from 'humanize-duration';
 import { client } from '../client';
 import { config } from '../config';
@@ -22,9 +23,8 @@ export const ready = async () => {
         const channel = client.channels.cache.get(envs.OWNER.BOT_CHANNEL);
         if (channel && (isTextChannel(channel) || isNewsChannel(channel))) {
             const replies = [
-                `New version deployed!`,
-                `Uptime: ${humanizeDuration(process.uptime() * 1000)}`,
-                envs.BOT.COMMIT_HASH ? `Commit: ${envs.BOT.COMMIT_HASH}` : false,
+                `Version ${envs.BOT.COMMIT_HASH || git.short()} deployed!`,
+                `Took ${humanizeDuration(process.uptime() * 1000)} to start!`
             ].filter(Boolean).join('\n');
             await channel.send(replies);
         }
