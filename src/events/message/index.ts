@@ -1,14 +1,15 @@
 import humanizeDuration from 'humanize-duration';
-import { envs } from '../../envs';
-import { log } from '../../log';
-import { Server } from '../../servers';
+import { envs } from '@/envs';
+import { isTextChannelMessage } from '@/guards';
+import { log } from '@/log';
+import { Server } from '@/servers';
 import type { Message } from 'discord.js';
-
-export const capValue = (number: number, min: number, max: number) => Math.max(min, Math.min(number, max));
 
 let isStarting = true;
 
 export const message = async (message: Message) => {
+  // @ts-expect-error
+  message.startedProcessingTimestamp = new Date();
   // In development mode only allow the bot's own server to process
   if (envs.NODE_ENV === 'development' && message.guild?.id !== envs.OWNER.SERVER) {
     return;
@@ -34,8 +35,13 @@ export const message = async (message: Message) => {
     return;
   }
 
-  // Process message
-  const server = await Server.findOrCreate({ id: message.guild!.id });
-  const user = await server.getUser({ id: message.author.id });
-  await user.processMessage(message);
+  // Only continue in a text channel and they actually sent a message
+  if (isTextChannelMessage(message) && message.content.trim() !== '') {
+    // Get current server
+    const server = await Server.findOrCreate({ id: message.guild.id });
+
+    // Process message
+    const user = await server.getUser({ id: message.author.id });
+    await user.processMessage(message);
+  }
 };

@@ -34,21 +34,26 @@ export class Server {
     }
     public channels: {
         botCommands?: string;
-    }
-    public users: {
-        [key: string]: User
+        verification?: string | string[];
     }
     public aliases: {
         [command: string]: Alias
     }
 
+    private attemptParse<T extends any>(option: T): T | undefined {
+        try {
+            return (typeof option === 'string' ? JSON.parse(option) : option);
+        } catch {}
+    }
+
     constructor(options: Partial<ServerOptions> & { id: ServerOptions['id'] }) {
         this.id = options.id;
         this.prefix = options.prefix ?? '!';
-        this.commands = options.commands ?? {};
-        this.channels = options.channels ?? {};
-        this.users = Object.fromEntries(Object.entries((options.users ?? {}) as any).map(([id, user]) => [id, new User(user as any)])) ?? {};
-        this.aliases = options.aliases ?? {};
+        this.commands = this.attemptParse(options.commands) ?? {};
+        this.channels = this.attemptParse(options.channels) ?? {
+            verification: []
+        };
+        this.aliases = this.attemptParse(options.aliases) ?? {};
     }
 
     public async setPrefix(prefix: string) {
@@ -93,7 +98,9 @@ export class Server {
     public static async create({ id }: { id: Server['id'] } ) {
         // Create server
         const prefix = '!';
-        await database.query(sql`INSERT INTO servers(id,prefix) VALUES (${id},${prefix});`);
+        const channels = JSON.stringify({});
+        const aliases = JSON.stringify({});
+        await database.query(sql`INSERT INTO servers(id,prefix,channels,aliases) VALUES (${id},${prefix},${channels},${aliases});`);
 
         // Failed to create server
         const servers = await database.query<ServerOptions>(sql`SELECT * FROM servers WHERE id=${id};`);

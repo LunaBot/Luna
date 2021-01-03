@@ -1,5 +1,5 @@
 import { DiscordAPIError } from 'discord.js';
-import { log } from '../log';
+import { log } from '@/log';
 
 export const error = (error: NodeJS.ErrnoException | DiscordAPIError) => {
     if (error instanceof DiscordAPIError) {

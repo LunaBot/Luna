@@ -1,4 +1,7 @@
-import type { Message, APIMessageContentResolvable, MessageOptions, MessageAdditions } from 'discord.js';
+import { sql } from '@databases/pg';
+import type { Message, APIMessageContentResolvable, MessageOptions, MessageAdditions, Interaction, PermissionString } from 'discord.js';
+import { database } from './database';
+import { Server } from './servers';
 
 const ONE_SECOND = 1000;
 const FIVE_SECONDS = ONE_SECOND * 5;
@@ -21,6 +24,39 @@ export interface CommandOptions {
 
 type CommandResult = APIMessageContentResolvable | (MessageOptions & { split?: false }) | MessageAdditions | string;
 
+export enum ApplicationCommandOptionType {
+    SUB_COMMAND = 1,
+    SUB_COMMAND_GROUP = 2,
+    STRING = 3,
+    INTEGER = 4,
+    BOOLEAN = 5,
+    USER = 6,
+    CHANNEL = 7,
+    ROLE = 8,
+}
+
+export interface ApplicationCommandOptionChoice {
+    name: String;
+    field: String;
+}
+
+export interface CommandOption {
+    // 1-32 character name matching ^[\w-]{1,32}$
+    name: String;
+    // 1-100 character description
+    description: String;
+    // value of ApplicationCommandOptionType
+    type: ApplicationCommandOptionType;
+    // The first required option for the user to complete--only one option can be default
+    default?: Boolean;
+    // If the parameter is required or optional--default false
+    required?: Boolean;
+    // array of ApplicationCommandOptionChoice	choices for string and int types for the user to pick from
+    choices?: ApplicationCommandOptionChoice
+    // array of ApplicationCommandOption	if the option is a subcommand or subcommand group type, this nested options will be the parameters
+    options?: CommandOption[]
+}
+
 export class Command {
     public name: string = 'command';
     public command: string = 'command';
@@ -30,10 +66,11 @@ export class Command {
     public owner: boolean = false;
     public examples: string[] = [];
     public roles: string[] = [];
-    public arguments = {
-        minimum: 0,
-        maximum: Infinity
-    };
+    /**
+     * Discord permissions needed to use this command.
+     */
+    public permissions: PermissionString[] = [];
+    public options: CommandOption[] = [];
 
     static TIMEOUTS = {
         ONE_SECOND,
@@ -45,16 +82,17 @@ export class Command {
         TEN_MINUTES
     };
 
-    // @todo: Add in support for detecting if id was pinged
-    protected getIdFromMessage(message: string) {
-        const trimmedMessage = `${message}`.trim();
-        if (trimmedMessage.startsWith('<') && trimmedMessage.endsWith('>')) {
-            const id = message.split('<')[1];
-            return id.substr(0, id.length - 1).replace('@', '').replace('#', '').replace('!', '');
-        }
+    public async isEnabled(serverId: Server['id']) {
+        return database.query(sql`SELECT enabled FROM commands WHERE serverId=${serverId} AND command=${this.command};`).then((commands) => {
+            return commands[0]?.enabled ?? false;
+        });
     }
 
-    handler(_prefix: string, _message: Message, _args: string[]): Promise<CommandResult> | CommandResult {
+    messageHandler(_prefix: string, _message: Message, _args: string[]): Promise<CommandResult | undefined> | CommandResult | undefined | void {
+        throw new Error('Not implemented');
+    }
+
+    interactionHandler(_prefix: string, _interaction: Interaction): Promise<CommandResult | undefined> | CommandResult | undefined | void {
         throw new Error('Not implemented');
     }
 };

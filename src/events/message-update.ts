@@ -1,5 +1,5 @@
-import { log } from '../log';
-import { Server } from '../servers';
+import { log } from '@/log';
+import { Server } from '@/servers';
 import type { Message } from 'discord.js';
 // import _commands from '../commands';
 // import { config } from '../config';

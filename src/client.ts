@@ -10,9 +10,9 @@ Structures.extend('GuildMember', GuildMember => {
     }
 
     _patch(data: any) {
-        // @ts-expect-error
-        super._patch(data);
-        this.pending = data.pending ?? false;
+      // @ts-expect-error
+      super._patch(data);
+      this.pending = data.pending ?? false;
     }
   }
 

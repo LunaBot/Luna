@@ -1,7 +1,7 @@
 import { sql } from '@databases/pg';
-import { Message } from 'discord.js';
-import _commands from './commands';
-import botCommand from './commands/bot';
+import { DMChannel, GuildMember, Interaction, Message, MessageEmbed, NewsChannel, TextChannel } from 'discord.js';
+import { Command } from './command';
+import { PromiseValue } from 'type-fest';
 import { database } from './database';
 import { envs } from './envs';
 import {
@@ -9,11 +9,12 @@ import {
     CommandPermissionError,
     InvalidCommandError,
     MultiLinePermissionError
-    } from './errors';
+} from './errors';
 import { UserExperience } from './events/message/user-experience';
 import { isTextChannelMessage } from './guards';
 import { LevelManager } from './levels';
 import { log } from './log';
+import { moduleManager } from './module-manager';
 import { Server } from './servers';
 import { promiseTimeout } from './utils';
 
@@ -28,13 +29,6 @@ interface UserOptions {
 
 // In milliseconds
 const FIVE_SECONDS = 5000;
-
-const getCommand = (commandName: string) => {
-    const command = _commands.find(_command => _command.command === commandName);
-    log.silly('Searching for %s, found %s', commandName, JSON.stringify(command));
-    return command;
-};
-const isCommandAlias = (server: Server, commandName: string) => Object.keys(server.aliases).includes(commandName);
 
 export class User {
     public id: string;
@@ -161,27 +155,22 @@ export class User {
         }
     }
 
-    public async processUserExperience(message: Message) {
-        const server = await Server.findOrCreate({ id: this.serverId });
-        const userExperience = new UserExperience(server, this, message);
-        await userExperience.process().catch(error => {
-            console.log(error);
-        });
+    public async processVerifications(message: Message) {
+        const channelId = message.channel.id;
+        // Is this a verification channel?
+        // Is the command enabled?
+        const verificationChannels = await database.query(sql`SELECT * FROM verifications WHERE enabled=true AND allowedChannels @> ARRAY[${channelId}]::varchar[]`);
+        console.log({ verificationChannels });
+
+        // Do we require a profile image?
+
+
+        // Did the user succeed?
+        // Did the user fail?
+        // Did the user cause an error?
     }
 
-    public async processMessage(message: Message) {
-        // Non text channel
-        if (!isTextChannelMessage(message)) {
-            return;
-        }
-
-        // Update our cache with the user's display name and image
-        await this.setDisplayName(message.guild?.members.cache.get(this.id)?.displayName || message.guild?.members.cache.get(this.id)?.user.username);
-        await this.setDisplayImage(message.guild?.members.cache.get(this.id)?.user.displayAvatarURL({ format: 'png' }));
-
-        // Handle user experience
-        await this.processUserExperience(message);
-
+    private async processCommand(message: Message | Interaction) {
         // Get current server
         const server = await Server.findOrCreate({ id: this.serverId });
 
@@ -196,7 +185,7 @@ export class User {
         }
 
         // Log full message
-        log.debug(`[${message.author.tag}]: ${message.content}`);
+        log.debug(`[${message.author?.tag}]: ${message.content}`);
 
         const _commandBody = message.content.slice(silent ? server.prefix.length + 1 : server.prefix.length);
         const commandBody = _commandBody.split('\n')[0];
@@ -211,7 +200,7 @@ export class User {
             }
 
             // Bail if the command isn't valid
-            const command = getCommand(isCommandAlias(server, commandName) ? server.aliases[commandName] : commandName);
+            const command = moduleManager.getCommand(commandName);
             if (!command) {
                 throw new InvalidCommandError(server.prefix, commandName, args);
             }
@@ -221,44 +210,28 @@ export class User {
                 throw new MultiLinePermissionError();
             }
 
-            // Don't check permissions if this is the owner of the bot
-            if (envs.OWNER.ID !== message.member?.id) {
-                // Check we have permission to run this
-                if (!message.member?.roles.cache.some(role => command.roles.includes(role.name))) {
-                    throw new CommandPermissionError(server.prefix, commandName);
-                }
-            }
+            // Check we have permission to proceed
+            await this.processPermissions(commandName, server, message.member!, command);
 
-            // Ensure we have the right amount of args
-            if (command.arguments?.minimum !== undefined || command.arguments?.maximum !== undefined) {
-                if (args.length < command.arguments.minimum) {
-                    throw new AppError('Not enough args, %s requires at least %s args.', command.name, command.arguments.minimum);
+            // Ensure we have all the needed options
+            const options = command.options.filter(option => option.required);
+            if (options.length >= 1) {
+                // Not enough arguments
+                if (args.length < options.length) {
+                    throw new AppError('Not enough args, %s requires at least %s args.', command.name, options.length);
                 }
-
-                if (args.length > command.arguments.maximum) {
-                    throw new AppError('Too many args, %s requires no more than %s args.', command.name, command.arguments.maximum);
+    
+                // Too many arguments
+                if (args.length > command.options.length) {
+                    throw new AppError('Too many args, %s requires no more than %s args.', command.name, command.options.length);
                 }
             }
 
             // Run the command
-            const commandPromise = Promise.resolve(command.handler(server.prefix, message, args));
+            const commandPromise = Promise.resolve(command.messageHandler ? command.messageHandler(server.prefix, message, args) : command.handler(server.prefix, message, args));
             const result = await promiseTimeout(commandPromise, command.timeout ?? FIVE_SECONDS);
 
-            // No output
-            if (!result) {
-                throw new AppError('No command output');
-            }
-
-            // If result is a string and starts with a capital
-            if (typeof result === 'string' && !result.startsWith('http') && /^[a-z]/.test(result)) {
-                log.warn(`Command output started with a lowercase "${result}".`);
-            }
-
-            // Skip output
-            if (silent) return;
-
-            // Respond with command output
-            await message.channel.send(result as string);
+            await this.processResult(result, message.channel, message.member!);
         } catch (error) {
             // Reply with error
             if (process.env.DEBUG) {
@@ -271,6 +244,93 @@ export class User {
 
             log.error(error);
             await message.channel.send(error.message);
+        }
+    }
+
+    public async processInteraction(interaction: Interaction) {
+        // Get current server
+        const server = await Server.findOrCreate({ id: this.serverId });
+
+        // Get command
+        const commandName = interaction.name;
+        const command = moduleManager.getCommand(commandName);
+
+        // Check we have permission to proceed
+        await this.processPermissions(interaction.name, server, interaction.member!, command);
+
+        // Process command
+        return command?.interactionHandler(server.prefix, interaction);
+    }
+
+    public async processPermissions(commandName: string, server: Server, member: GuildMember, command?: Command) {
+        // Command isn't loaded
+        if (!command) {
+            throw new AppError(`\`${commandName}\` is currently unloaded!`);
+        }
+
+        // Is command enabled?
+        if (await command.isEnabled(server.id).then(enabled => !enabled)) {
+            // Command is disabled, bail
+            throw new AppError(`The \`${commandName}\` command is disabled!`);
+        }
+
+        // Don't check permissions if this is the owner of the bot
+        if (envs.OWNER.ID !== member?.id) {
+            // Check we have permission to run this
+            if (!command?.permissions.some(permission => member?.hasPermission(permission as any))) {
+                throw new CommandPermissionError('/', commandName);
+            }
+        }
+    }
+
+    public async processMessage(message: Message) {
+        // Non text channel
+        if (!isTextChannelMessage(message)) {
+            return;
+        }
+
+        // Update our cache with the user's display name
+        await this.setDisplayName(message.guild?.members.cache.get(this.id)?.displayName || message.guild?.members.cache.get(this.id)?.user.username);
+
+        // Update our cache with the user's display image
+        await this.setDisplayImage(message.guild?.members.cache.get(this.id)?.user.displayAvatarURL({ format: 'png' }));
+
+        // Process command
+        await this.processCommand(message);
+    }
+
+    async processResult(result: PromiseValue<ReturnType<User['processMessage'] | User['processInteraction']>>, channel: TextChannel | NewsChannel | DMChannel, member: GuildMember) {
+        try {
+            // No output
+            if (!result) {
+                throw new AppError('No command output');
+            }
+
+            // Output is a string and starts with a capital
+            if (typeof result === 'string' && !result.startsWith('http') && /^[a-z]/.test(result)) {
+                log.warn(`Command output started with a lowercase "${result}".`);
+            }
+
+            // Output is silent
+            if (result === Symbol.for('silent')) {
+                return;
+            }
+
+            // Respond with command output
+            await channel.send(result as string);
+        } catch (error) {
+            log.error(error);
+
+            // Reply with error
+            if (process.env.DEBUG) {
+                // Show debugging to owner
+                if (envs.OWNER.ID === member?.id) {
+                    await channel.send('```json\n' + JSON.stringify(error, null, 2) + '\n```');
+                    return;
+                }
+            }
+
+            await channel.send(error.message);
         }
     }
 };

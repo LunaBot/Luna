@@ -1,1 +1,0 @@
-// Save panel in db

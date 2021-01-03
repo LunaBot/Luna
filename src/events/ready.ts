@@ -1,12 +1,12 @@
-import { sql } from '@databases/pg';
 import git from 'git-rev-sync';
 import humanizeDuration from 'humanize-duration';
-import { client } from '../client';
-import { config } from '../config';
-import { database } from '../database';
-import { envs } from '../envs';
-import { isNewsChannel, isTextChannel } from '../guards';
-import { log } from '../log';
+import { client } from '@/client';
+import { config } from '@/config';
+import { database } from '@/database';
+import { envs } from '@/envs';
+import { isNewsChannel, isTextChannel } from '@/guards';
+import { log } from '@/log';
+import { sql } from '@databases/pg';
 
 export const ready = async () => {
     // Set bot's activity status
@@ -23,7 +23,7 @@ export const ready = async () => {
         const channel = client.channels.cache.get(envs.OWNER.BOT_CHANNEL);
         if (channel && (isTextChannel(channel) || isNewsChannel(channel))) {
             const replies = [
-                `Version ${envs.BOT.COMMIT_HASH || git.short()} deployed!`,
+                `Version \`${envs.BOT.COMMIT_HASH || git.short()}\` deployed!`,
                 `Took ${humanizeDuration(process.uptime() * 1000)} to start!`
             ].filter(Boolean).join('\n');
             await channel.send(replies);
