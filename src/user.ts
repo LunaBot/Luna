@@ -280,7 +280,7 @@ export class User {
             if (command?.permissions.length >= 1) {
                 // Check we have permission to run this
                 if (!command?.permissions.some(permission => member?.hasPermission(permission as any))) {
-                    throw new CommandPermissionError('/', commandName);
+                    throw new CommandPermissionError(server.prefix, commandName);
                 }
             }
         }
