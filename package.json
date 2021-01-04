@@ -3,7 +3,7 @@
   "version": "0.0.1",
   "description": "",
   "scripts": {
-    "start": "./bin/automod",
+    "start": "ts-node-transpile-only -r tsconfig-paths/register -r dotenv/config src/index.ts",
     "start-debug": "DEBUG=true LOG_LEVEL=silly ./bin/automod",
     "test": "ava",
     "coverage": "nyc ava",
