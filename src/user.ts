@@ -276,9 +276,12 @@ export class User {
 
         // Don't check permissions if this is the owner of the bot
         if (envs.OWNER.ID !== member?.id) {
-            // Check we have permission to run this
-            if (!command?.permissions.some(permission => member?.hasPermission(permission as any))) {
-                throw new CommandPermissionError('/', commandName);
+            // Just run it!
+            if (command?.permissions.length >= 1) {
+                // Check we have permission to run this
+                if (!command?.permissions.some(permission => member?.hasPermission(permission as any))) {
+                    throw new CommandPermissionError('/', commandName);
+                }
             }
         }
     }

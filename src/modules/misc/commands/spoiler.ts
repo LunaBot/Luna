@@ -36,7 +36,11 @@ export class Spoiler extends Command {
   ];
   public roles = [ '@everyone' ];
 
-  async handler(_prefix: string, message: Message, _args: string[]) {
+  public async messageHandler(_prefix: string, message: Message, _args: string[]) {
+    return this.handler(_prefix, message, _args);
+  }
+
+  public async handler(_prefix: string, message: Message, _args: string[]) {
     if (isTextChannelMessage(message)) {
       // Parse message
       const text = _args.join(' ').trim();
@@ -56,7 +60,7 @@ export class Spoiler extends Command {
       }
 
       // Create message
-      const member = client.guilds.cache.get(message.guild?.id)?.member(message.author.id);
+      const member = client.guilds.cache.get(message.guild?.id)?.members.cache.get(message.author.id);
       const embed = new MessageEmbed({
         author: {
           name: member?.displayName ?? message.author.username,

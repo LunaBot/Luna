@@ -27,7 +27,7 @@ class Module {
     public endpoints: { name: string; endpoint: never; }[] = [];
 
     constructor(options: ModuleOptions) {
-        log.debug('Creating module %s with options (%s)', options.name, options);
+        log.debug('Creating module %s with options (%s)', options.name, JSON.stringify(options));
 
         // Setup class
         this.id = options.id;
