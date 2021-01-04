@@ -57,7 +57,8 @@ export class Commands extends Command {
                 if (!array.length) return [];
                 return [array.slice(0, sizeOfChunk)].concat(chunk(array.slice(sizeOfChunk), sizeOfChunk) );
             };
-            return chunk(fields, 10).map((fields, index) => ({
+            const pages = chunk(fields, 10);
+            return pages.map((fields, index) => ({
                 /*
                  * A page object consists of three items:
                  * 1) A name. This is used as a unique destination name for reactions.
@@ -75,14 +76,18 @@ export class Commands extends Command {
                     title: 'Commands',
                     url: joinUrl(config.PUBLIC_URL, 'wiki', 'commands'),
                     fields,
-                    footer: {
-                        text: `Page ${index + 1}/${Math.ceil(fields.length / 10) + 1}`
-                    }
+                    ...(pages.length >= 2 ? {
+                        footer: {
+                            text: `Page ${index + 1}/${Math.ceil(fields.length / 10) + 1}`
+                        }
+                    } : {})
                 }),
-                reactions: {
-                    '⬅️': 'previous',
-                    '➡️': 'next'
-                }
+                ...(pages.length >= 2 ? {
+                    reactions: {
+                        '⬅️': 'previous',
+                        '➡️': 'next'
+                    }
+                } : {})
             }));
         }
 
