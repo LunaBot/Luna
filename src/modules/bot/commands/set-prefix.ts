@@ -17,7 +17,7 @@ export class SetPrefix extends Command {
         description: 'The new prefix, default is `!`',
         required: true
     }]
-    public permissions = [];
+    public permissions = ['ADMINISTRATOR' as const];
     public roles = [];
 
     public async messageHandler(_prefix: string, message: Message, args: string[]) {
