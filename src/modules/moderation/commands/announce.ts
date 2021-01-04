@@ -22,15 +22,15 @@ export class Announce extends Command {
     }];
 
     async messageHandler(_prefix: string, message: Message, args: string[]) {
-        const channel = message.mentions.channels.first();
-        const announcement = args.join(' ');
+        const channel = message.mentions.channels.first()!;
+        const announcement = args.slice(1).join(' ');
         return this.handler(channel, announcement);
     }
 
     async interactionHandler(_prefix: string, interaction: Interaction) {
-        const channel = interaction.options?.find(option => option.name === 'channel')?.value;
-        const announcement = interaction.options?.find(option => option.name === 'announcement')?.value;
-        console.log(channel, announcement);
+        const channelId = interaction.options?.find(option => option.name === 'channel')?.value!;
+        const channel = interaction.guild.channels.cache.get(channelId)!;
+        const announcement = interaction.options?.find(option => option.name === 'announcement')?.value!;
         return this.handler(channel, announcement);
     }
 
@@ -53,6 +53,6 @@ export class Announce extends Command {
         // Send to new channel
         await channel.send(announcement);
 
-        return `Sent message to ${channel.name}`;
+        return `Sent message to <#${channel.id}>`;
     }
 };
