@@ -50,7 +50,10 @@ export class Bot extends Command {
             throw new AppError('No client ID found');
         }
 
-        return `You can invite me here: https://discordapp.com/oauth2/authorize?client_id=${clientId}&scope=bot&permissions=0`;
+        return new MessageEmbed({
+            description: 'You can invite me [here](https://discordapp.com/oauth2/authorize?client_id=777463553253834785&scope=bot&permissions=0)!',
+            color: 11800515
+        });
     }
 
     async infoHandler(createdTimestamp: number, memberId: string) {
