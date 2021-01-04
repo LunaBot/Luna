@@ -12,21 +12,25 @@ To invite the bot to your server, you have to join a server with the bot on it, 
 
 #### Upcoming features
 > Modmail
-
+>
 > Tickets
-
-> Slash `(/)` Commands
-
+>
+> Slash (`/`) Commands
+>
 > Verification Channels
-
+>
 > Music
-
+>
 > Custom commands
-
+>
 > Automated Messages
-
+>
 > Mobile app
-
+>
 > Profile pages
-
+>
 > Web page
+>
+> Anti Raid
+>
+> Lockdown
