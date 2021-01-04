@@ -82,14 +82,14 @@ export class Modules extends Command {
     }
 
     // !modules enable
-    async enableModule(serverId: string, _module?: string) {
-        if (!_module) {
+    async enableModule(serverId: string, moduleName?: string) {
+        if (!moduleName) {
             throw new AppError('Please provide a module to enable.');
         }
 
-        const moduleisValid = await moduleManager.getInstalledModules().then(modules => {
-            return modules.find(__module => __module.name === _module) ? true : false;
-        });
+        const modules = await moduleManager.getInstalledModules();
+        const foundModule = modules.find(__module => __module.name.toLowerCase() === moduleName.trim().toLowerCase());
+        const moduleisValid = foundModule !== undefined;
 
         // Bail if it's not an installed module
         if (!moduleisValid) {
@@ -97,20 +97,20 @@ export class Modules extends Command {
         }
 
         // Set enabled in DB
-        await database.query(sql`UPDATE modules SET enabled=${true} WHERE serverId=${serverId} AND name=${_module}`);
+        await database.query(sql`UPDATE modules SET enabled=${true} WHERE serverId=${serverId} AND name=${moduleName}`);
 
-        return `Enabled ${_module} module!`;
+        return `Enabled ${moduleName} module!`;
     }
     
     // !modules disable
-    async disableModule(serverId: string, _module?: string) {
-        if (!_module) {
+    async disableModule(serverId: string, moduleName?: string) {
+        if (!moduleName) {
             throw new AppError('Please provide a module to disable.');
         }
 
-        const moduleisValid = await moduleManager.getInstalledModules().then(modules => {
-            return modules.find(__module => __module.name === _module) ? true : false;
-        });
+        const modules = await moduleManager.getInstalledModules();
+        const foundModule = modules.find(__module => __module.name.toLowerCase() === moduleName.trim().toLowerCase());
+        const moduleisValid = foundModule !== undefined;
 
         // Bail if it's not an installed module
         if (!moduleisValid) {
@@ -118,9 +118,9 @@ export class Modules extends Command {
         }
 
         // Set disable in DB
-        await database.query(sql`UPDATE modules SET enabled=${false} WHERE serverId=${serverId} AND name=${_module}`);
+        await database.query(sql`UPDATE modules SET enabled=${false} WHERE serverId=${serverId} AND name=${moduleName}`);
 
-        return `Disabled ${_module} module!`;
+        return `Disabled ${moduleName} module!`;
     }
 
     // !modules
@@ -153,16 +153,17 @@ export class Modules extends Command {
 
         // Get all modules from db
         const modules = await moduleManager.getEnabledModules(serverId);
-        const _module = modules.find(_module => _module.name.toLowerCase() === moduleName.toLowerCase());
+        const foundModule = modules.find(__module => __module.name.toLowerCase() === moduleName.trim().toLowerCase());
+        const moduleisValid = foundModule !== undefined;
 
-        if (!_module) {
+        if (!moduleisValid) {
             throw new AppError('Invalid module name!');
         }
 
         const embed = new MessageEmbed()
             .setColor('#0099ff')
             .setURL(config.PUBLIC_URL)
-            .setAuthor(_module?.name)
+            .setAuthor(moduleName)
             .addFields({
                 name: 'Enabled',
                 value: true
