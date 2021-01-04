@@ -21,7 +21,7 @@ export class Panel extends Command {
         }, {
             name: 'channel',
             description: 'Where should I post the panel?',
-            type: ApplicationCommandOptionType.STRING
+            type: ApplicationCommandOptionType.CHANNEL
         }]
     }, {
         name: 'delete',
@@ -48,6 +48,10 @@ export class Panel extends Command {
             name: 'id',
             description: 'Panel ID',
             type: ApplicationCommandOptionType.STRING
+        }, {
+            name: 'channel',
+            description: 'Where should I post the panel?',
+            type: ApplicationCommandOptionType.CHANNEL
         }]
     }];
 
