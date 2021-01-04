@@ -1,19 +1,21 @@
 import { Interaction, Message, MessageEmbed } from 'discord.js';
+import joinUrl from 'url-join';
 import { ApplicationCommandOptionType, Command } from '@/command';
+import { config } from '@/config';
 import { InvalidCommandError } from '@/errors';
 import { moduleManager } from '@/module-manager';
 
 const generateHelp = (prefix: string) => {
     return new MessageEmbed()
         .setColor('#0099ff')
-        .setURL('https://discord.js.org/')
-        .setAuthor('@automod')
+        .setURL(joinUrl(config.PUBLIC_URL, 'wiki', 'help'))
+        .setAuthor('Help')
         .addFields({
-            name: 'Moderator',
-            value: `\`${prefix}help moderator\``
+            name: 'What commands can I use?',
+            value: `\`${prefix}commands\``
         }, {
-            name: 'Member',
-            value: `\`${prefix}help member\``
+            name: 'How do I invite the bot?',
+            value: `\`${prefix}bot-invite\``
         });
 };
 

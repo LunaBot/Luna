@@ -83,7 +83,7 @@ export class Command {
     };
 
     public async isEnabled(serverId: Server['id']) {
-        return database.query(sql`SELECT enabled FROM commands WHERE serverId=${serverId} AND command=${this.command};`).then((commands) => {
+        return database.query(sql`SELECT enabled FROM commands WHERE serverId=${serverId} AND command=${this.command};`).then((commands: any) => {
             return commands[0]?.enabled ?? false;
         });
     }
