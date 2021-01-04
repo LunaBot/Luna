@@ -1,5 +1,12 @@
 #!/usr/bin/env node
 
+// Load ts-node
+require('ts-node/register/transpile-only');
+// Load @/paths
+require('tsconfig-paths/register');
+// Load .env files
+require('dotenv/config');
+
 // Load .env file
 require('dotenv-expand')(require('dotenv').config());
 
@@ -12,7 +19,7 @@ const log = new Logger();
 
 try {
     // Build entry file path
-    const entryFile = path.resolve(__dirname, '..', 'dist', 'index.js');
+    const entryFile = path.resolve(__dirname, '..', 'src', 'index.ts');
 
     // Files aren't built
     if (!fs.existsSync(entryFile)) {
