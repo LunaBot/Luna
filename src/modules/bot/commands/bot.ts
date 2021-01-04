@@ -27,21 +27,21 @@ export class Bot extends Command {
     async messageHandler(_prefix: string, message: Message, args: string[]) {
         return this.handler({
             command: args[0],
-        }, message.createdTimestamp, message.member!.id);
+        }, message.createdTimestamp, message.member!.id, message.id);
     }
 
     async interactionHandler(_prefix: string, interaction: Interaction) {
         return this.handler({
             command: interaction.options ? interaction.options[0].name : 'info',
-        }, interaction.createdTimestamp, interaction.member!.id);
+        }, interaction.createdTimestamp, interaction.member!.id, interaction.id);
     }
 
-    async handler({ command }: { command?: string }, createdTimestamp: number, memberId: string) {
+    async handler({ command }: { command?: string }, createdTimestamp: number, memberId: string, messageId: string) {
         if (command === 'invite') {
             return this.inviteHandler();
         }
 
-        return this.infoHandler(createdTimestamp, memberId);
+        return this.infoHandler(createdTimestamp, memberId, messageId);
     }
 
     async inviteHandler() {
@@ -56,9 +56,12 @@ export class Bot extends Command {
         });
     }
 
-    async infoHandler(createdTimestamp: number, memberId: string) {
+    async infoHandler(createdTimestamp: number, memberId: string, messageId: string) {
         const uptime = humanizeDuration(Math.floor(process.uptime()) * 1000);
-        const ping = (Date.now() - createdTimestamp) - client.ws.ping;
+        const timeTaken = (Date.now() - (createdTimestamp - client.ws.ping));
+        // Account for negative pings
+        // This happens since discord is slightly behind our system clock
+        const ping = timeTaken >= 1 ? timeTaken : 1;
         const embeds = [
             {
                 description: 'This is an open source Discord bot with a lot of features.\nUse `!commands` to see the command you have access to.',
@@ -94,7 +97,7 @@ export class Bot extends Command {
                     icon_url: 'https://cdn.discordapp.com/attachments/794133875311771659/795540788226424842/auto_mod_logo_1.png'
                 },
                 footer: {
-                    text: `Message ID: ${memberId}`
+                    text: `Message ID: ${messageId}`
                 },
                 timestamp: new Date(),
                 thumbnail: {
