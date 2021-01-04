@@ -1,20 +1,35 @@
 import { Command } from '@/command';
+import { database } from '@/database';
 import { AppError } from '@/errors';
-import type { Message, CollectorFilter, Interaction } from 'discord.js';
+import { isTextChannel } from '@/guards';
+import { moduleManager } from '@/module-manager';
+import pMapSeries from 'p-map-series';
+import { sql } from '@databases/pg';
+import type { Message, CollectorFilter, Interaction, Channel, TextChannel, DMChannel } from 'discord.js';
+import { v4 as uuid } from 'uuid';
 
 const filter: CollectorFilter = (response) => !response.author.bot;
-const waitForAdminRoles = async (message: Message) => {
-    return message.channel.awaitMessages(filter, { max: 1, time: 10000, errors: ['time'] }).then(collected => {
+const waitForRoles = async (channel: TextChannel | DMChannel) => {
+    return channel.awaitMessages(filter, { max: 1, time: 15000, errors: ['time'] }).then(collected => {
         return collected.flatMap(answer => answer.mentions.roles);
     }).catch(_collected => {
-        throw new AppError('you took too long to respond.');
+        throw new AppError('You took too long to respond.');
+    });
+};
+const waitForBoolean = async (channel: TextChannel | DMChannel) => {
+    return channel.awaitMessages(filter, { max: 1, time: 15000, errors: ['time'] }).then(collected => {
+        return Array.from(collected.values()).flatMap((answer) => {
+            return answer.content.toString().includes('yes') ?? answer.content.toString().includes('true');
+        });
+    }).catch(_collected => {
+        throw new AppError('You took too long to respond.');
     });
 };
 
 export class Setup extends Command {
     public name = 'Setup';
     public command = 'setup';
-    public timeout = 20000;
+    public timeout = 60000;
     public description = 'Set me up captain!';
     public hidden = false;
     public owner = true;
@@ -23,39 +38,95 @@ export class Setup extends Command {
     public options = [];
 
     messageHandler(_prefix: string, message: Message, _args: string[]) {
-        return this.handler(_prefix, message);
+        return this.handler({}, message.guild!.id, message.channel);
     }
 
     interactionHandler(_prefix: string, _interaction: Interaction) {
-        throw new Error('Not allowed!');
+        return this.handler({}, _interaction.guild!.id, _interaction.channel);
     }
 
-    async handler(_prefix: string, message: Message) {
-        // What roles do admins have?
-            // Please tag the admin's role
-        // What roles do mods have?
-            // Please tag the mod's role
-        
+    async handler({}, serverId: string, channel: Channel) {
+        if (isTextChannel(channel)) {
+            // Get admin roles
+            const adminRoles = await this.getRoles('admin', channel);
+
+            // Update admin roles
+            if (adminRoles) {
+                await database.query(sql`UPDATE servers SET adminRoles=${adminRoles} WHERE id=${serverId}`);
+            }
+
+            // Get mod roles
+            const modRoles = await this.getRoles('mod', channel);
+
+            // Update mod roles
+            if (modRoles) {
+                await database.query(sql`UPDATE servers SET modRoles=${modRoles} WHERE id=${serverId}`);
+            }
+
+            // Get enabled modules
+            const modules = await moduleManager.getInstalledModules().then(modules => {
+                return pMapSeries(modules, async _module => {
+                    await channel.send(`Do you want to enable the ${_module.name} module?`);
+                    const enabled = await waitForBoolean(channel);
+                    return {
+                        ..._module,
+                        enabled
+                    }
+                });
+            });
+
+            // Update enabled modules
+            if (modules.length >= 1) {
+                await Promise.all(modules.map(async _module => {
+                    await database.query(sql`INSERT INTO modules (id, serverId, name, enabled) VALUES(${uuid()}, ${serverId}, ${_module.name}, ${true}) ON CONFLICT (serverId,name) DO UPDATE SET enabled = EXCLUDED.enabled;`);
+                }));
+            }
+
+            // Mark setup finished
+            await database.query(sql`UPDATE servers SET setup=${true} WHERE id=${serverId}`);
+
+            return 'Setup finished!';
+        }
+    }
+
+    async handleCommands() {
+
+    }
+
+    async getRoles(role: string, channel: TextChannel | DMChannel) {
         // Ask the question
-        await message.channel.send('What roles do your admins use?');
+        await channel.send(`What roles do your ${role}s use?`);
 
         // Wait for the answer
-        const mentioned = await waitForAdminRoles(message);
+        let roles = await waitForRoles(channel);
 
         // Get the role(s) mentioned
-        if (!mentioned || mentioned.size === 0) {
-            message.reply('no role(s) mentioned, try again.');
-            await waitForAdminRoles(message);
+        if (!roles || roles.size === 0) {
+            await channel.send('No role(s) mentioned, try again.');
+            roles = await waitForRoles(channel);
         }
 
-        // Update server's settings
+        // Didn't mention anyone even after a retry
+        if (roles.size === 0) {
+            await channel.send('No role(s) mentioned, skipping.');
+            return;
+        }
+
+        // Remap to tags
+        const tags = roles.map(role => `<@&${role.id}>`);
 
         // One role
-        if (mentioned.size === 1) {
-            return `<@&${mentioned.first()?.id}> has been marked as an admin role!`;
+        if (roles.size === 1) {
+            await channel.send(`${tags[0]} has been marked as a "${role}" role!`);
+
+            // Return roles
+            return roles;
         }
 
         // Multiple roles
-        return `${mentioned.map(mention => `<@&${mention.id}>`).join(' ')} have all been marked as admin roles!`;
+        await channel.send(`${tags.join(' ')} have all been marked a "${role}" roles!`);
+
+        // Return roles
+        return roles;
     }
 };
