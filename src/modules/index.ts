@@ -5,4 +5,5 @@ export * as Internal from './internal';
 export * as Levels from './levels';
 export * as Misc from './misc';
 export * as Moderation from './moderation';
+export * as Panels from './panels';
 export * as SlashCommands from './slash-commands';
