@@ -48,6 +48,7 @@
     "pluralize": "^8.0.0",
     "sentiment": "^5.0.2",
     "ts-node": "^9.1.1",
+    "typescript": "^4.1.3",
     "url-join": "^4.0.1",
     "uuid": "^8.3.2",
     "uuid-apikey": "^1.5.1",
@@ -73,8 +74,7 @@
     "ts-mock-imports": "^1.3.1",
     "tsconfig-paths": "^3.9.0",
     "tsup": "^3.11.0",
-    "type-fest": "^0.20.2",
-    "typescript": "^4.1.3"
+    "type-fest": "^0.20.2"
   },
   "ava": {
     "extensions": [
