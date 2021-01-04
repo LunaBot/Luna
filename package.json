@@ -43,6 +43,7 @@
     "ml-sentiment": "^2.0.7",
     "njstrace": "^1.2.0",
     "number-to-color": "^0.4.1",
+    "p-map-series": "^2.1.0",
     "p-timeout": "^4.1.0",
     "parse-human-date": "^1.2.0",
     "pluralize": "^8.0.0",
