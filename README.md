@@ -1,7 +1,8 @@
-# Automod 
-Automod is a Discord bot in development by __OmgImAlexis#1546__ for moderation.
-
-The bot also has leveling features and some other handy utility commands.
+<p align="center">
+ <img width="100px" src="https://media.discordapp.net/attachments/795464972019695647/795487228549791774/automod-logo.png?width=499&height=499" align="center" alt="GitHub Readme Stats" />
+ <h2 align="center">Automod</h2>
+ <p align="center">Automod is a moderation bot but it has and will have some handy features (Check Upcoming Features)</p>
+</p>
 
 ## Links
 [Support Server](https://discord.gg/F9EbdNF4T3) 
