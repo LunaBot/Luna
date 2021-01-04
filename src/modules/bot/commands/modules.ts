@@ -89,15 +89,14 @@ export class Modules extends Command {
 
         const modules = await moduleManager.getInstalledModules();
         const foundModule = modules.find(__module => __module.name.toLowerCase() === moduleName.trim().toLowerCase());
-        const moduleisValid = foundModule !== undefined;
 
         // Bail if it's not an installed module
-        if (!moduleisValid) {
+        if (foundModule === undefined) {
             throw new AppError('Invalid module name!');
         }
 
         // Set enabled in DB
-        await database.query(sql`UPDATE modules SET enabled=${true} WHERE serverId=${serverId} AND name=${moduleName}`);
+        await database.query(sql`UPDATE modules SET enabled=${true} WHERE serverId=${serverId} AND name=${foundModule.name}`);
 
         return `Enabled ${moduleName} module!`;
     }
@@ -110,15 +109,14 @@ export class Modules extends Command {
 
         const modules = await moduleManager.getInstalledModules();
         const foundModule = modules.find(__module => __module.name.toLowerCase() === moduleName.trim().toLowerCase());
-        const moduleisValid = foundModule !== undefined;
 
         // Bail if it's not an installed module
-        if (!moduleisValid) {
+        if (foundModule === undefined) {
             throw new AppError('Invalid module name!');
         }
 
         // Set disable in DB
-        await database.query(sql`UPDATE modules SET enabled=${false} WHERE serverId=${serverId} AND name=${moduleName}`);
+        await database.query(sql`UPDATE modules SET enabled=${false} WHERE serverId=${serverId} AND name=${foundModule.name}`);
 
         return `Disabled ${moduleName} module!`;
     }
@@ -154,19 +152,21 @@ export class Modules extends Command {
         // Get all modules from db
         const modules = await moduleManager.getEnabledModules(serverId);
         const foundModule = modules.find(__module => __module.name.toLowerCase() === moduleName.trim().toLowerCase());
-        const moduleisValid = foundModule !== undefined;
 
-        if (!moduleisValid) {
+        if (foundModule === undefined) {
             throw new AppError('Invalid module name!');
         }
 
         const embed = new MessageEmbed()
             .setColor('#0099ff')
             .setURL(config.PUBLIC_URL)
-            .setAuthor(moduleName)
+            .setAuthor(foundModule.name)
             .addFields({
                 name: 'Enabled',
                 value: true
+            }, {
+                name: 'Description',
+                value: foundModule.description
             });
 
         return embed;
