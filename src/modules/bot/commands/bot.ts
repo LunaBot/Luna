@@ -16,7 +16,7 @@ export class Bot extends Command {
     public examples = [];
     public options = [{
         name: 'invite',
-        description: 'Get a bot invite link',
+        description: 'Get the bot\'s invite link',
         type: ApplicationCommandOptionType.SUB_COMMAND
     }, {
         name: 'info',
@@ -26,7 +26,7 @@ export class Bot extends Command {
 
     async messageHandler(_prefix: string, message: Message, args: string[]) {
         return this.handler({
-            command: args[1],
+            command: args[0],
         }, message.createdTimestamp, message.member!.id);
     }
 
