@@ -76,7 +76,7 @@ export class Bot extends Command {
                     },
                     {
                         name: 'Version',
-                        value: `${envs.BOT.COMMIT_HASH || git.short()}`,
+                        value: `${envs.BOT.COMMIT_HASH.substring(0, 7) || git.short()}`,
                         inline: true
                     },
                     {
