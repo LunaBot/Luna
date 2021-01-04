@@ -1,11 +1,11 @@
 import { Command } from '@/command';
 import { AppError } from '@/errors';
-import type { Message, CollectorFilter } from 'discord.js';
+import type { Message, CollectorFilter, Interaction } from 'discord.js';
 
 const filter: CollectorFilter = (response) => !response.author.bot;
 const waitForAdminRoles = async (message: Message) => {
     return message.channel.awaitMessages(filter, { max: 1, time: 10000, errors: ['time'] }).then(collected => {
-        return collected.map(answer => answer.mentions.members);
+        return collected.flatMap(answer => answer.mentions.roles);
     }).catch(_collected => {
         throw new AppError('you took too long to respond.');
     });
@@ -14,14 +14,23 @@ const waitForAdminRoles = async (message: Message) => {
 export class Setup extends Command {
     public name = 'Setup';
     public command = 'setup';
-    public timeout = 5000;
+    public timeout = 20000;
     public description = 'Set me up captain!';
-    public hidden = true;
-    public owner = false;
+    public hidden = false;
+    public owner = true;
     public examples = [];
-    public roles = [ 'test-role'  ];
+    public permissions = ['ADMINISTRATOR' as const];
+    public options = [];
 
-    async handler(_prefix: string, message: Message, _args: string[]) {
+    messageHandler(_prefix: string, message: Message, _args: string[]) {
+        return this.handler(_prefix, message);
+    }
+
+    interactionHandler(_prefix: string, _interaction: Interaction) {
+        throw new Error('Not allowed!');
+    }
+
+    async handler(_prefix: string, message: Message) {
         // What roles do admins have?
             // Please tag the admin's role
         // What roles do mods have?
@@ -34,17 +43,19 @@ export class Setup extends Command {
         const mentioned = await waitForAdminRoles(message);
 
         // Get the role(s) mentioned
-        if (!mentioned || mentioned.length === 0) {
+        if (!mentioned || mentioned.size === 0) {
             message.reply('no role(s) mentioned, try again.');
             await waitForAdminRoles(message);
         }
 
         // Update server's settings
 
-        if (mentioned.length === 1 && mentioned[0]) {
-            return `<@${mentioned[0]}> has been marked as an admin role!`;
+        // One role
+        if (mentioned.size === 1) {
+            return `<@&${mentioned.first()?.id}> has been marked as an admin role!`;
         }
 
-        return `${mentioned.map(mention => `<@${mention}>`)} have been marked as admin roles!`;
+        // Multiple roles
+        return `${mentioned.map(mention => `<@&${mention.id}>`).join(' ')} have all been marked as admin roles!`;
     }
 };
