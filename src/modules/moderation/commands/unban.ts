@@ -2,7 +2,7 @@ import { ApplicationCommandOptionType, Command } from '@/command';
 import type { GuildMember, Interaction, Message } from 'discord.js';
 import { AppError } from '@/errors';
 
-export class Ban extends Command {
+export class Unban extends Command {
     public name = 'Unban';
     public command = 'unban';
     public timeout = 5000;
