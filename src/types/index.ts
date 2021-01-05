@@ -1,7 +1,7 @@
 declare module 'parse-human-date' {
-    export default function parseHumanDate(input: any, options?: {
+    export default function parseHumanDate(input: string, options?: {
         now: number;
-    }): any;
+    }): Date;
 };
 
 declare module 'ml-sentiment';
