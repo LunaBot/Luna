@@ -70,6 +70,10 @@ export class Image extends Command {
         }
     }
 
+    async messageHandler(prefix: string, message: Message, args: string[]) {
+        return this.handler(prefix, message, args);
+    }
+
     // !image
     // !image tags
     // !image endpoints
