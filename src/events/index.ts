@@ -8,7 +8,7 @@ export * from './warn';
 // export * from './emojiCreate';
 // export * from './emojiDelete';
 // export * from './emojiUpdate';
-export * from './error';
+export * from './event-error';
 // export * from './guildBanAdd';
 // export * from './guildBanRemove';
 // export * from './guildCreate';
