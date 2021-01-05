@@ -6,9 +6,12 @@ import { envs } from '@/envs';
 import { log } from '@/log';
 import { moduleManager } from '@/module-manager';
 import { Server } from '@/servers';
+import { database } from '@/database';
+import { sql } from '@databases/pg';
+import pMapSeries from 'p-map-series';
 
 // Load slash commands
-const addCommands = async (client: SlashCommandsClient, serverId: Server['id'], _commands: Command[], update = false) => {
+const addCommands = async (client: SlashCommandsClient, serverId: Server['id'], _commands?: Command[], update = false) => {
     const commands = await Promise.all((_commands ?? moduleManager.getCommands()).map(async command => ({
         command,
         data: {
@@ -85,19 +88,24 @@ const updateCommands = async (client: SlashCommandsClient, serverId: Server['id'
     return addCommands(client, serverId, commandsToInstall, true);
 };
 
+const sleep = (ms: number)=> new Promise<void>(resolve => setTimeout(() => resolve(), ms));
+
 export const ready = async () => {
     // Create interactions client
     const interactionsClient = new SlashCommandsClient(envs.BOT.TOKEN, client.user?.id!);
 
-    // Remove all global commands
-    // await deleteGlobalCommands(client);
+    // Get all servers with "slashCommands" module enabled
+    const servers = await database.query(sql`SELECT serverId from modules WHERE name=${'SlashCommands'} AND enabled=${true}`).then(modules => {
+        return modules.flatMap(_module => _module.serverid);
+    });
 
-    // Remove old slash commands from test server
-    // await deleteCommands(interactionsClient, '777464389728862268');
+    // Update slash commands
+    await pMapSeries(servers, async serverId => {
+        // Add slash commands to server
+        // await addCommands(interactionsClient, serverId);
+        log.info(`Server: ${serverId} has slashCommands enabled.`);
 
-    // Add slash commands to test server
-    // await addCommands(interactionsClient, '777464389728862268');
-
-    // Reinstall updated commands
-    await updateCommands(interactionsClient, '777464389728862268');
+        // Wait for 1s
+        await sleep(1000);
+    });
 };
