@@ -5,6 +5,8 @@ import { envs } from '@/envs';
 import { Interaction, Message, MessageEmbed } from 'discord.js';
 import { client } from '@/client';
 import { AppError } from '@/errors';
+import dedent from 'dedent';
+import { Server } from '@/servers';
 
 export class Bot extends Command {
     public name = 'Bot';
@@ -22,26 +24,50 @@ export class Bot extends Command {
         name: 'info',
         description: 'Bot information',
         type: ApplicationCommandOptionType.SUB_COMMAND
+    }, {
+        name: 'prefix',
+        description: 'Set the bot prefix',
+        type: ApplicationCommandOptionType.SUB_COMMAND,
+        options: [{
+            name: 'prefix',
+            description: 'The bot\'s new prefix, default is `!`',
+            type: ApplicationCommandOptionType.STRING
+        }]
     }]
 
     async messageHandler(_prefix: string, message: Message, args: string[]) {
         return this.handler({
             command: args[0],
-        }, message.createdTimestamp, message.member!.id, message.id);
+            prefix: args[1],
+        }, message.createdTimestamp, message.id, message.guild!.id);
     }
 
     async interactionHandler(_prefix: string, interaction: Interaction) {
         return this.handler({
             command: interaction.options ? interaction.options[0].name : 'info',
-        }, interaction.createdTimestamp, interaction.member!.id, interaction.id);
+            prefix: interaction.options ? interaction.options[1].name : '!',
+        }, interaction.createdTimestamp, interaction.id, interaction.guild.id);
     }
 
-    async handler({ command }: { command?: string }, createdTimestamp: number, memberId: string, messageId: string) {
-        if (command === 'invite') {
-            return this.inviteHandler();
+    async handler(options: { command?: string, prefix: string }, createdTimestamp: number, messageId: string, serverId: string) {
+        const commands = {
+            invite: () => this.inviteHandler(),
+            info: () => this.infoHandler(createdTimestamp, messageId),
+            prefix: () => this.prefixHandler({ prefix: options.prefix }, serverId),
+        };
+
+        // Return bot info
+        if (!options.command) {
+            return commands.info();
         }
 
-        return this.infoHandler(createdTimestamp, memberId, messageId);
+        // Invalid command
+        if (!Object.keys(commands).includes(options.command as keyof typeof commands)) {
+            // @todo: Make a new error for this
+            throw new AppError('Invalid subcommand');
+        }
+
+        return commands[options.command as keyof typeof commands]();
     }
 
     async inviteHandler() {
@@ -51,15 +77,18 @@ export class Bot extends Command {
         }
 
         return new MessageEmbed({
-            description: 'You can invite me [here](https://discordapp.com/oauth2/authorize?client_id=777463553253834785&scope=bot&permissions=0)!',
+            description: dedent`
+                You can invite me [here](https://discordapp.com/oauth2/authorize?client_id=777463553253834785&scope=bot&permissions=0)!
+                Make sure to assign me a role once I'm added. :hearts:
+            `,
             color: 11800515
         });
     }
 
-    async infoHandler(createdTimestamp: number, memberId: string, messageId: string) {
+    async infoHandler(createdTimestamp: number, messageId: string) {
         const uptime = humanizeDuration(Math.floor(process.uptime()) * 1000);
-        const timeTaken = (Date.now() - createdTimestamp);
         const latency = Math.round(client.ws.ping);
+        const timeTaken = (Date.now() - createdTimestamp) - latency;
         // Account for negative pings
         // This happens since discord is slightly behind our system clock
         const ping = timeTaken >= 1 ? timeTaken : 1;
@@ -113,5 +142,26 @@ export class Bot extends Command {
             }
         ]
         return embeds.map(embed => new MessageEmbed(embed));
+    }
+
+    async prefixHandler(options: { prefix: string }, serverId: string) {
+        // We need no more than 1 character
+        if (typeof options.prefix === 'string' && options.prefix.length >= 2) {
+            throw new AppError('Prefix can only be a single character!');
+        }
+
+        // Print current prefix
+        const server = await Server.findOrCreate({ id: serverId });
+        if (!options.prefix) {
+            return `Prefix is currently set to \`${server.prefix}\``;
+        }
+
+        // Update prefix
+        try {
+            await server.setPrefix(options.prefix);
+            return `Set prefix to \`${options.prefix}\``;
+        } catch (error) {
+            return `Failed updating prefix to \`${options.prefix}\``;
+        }
     }
 };
