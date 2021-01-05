@@ -9,12 +9,11 @@ type DataManager = (response: Response) => Promise<any>;
 export class Image extends Command {
     public name = 'image';
     public command = 'image';
-    public timeout = 3000;
+    public timeout = Command.TIMEOUTS.FIVE_SECONDS;
     public description = 'Get an image';
     public hidden = false;
     public owner = false;
     public examples = [ '!image' ];
-    public roles = [ '@everyone' ];
 
     private endpoints = [
         'https://api.thecatapi.com/v1/images/search',

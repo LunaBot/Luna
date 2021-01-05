@@ -22,7 +22,7 @@ const generateHelp = (prefix: string) => {
 export class Help extends Command {
     public name = 'Help';
     public command = 'help';
-    public timeout = 5000;
+    public timeout = Command.TIMEOUTS.FIVE_SECONDS;
     public description = 'Show help';
     public hidden = false;
     public owner = false;

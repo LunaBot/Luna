@@ -6,7 +6,7 @@ import { parse as parseJson} from 'json5';
 export class Test extends Command {
     public name = 'Test';
     public command = 'test';
-    public timeout = 5000;
+    public timeout = Command.TIMEOUTS.FIVE_SECONDS;
     public description = 'Run test commands.';
     public hidden = false;
     public owner = false;

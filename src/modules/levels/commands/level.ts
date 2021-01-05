@@ -10,7 +10,7 @@ import type { Message } from 'discord.js';
 export class Level extends Command {
   public name = 'Level';
   public command = 'level';
-  public timeout = 5000;
+  public timeout = Command.TIMEOUTS.FIVE_SECONDS;
   public description = 'Get your current level';
   public hidden = false;
   public owner = false;

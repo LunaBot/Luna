@@ -24,7 +24,7 @@ const getImage = async (url: string) => {
 export class Spoiler extends Command {
   public name = 'spoiler';
   public command = 'spoiler';
-  public timeout = 1000;
+  public timeout = Command.TIMEOUTS.FIVE_SECONDS;
   public description = 'Create a spoiler. This works on mobile with images!';
   public hidden = false;
   public owner = false;

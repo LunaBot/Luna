@@ -6,7 +6,7 @@ import { Command } from '@/command';
 export class Restart extends Command {
     public name = 'Restart';
     public command = 'restart';
-    public timeout = 5000;
+    public timeout = Command.TIMEOUTS.FIVE_SECONDS;
     public description = 'Restart AutoMod';
     public hidden = false;
     public options = [];

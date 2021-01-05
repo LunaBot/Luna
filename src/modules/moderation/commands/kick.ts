@@ -5,7 +5,7 @@ import { AppError } from '@/errors';
 export class Kick extends Command {
     public name = 'Kick';
     public command = 'kick';
-    public timeout = 5000;
+    public timeout = Command.TIMEOUTS.FIVE_SECONDS;
     public description = 'Kick a member.';
     public hidden = false;
     public owner = false;

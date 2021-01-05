@@ -5,7 +5,7 @@ import { Command, ApplicationCommandOptionType } from '@/command';
 export class Clear extends Command {
     public name = 'Clear';
     public command = 'clear';
-    public timeout = 5000;
+    public timeout = Command.TIMEOUTS.FIVE_SECONDS;
     public description = 'Clear messages';
     public hidden = false;
     public owner = false;

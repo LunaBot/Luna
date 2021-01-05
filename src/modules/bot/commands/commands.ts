@@ -17,7 +17,7 @@ interface Field {
 export class Commands extends Command {
     public name = 'Commands';
     public command = 'commands';
-    public timeout = 5000;
+    public timeout = Command.TIMEOUTS.FIVE_SECONDS;
     public description = 'Print all commands you have access to.';
     public hidden = false;
     public owner = false;

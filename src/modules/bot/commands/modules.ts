@@ -9,7 +9,7 @@ import { sql } from '@databases/pg';
 export class Modules extends Command {
     public name = 'Modules';
     public command = 'modules';
-    public timeout = 5000;
+    public timeout = Command.TIMEOUTS.FIVE_SECONDS;
     public description = 'List all of the AutoMod modules.';
     public hidden = false;
     public owner = false;

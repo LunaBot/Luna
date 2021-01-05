@@ -9,7 +9,7 @@ import type { Message } from 'discord.js';
 export class Verification extends Command {
     public name = 'Verification';
     public command = 'verification';
-    public timeout = 5000;
+    public timeout = Command.TIMEOUTS.FIVE_SECONDS;
     public description = 'Manage verification channels.';
     public hidden = false;
     public owner = true;

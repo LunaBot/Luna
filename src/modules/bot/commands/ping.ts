@@ -5,7 +5,7 @@ import type { Interaction, Message } from 'discord.js';
 export class Ping extends Command {
     public name = 'Ping';
     public command = 'ping';
-    public timeout = 5000;
+    public timeout = Command.TIMEOUTS.FIVE_SECONDS;
     public description = 'Check the bot\'s latency.';
     public hidden = false;
     public owner = false;

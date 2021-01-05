@@ -5,7 +5,7 @@ import { AppError } from '@/errors';
 export class Ban extends Command {
     public name = 'Ban';
     public command = 'ban';
-    public timeout = 5000;
+    public timeout = Command.TIMEOUTS.FIVE_SECONDS;
     public description = 'Ban a member.';
     public hidden = false;
     public owner = false;

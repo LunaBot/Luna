@@ -13,5 +13,5 @@ export class Random extends Command {
 
     handler(_prefix: string, _message: Message, _args: string[]) {
         return `random number: ${Math.random()}`;
-    }   
+    }
 };

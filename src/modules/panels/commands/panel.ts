@@ -7,7 +7,7 @@ import type { Interaction, Message } from 'discord.js';
 export class Panel extends Command {
     public name = 'Panel';
     public command = 'panel';
-    public timeout = 2000;
+    public timeout = Command.TIMEOUTS.FIVE_SECONDS;
     public description = 'Manage panels';
     public hidden = false;
     public owner = false;

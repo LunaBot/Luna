@@ -26,7 +26,7 @@ class Leaderboard {
 export class Leaderboards extends Command {
   public name = 'Leaderboards';
   public command = 'leaderboards';
-  public timeout = 5000;
+  public timeout = Command.TIMEOUTS.FIVE_SECONDS;
   public description = 'Show the current leaderboards';
   public hidden = false;
   public owner = false;

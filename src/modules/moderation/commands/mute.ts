@@ -8,7 +8,7 @@ import type { Message } from 'discord.js';
 export class Mute extends Command {
     public name = 'Mute';
     public command = 'mute';
-    public timeout = 5000;
+    public timeout = Command.TIMEOUTS.FIVE_SECONDS;
     public description = 'Mute a member.';
     public hidden = true;
     public owner = false;

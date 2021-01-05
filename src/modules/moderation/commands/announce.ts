@@ -6,7 +6,7 @@ import { isTextChannel } from '@/guards';
 export class Announce extends Command {
     public name = 'Announce';
     public command = 'announce';
-    public timeout = 1000;
+    public timeout = Command.TIMEOUTS.FIVE_SECONDS;
     public description = 'Send a message to a channel as automod';
     public hidden = false;
     public owner = false;

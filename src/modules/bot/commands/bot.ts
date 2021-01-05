@@ -11,7 +11,7 @@ import { Server } from '@/servers';
 export class Bot extends Command {
     public name = 'Bot';
     public command = 'bot';
-    public timeout = 5000;
+    public timeout = Command.TIMEOUTS.FIVE_SECONDS;
     public description = 'Bot specific commands.';
     public hidden = false;
     public owner = false;

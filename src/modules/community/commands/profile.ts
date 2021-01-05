@@ -6,7 +6,7 @@ import { config } from '@/config';
 export class Profile extends Command {
     public name = 'Profile';
     public command = 'profile';
-    public timeout = 3000;
+    public timeout = Command.TIMEOUTS.FIVE_SECONDS;
     public description = 'Get a member\s profile link';
     public hidden = false;
     public owner = false;

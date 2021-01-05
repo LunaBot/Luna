@@ -81,7 +81,7 @@ class Member {
 export class PerformAction extends Command {
     public name = 'action';
     public command = 'action';
-    public timeout = 5000;
+    public timeout = Command.TIMEOUTS.FIVE_SECONDS;
     public description = 'Performs an action towards another member';
     public hidden = true;
     public owner = false;

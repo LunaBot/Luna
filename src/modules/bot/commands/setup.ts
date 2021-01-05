@@ -29,7 +29,7 @@ const waitForBoolean = async (channel: TextChannel | DMChannel) => {
 export class Setup extends Command {
     public name = 'Setup';
     public command = 'setup';
-    public timeout = 60000;
+    public timeout = Command.TIMEOUTS.ONE_MINUTE;
     public description = 'Set me up captain!';
     public hidden = false;
     public owner = true;

@@ -4,7 +4,7 @@ import { Command } from '@/command';
 export class Alias extends Command {
     public name = 'alias';
     public command = 'alias';
-    public timeout = 3000;
+    public timeout = Command.TIMEOUTS.FIVE_SECONDS;
     public description = 'Manages command aliases';
     public hidden = true;
     public owner = true;

@@ -10,7 +10,7 @@ import { sql } from '@databases/pg';
 export class Rank extends Command {
   public name = 'Rank';
   public command = 'rank';
-  public timeout = 5000;
+  public timeout = Command.TIMEOUTS.FIVE_SECONDS;
   public description = 'Get your current rank card';
   public hidden = false;
   public owner = false;
