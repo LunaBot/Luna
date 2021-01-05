@@ -8,15 +8,21 @@ import { isNewsChannel, isTextChannel } from '@/guards';
 import { log } from '@/log';
 import { sql } from '@databases/pg';
 
-export const ready = async () => {
+export const ready = async () => {    
     // Set bot's activity status
     const serversCount = await database.query<{ count: number }>(sql`SELECT COUNT(id) FROM servers;`).then(rows => rows[0].count);
-    await client.user?.setActivity(`moderating ${serversCount} server${serversCount === 1 ? '' : 's'}`);
+    await client.user?.setActivity({
+        name: `over ${serversCount} server${serversCount === 1 ? '' : 's'}`,
+        type: 'WATCHING'
+    });
 
     // Print Admin API key
     if (config.API_KEY_WAS_GENERATED) {
         log.debug(`Admin API key: ${envs.ADMIN.HIDE_KEYS ? config.ADMIN_API_KEY.replace(/./g, '*') : config.ADMIN_API_KEY}`);
     }
+
+    // Set online
+    await client.user?.setStatus('online');
 
     // Post "online" update in owner's server
     if (envs.OWNER.BOT_CHANNEL) {
