@@ -15,7 +15,7 @@ export const ready = async () => {
 
     // Print Admin API key
     if (config.API_KEY_WAS_GENERATED) {
-        log.debug(`Admin API key: ${config.ADMIN_API_KEY}`);
+        log.debug(`Admin API key: ${envs.ADMIN.HIDE_KEYS ? config.ADMIN_API_KEY.replace(/./g, '*') : config.ADMIN_API_KEY}`);
     }
 
     // Post "online" update in owner's server

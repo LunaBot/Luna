@@ -24,6 +24,7 @@ export const envs = {
     },
     ADMIN: {
         API_KEY: process.env.ADMIN_API_KEY ?? uuidAPIKey.create().apiKey,
+        HIDE_KEYS: process.env.ADMIN_HIDE_KEYS ?? false,
     },
 };
 
