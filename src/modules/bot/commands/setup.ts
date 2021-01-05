@@ -74,7 +74,9 @@ export class Setup extends Command {
                     enabled
                 };
             });
-            const enabledModules = modules.filter(_ => _.enabled);
+            const enabledModules = modules
+                .filter(_ => _.enabled)
+                .filter(_ => !_.internal);
 
             // Only update DB if at least one module was enabled
             if (modules.length >= 1) {
