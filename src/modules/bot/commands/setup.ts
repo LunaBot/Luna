@@ -11,7 +11,7 @@ import { v4 as uuid } from 'uuid';
 const filter: CollectorFilter = (response) => !response.author.bot;
 const waitForRoles = async (channel: TextChannel | DMChannel) => {
     return channel.awaitMessages(filter, { max: 1, time: 15000, errors: ['time'] }).then(collected => {
-        return collected.flatMap(answer => answer.mentions.roles);
+        return collected.array().flatMap(answer => [...answer.mentions.roles.array()].flatMap(role => role.id));
     }).catch(_collected => {
         throw new AppError('You took too long to respond.');
     });
@@ -19,8 +19,8 @@ const waitForRoles = async (channel: TextChannel | DMChannel) => {
 const waitForBoolean = async (channel: TextChannel | DMChannel) => {
     return channel.awaitMessages(filter, { max: 1, time: 15000, errors: ['time'] }).then(collected => {
         return Array.from(collected.values()).flatMap((answer) => {
-            return answer.content.toString().includes('yes') ?? answer.content.toString().includes('true');
-        });
+            return answer.content.toString().toLowerCase().includes('yes') ?? answer.content.toString().toLowerCase().includes('true');
+        })[0];
     }).catch(_collected => {
         throw new AppError('You took too long to respond.');
     });
@@ -64,21 +64,29 @@ export class Setup extends Command {
             }
 
             // Get enabled modules
-            const modules = await moduleManager.getInstalledModules().then(modules => {
-                return pMapSeries(modules, async _module => {
-                    await channel.send(`Do you want to enable the ${_module.name} module?`);
-                    const enabled = await waitForBoolean(channel);
-                    return {
-                        ..._module,
-                        enabled
-                    }
-                });
+            const installedModules = await moduleManager.getInstalledModules();
+            const modules = await pMapSeries(installedModules, async _module => {
+                await channel.send(`Do you want to enable the ${_module.name} module?`);
+                const enabled = await waitForBoolean(channel);
+                await channel.send(`${enabled ? 'Enabled' : 'Disabled'} ${_module.name}!`);
+                return {
+                    ..._module,
+                    enabled
+                };
             });
+            const enabledModules = modules.filter(_ => _.enabled);
 
-            // Update enabled modules
+            // Only update DB if at least one module was enabled
             if (modules.length >= 1) {
-                await Promise.all(modules.map(async _module => {
+                // Send message
+                await channel.send(`Enabling ${enabledModules.length}/${installedModules.length} modules.`);
+
+                // Enable modules
+                await Promise.all(enabledModules.map(async _module => {
                     await database.query(sql`INSERT INTO modules (id, serverId, name, enabled) VALUES(${uuid()}, ${serverId}, ${_module.name}, ${true}) ON CONFLICT (serverId,name) DO UPDATE SET enabled = EXCLUDED.enabled;`);
+                    await Promise.all(_module.commands.map(async command => {
+                        await database.query(sql`INSERT INTO commands (id, serverId, command, enabled) VALUES(${uuid()}, ${serverId}, ${command.command}, ${true}) ON CONFLICT (serverId,command) DO UPDATE SET enabled = EXCLUDED.enabled;`);
+                    }));
                 }));
             }
 
@@ -101,22 +109,22 @@ export class Setup extends Command {
         let roles = await waitForRoles(channel);
 
         // Get the role(s) mentioned
-        if (!roles || roles.size === 0) {
+        if (!roles || roles.length === 0) {
             await channel.send('No role(s) mentioned, try again.');
             roles = await waitForRoles(channel);
         }
 
         // Didn't mention anyone even after a retry
-        if (roles.size === 0) {
+        if (roles.length === 0) {
             await channel.send('No role(s) mentioned, skipping.');
             return;
         }
 
         // Remap to tags
-        const tags = roles.map(role => `<@&${role.id}>`);
+        const tags = roles.map(role => `<@&${role}>`);
 
         // One role
-        if (roles.size === 1) {
+        if (roles.length === 1) {
             await channel.send(`${tags[0]} has been marked as a "${role}" role!`);
 
             // Return roles
