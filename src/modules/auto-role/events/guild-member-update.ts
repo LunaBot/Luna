@@ -3,6 +3,7 @@ import { GuildMember as DiscordGuildMember, Role } from 'discord.js';
 import humanizeDuration from 'humanize-duration';
 import { database } from '@/database';
 import { moduleLogger } from '@/log';
+import { sleep } from '@/utils';
 
 type GuildMember = DiscordGuildMember & {
     pending: boolean;
@@ -14,10 +15,6 @@ interface AutoRole {
     roles: String[];
     timer: number;
 }
-
-const sleep = (seconds: number) => new Promise<void>(resolve => {
-    setTimeout(() => resolve(), seconds);
-});
 
 interface RoleAndAction {
     role: Role,
