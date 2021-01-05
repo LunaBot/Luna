@@ -22,13 +22,13 @@ export class Ban extends Command {
         type: ApplicationCommandOptionType.STRING,
     }]
 
-    // !ban @OmgImAlexis bad mod!
+    // !unban @OmgImAlexis didn't mean to ban you!
     async messageHandler(_prefix: string, message: Message, args: string[]) {
         // Who are we?
         const member = message.member!;
-        // Who are we banning?
+        // Who are we unbanning?
         const memberToUnban = message.mentions.members?.first();
-        // Why are we banning them?
+        // Why are we unbanning them?
         const reason = args.slice(1).join(' ');
         return this.handler(member, memberToUnban, reason);
     }
@@ -36,9 +36,9 @@ export class Ban extends Command {
     async interactionHandler(_prefix: string, interaction: Interaction) {
         // Who are we?
         const member = interaction.member!;
-        // Who are we banning?
+        // Who are we unbanning?
         const memberToUnban = interaction.guild.members.cache.get(interaction.options?.find(option => option.name === 'member')?.value!);
-        // Why are we banning them?
+        // Why are we unbanning them?
         const reason = interaction.options?.find(option => option.name === 'reason')?.value;
 
         return this.handler(member, memberToUnban, reason);
