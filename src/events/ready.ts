@@ -9,6 +9,15 @@ import { log } from '@/log';
 import { sql } from '@databases/pg';
 
 export const ready = async () => {    
+    const environment = envs.ENVIRONMENT.toLowerCase();
+    const username = client.user?.username
+    const potentialUsername = `AutoMod - ${environment.substring(0, 1).toUpperCase()}${environment.substring(1).toLowerCase()}`;
+
+    // Username should match the environment
+    if (username !== potentialUsername) {
+        log.warn(`Incorrect username, currently is "${username}" should be "${potentialUsername}"`);
+    }
+
     // Set bot's activity status
     const serversCount = await database.query<{ count: number }>(sql`SELECT COUNT(id) FROM servers;`).then(rows => rows[0].count);
     await client.user?.setActivity({
