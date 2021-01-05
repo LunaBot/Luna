@@ -12,15 +12,17 @@ interface ModuleOptions {
     id: string;
     name: string;
     description: string;
+    internal: boolean;
     commands: typeof Command [];
     events: [];
     endpoints: [];
 }
 
-class Module {
+export class Module {
     public id: string;
     public name: string;
     public description: string;
+    public internal: boolean;
     public commands: Command[];
     public enabled = true;
     public events: { name: string; handler: never; }[] = [];
@@ -33,6 +35,7 @@ class Module {
         this.id = options.id;
         this.name = options.name;
         this.description = options.description;
+        this.internal = options.internal ?? false;
         this.commands = Object.values(options.commands ?? {}).map(Command => new Command());
         this.events = Object.entries(options.events ?? {}).map(([name, handler]) => ({ name, handler }));
         this.endpoints = Object.entries(options.endpoints ?? {}).map(([name, endpoint]) => ({ name, endpoint }));
@@ -53,7 +56,7 @@ class Module {
                             name: eventName
                         }
                     };
-                    client.emit('error', error);
+                    client.emit('eventError', error);
                 });
             });
         });
