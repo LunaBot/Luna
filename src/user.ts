@@ -187,11 +187,9 @@ export class User {
         // Log full message
         log.debug(`[${message.author?.tag}]: ${message.content}`);
 
-        const _commandBody = message.content.slice(silent ? server.prefix.length + 1 : server.prefix.length);
-        const commandBody = _commandBody.split('\n')[0];
+        const commandBody = message.content.slice(silent ? server.prefix.length + 1 : server.prefix.length);
         const args = commandBody.split(' ');
         const commandName = args.shift()?.toLowerCase()?.trim();
-        const mutlilineCommand = _commandBody.split('\n').length >= 2;
 
         try {
             // Bail if there's no command given
@@ -203,11 +201,6 @@ export class User {
             const command = moduleManager.getCommand(commandName);
             if (!command) {
                 throw new InvalidCommandError(server.prefix, commandName, args);
-            }
-
-            // Don't allow multi-line commands
-            if (mutlilineCommand) {
-                throw new MultiLinePermissionError();
             }
 
             // Check we have permission to proceed
