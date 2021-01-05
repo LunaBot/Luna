@@ -28,6 +28,10 @@ export class Mute extends Command {
         type: ApplicationCommandOptionType.STRING,
     }];
 
+    async messageHandler(prefix: string, message: Message, args: string[]) {
+        return this.handler(prefix, message, args);
+    }
+
     async handler(_prefix: string, message: Message, args: string[]) {
         if (isTextChannelMessage(message)) {
             const server = await Server.findOrCreate({ id: message.guild.id });
@@ -63,7 +67,8 @@ export class Mute extends Command {
 
             // Later on unmute them
             // @TODO: This needs to mark the mute in the database
-            //        otherwise mutes over restarts don't work
+            //        otherwise mutes over restarts don't work and we might
+            //        unmute AFTER they've been manually unmuted and remuted
             const timeout = new Date(muteUntil).getTime() - new Date().getTime();
             setTimeout(async () => {
                 await member?.roles.remove(muteRole);
