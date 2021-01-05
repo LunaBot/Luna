@@ -78,7 +78,7 @@ export class Bot extends Command {
 
         return new MessageEmbed({
             description: dedent`
-                You can invite me [here](https://discordapp.com/oauth2/authorize?client_id=777463553253834785&scope=bot&permissions=0)!
+                You can invite me [here](https://discordapp.com/oauth2/authorize?client_id=${clientId}&scope=bot&permissions=0)!
                 Make sure to assign me a role once I'm added. :hearts:
             `,
             color: 11800515
