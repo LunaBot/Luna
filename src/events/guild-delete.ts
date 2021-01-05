@@ -13,7 +13,7 @@ export const guildDelete = async (guild: Guild) => {
 
     // DM bot owner
     const owner = client.users.cache.get(envs.OWNER.ID);
-    await owner?.send(`${guild.id} aka "${guild.name}" just added me.`);
+    await owner?.send(`${guild.id} aka "${guild.name}" just removed me. :disappointed:`);
 
     // Set bot's activity status
     const serversCount = await database.query<{ count: number }>(sql`SELECT COUNT(id) FROM servers;`).then(rows => rows[0].count);
