@@ -14,17 +14,19 @@ export class Announce extends Command {
     public options = [{
         name: 'channel',
         description: 'Where to post the message',
-        type: ApplicationCommandOptionType.CHANNEL
+        type: ApplicationCommandOptionType.CHANNEL,
     }, {
         name: 'announcement',
         description: 'The message to post',
-        type: ApplicationCommandOptionType.STRING
+        type: ApplicationCommandOptionType.STRING,
     }];
 
     async messageHandler(_prefix: string, message: Message, args: string[]) {
         const channel = message.mentions.channels.first()!;
         const announcement = args.slice(1).join(' ');
-        return this.handler(channel, announcement);
+        const result = await this.handler(channel, announcement);
+        await message.delete();
+        return result;
     }
 
     async interactionHandler(_prefix: string, interaction: Interaction) {
@@ -53,6 +55,6 @@ export class Announce extends Command {
         // Send to new channel
         await channel.send(announcement);
 
-        return `Sent message to <#${channel.id}>`;
+        return Symbol.for('silent');
     }
 };
