@@ -58,7 +58,8 @@ export class Bot extends Command {
 
     async infoHandler(createdTimestamp: number, memberId: string, messageId: string) {
         const uptime = humanizeDuration(Math.floor(process.uptime()) * 1000);
-        const timeTaken = (Date.now() - (createdTimestamp - client.ws.ping));
+        const timeTaken = (Date.now() - createdTimestamp);
+        const latency = Math.round(client.ws.ping);
         // Account for negative pings
         // This happens since discord is slightly behind our system clock
         const ping = timeTaken >= 1 ? timeTaken : 1;
@@ -78,18 +79,24 @@ export class Bot extends Command {
                         inline: true
                     },
                     {
+                        name: 'Latency',
+                        value: `${latency}ms`,
+                        inline: true
+                    },
+                    {
                         name: 'Version',
                         value: `${envs.BOT.COMMIT_HASH.substring(0, 7) || git.short()}`,
                         inline: true
                     },
                     {
                         name: 'Creator',
-                        value: `<@${envs.OWNER.ID}>`
+                        value: `<@${envs.OWNER.ID}>`,
+                        inline: false
                     },
                     {
                         name: 'Support us',
                         value: 'You can support us by staring our repo on [Github](https://github.com/automodbot/automod).',
-                        inline: true
+                        inline: false
                     }
                 ],
                 author: {
