@@ -64,7 +64,7 @@ export class Help extends Command {
         return this.handler(prefix, commandName);
     }
 
-    async handler(prefix: string, commandName: string) {
+    async handler(prefix: string, commandName?: string) {
         if (!commandName) {
             return generateHelp(prefix);
         }

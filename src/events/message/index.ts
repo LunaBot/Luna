@@ -4,6 +4,7 @@ import { isTextChannelMessage } from '@/guards';
 import { log } from '@/log';
 import { Server } from '@/servers';
 import type { Message } from 'discord.js';
+import { client } from '@/client';
 
 let isStarting = true;
 
@@ -31,7 +32,16 @@ export const message = async (message: Message) => {
   }
 
   // Skip non allowed channels
+  // @todo: make this dynamic from db
   if (message.channel.id === '776990572052742175') {
+    return;
+  }
+
+  // If the person mentioned is the bot
+  // Only trigger on `@AutoMod test` not `test @AutoMod`
+  // We don't need this triggering mid-sentence
+  if (message.content.startsWith(`<@!${client.user?.id}>`)) {
+    client.emit('mentioned', message);
     return;
   }
 

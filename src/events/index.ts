@@ -25,6 +25,7 @@ export * from './guild-member-add';
 // export * from './inviteCreate';
 // export * from './inviteDelete';
 // export * from './interaction-create';
+export * from './mentioned';
 export * from './message';
 // export * from './messageDelete';
 // export * from './messageReactionRemoveAll';

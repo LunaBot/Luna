@@ -1,4 +1,5 @@
 import { sql } from '@databases/pg';
+import { Guild } from 'discord.js';
 import { database } from './database';
 import { AppError } from './errors';
 import { User } from './user';
@@ -74,6 +75,14 @@ export class Server {
         return User.create({ id, serverId: this.id });
     }
 
+    public static async botRemoved(guild: Guild) {
+        await database.query(sql`UPDATE servers SET enabled=${false} WHERE id=${guild.id}`);
+    }
+
+    public static async botAdded(guild: Guild) {
+        await database.query(sql`UPDATE servers SET enabled=${true} WHERE id=${guild.id}`);
+    }
+
     public static async find({ id }: { id: Server['id'] } ) {
         const servers = await database.query<ServerOptions>(sql`SELECT * FROM servers WHERE id=${id};`);
 
@@ -100,7 +109,9 @@ export class Server {
         const prefix = '!';
         const channels = JSON.stringify({});
         const aliases = JSON.stringify({});
-        await database.query(sql`INSERT INTO servers(id,prefix,channels,aliases) VALUES (${id},${prefix},${channels},${aliases});`);
+        const setup = false;
+        // If the bot is readded to the server allow them to rerun setup
+        await database.query(sql`INSERT INTO servers(id,prefix,channels,aliases,setup) VALUES (${id},${prefix},${channels},${aliases},${setup}) ON CONFLICT (id) DO UPDATE SET setup = EXCLUDED.setup;`);
 
         // Failed to create server
         const servers = await database.query<ServerOptions>(sql`SELECT * FROM servers WHERE id=${id};`);
