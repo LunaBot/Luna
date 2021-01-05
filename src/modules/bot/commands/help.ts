@@ -15,7 +15,7 @@ const generateHelp = (prefix: string) => {
             value: `\`${prefix}commands\``
         }, {
             name: 'How do I invite the bot?',
-            value: `\`${prefix}bot-invite\``
+            value: `\`${prefix}bot invite\``
         });
 };
 
