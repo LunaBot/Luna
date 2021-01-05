@@ -39,6 +39,7 @@
     "humanize-duration": "^3.25.0",
     "import-to-array": "^1.0.0",
     "jsdiscordperms": "github:PgBiel/jsdiscordperms",
+    "json5": "^2.1.3",
     "logger": "github:unraid/logger#master",
     "ml-sentiment": "^2.0.7",
     "njstrace": "^1.2.0",
