@@ -37,7 +37,8 @@ export class Unban extends Command {
         // Who are we?
         const member = interaction.member!;
         // Who are we unbanning?
-        const memberToUnban = interaction.guild.members.cache.get(interaction.options?.find(option => option.name === 'member')?.value!);
+        // Make sure to fetch them as they may not be cached
+        const memberToUnban = await interaction.guild.members.fetch(interaction.options?.find(option => option.name === 'member')?.value!);
         // Why are we unbanning them?
         const reason = interaction.options?.find(option => option.name === 'reason')?.value;
 
