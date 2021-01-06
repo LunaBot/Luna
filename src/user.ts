@@ -97,18 +97,22 @@ export class User {
     }
 
     public static async create({ serverId, id }: { serverId: Server['id'], id: User['id'] }) {
-        // Create user
-        const experience = 0;
-        await database.query(sql`INSERT INTO users(serverId,id,experience) VALUES (${serverId},${id},${experience});`);
+        try {
+            // Create user
+            const experience = 0;
+            await database.query(sql`INSERT INTO users(serverId,id,experience) VALUES (${serverId},${id},${experience});`);
 
-        // Failed to create user
-        const users = await database.query<User>(sql`SELECT * FROM users WHERE serverId=${serverId} AND id=${id};`);
-        if (users.length === 0) {
+            // Failed to create user
+            const users = await database.query<User>(sql`SELECT * FROM users WHERE serverId=${serverId} AND id=${id};`);
+            if (users.length === 0) {
+                throw new AppError(`Failed to create user ${id}`);
+            }
+
+            // Return new user
+            return new User(users[0]);
+        } catch (error) {
             throw new AppError(`Failed to create user ${id}`);
         }
-
-        // Return new user
-        return new User(users[0]);
     }
 
     public async addExperience(experience: number) {
@@ -200,6 +204,9 @@ export class User {
             // Bail if the command isn't valid
             const command = moduleManager.getCommand(commandName);
             if (!command) {
+                // Skip error on production
+                // This allows other bots to use the same prefix
+                if (envs.NODE_ENV === 'production') return;
                 throw new InvalidCommandError(server.prefix, commandName, args);
             }
 
@@ -212,11 +219,6 @@ export class User {
                 // Not enough arguments
                 if (args.length < options.length) {
                     throw new AppError('Not enough args, %s requires at least %s args.', command.name, options.length);
-                }
-    
-                // Too many arguments
-                if (args.length > command.options.length) {
-                    throw new AppError('Too many args, %s requires no more than %s args.', command.name, command.options.length);
                 }
             }
 
