@@ -48,6 +48,7 @@
     "p-timeout": "^4.1.0",
     "parse-human-date": "^1.2.0",
     "pluralize": "^8.0.0",
+    "runtypes": "^5.0.1",
     "sentiment": "^5.0.2",
     "ts-node": "^9.1.1",
     "tsconfig-paths": "^3.9.0",
