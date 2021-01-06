@@ -3,6 +3,7 @@ import { DMChannel, GuildMember, Interaction, Message, MessageEmbed, NewsChannel
 import { Command } from './command';
 import { PromiseValue } from 'type-fest';
 import { database } from './database';
+import { RateLimiter } from 'discord.js-rate-limiter';
 import { envs } from './envs';
 import {
     AppError,
@@ -29,6 +30,10 @@ interface UserOptions {
 
 // In milliseconds
 const FIVE_SECONDS = 5000;
+const FIVE_MINUTES = 1000 * 60 * 5;
+
+const rateLimiterUser = new RateLimiter(1, FIVE_SECONDS);
+const rateLimiterMessage = new RateLimiter(1, FIVE_SECONDS);
 
 export class User {
     public id: string;
@@ -198,6 +203,16 @@ export class User {
         try {
             // Bail if there's no command given
             if (!commandName) {
+                return;
+            }
+
+            // Check if user is rate limited
+            const limited = rateLimiterUser.take(message.author!.id);
+            if (limited) {
+                // Only send rate limit message once every n seconds
+                const canSendMessage = !rateLimiterMessage.take(message.author!.id);
+                if (!canSendMessage) return;
+                await message.channel.send(`You're doing that do often, please try again later!`);
                 return;
             }
 

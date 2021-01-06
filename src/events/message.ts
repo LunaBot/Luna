@@ -1,5 +1,4 @@
 import humanizeDuration from 'humanize-duration';
-import { RateLimiter } from 'discord.js-rate-limiter';
 import { envs } from '@/envs';
 import { isTextChannelMessage } from '@/guards';
 import { log } from '@/log';
@@ -8,7 +7,6 @@ import type { Message } from 'discord.js';
 import { client } from '@/client';
 
 let isStarting = true;
-let rateLimiter = new RateLimiter(1, 2000);
 
 export const message = async (message: Message) => {
   // @ts-expect-error
@@ -36,13 +34,6 @@ export const message = async (message: Message) => {
   // Skip non allowed channels
   // @todo: make this dynamic from db
   if (message.channel.id === '776990572052742175') {
-    return;
-  }
-
-  // Check if user is rate limited
-  const limited = rateLimiter.take(message.author.id);
-  if (limited) {
-    await message.channel.send(`You're doing that do often, please try again later!`);
     return;
   }
 
