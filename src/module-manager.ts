@@ -5,6 +5,7 @@ import { Command } from '@/command';
 import { client } from '@/client';
 import { database } from './database';
 import { sql } from '@databases/pg';
+import { envs } from './envs';
 
 const isCommandFilter = (command: unknown): command is Command => command instanceof Command;
 
@@ -39,6 +40,19 @@ export class Module {
         this.commands = Object.values(options.commands ?? {}).map(Command => new Command());
         this.events = Object.entries(options.events ?? {}).map(([name, handler]) => ({ name, handler }));
         this.endpoints = Object.entries(options.endpoints ?? {}).map(([name, endpoint]) => ({ name, endpoint }));
+
+        if (envs.NODE_ENV !== 'production') {
+            // Log broken commands
+            Object.values(options.commands ?? {}).forEach(command => {
+                if (command.prototype.messageHandler === Command.prototype.messageHandler) {
+                    log.warn(`${command.name} is missing their messageHandler`);
+                }
+
+                if (command.prototype.interactionHandler === Command.prototype.interactionHandler) {
+                    log.warn(`${command.name} is missing their interactionHandler`);
+                }
+            });
+        }
 
         // Register events
         this.events.forEach(({ name: eventName, handler: eventHandler }) => {
@@ -127,7 +141,7 @@ class ModuleManager {
             enabled: boolean,
             serverId: string
         }[] = await database.query(sql`SELECT * FROM modules WHERE enabled=${true} AND serverId=${serverId}`);
-        
+
         return installedModules.map(enabledModule => {
             const foundModule = enabledModules.find(_module => _module.name === enabledModule.name);
             return foundModule ? {
