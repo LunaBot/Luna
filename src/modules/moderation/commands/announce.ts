@@ -11,6 +11,7 @@ export class Announce extends Command {
     public hidden = false;
     public owner = false;
     public examples = [ '!announce #general Good morning @everyone <3' ];
+    public permissions = ['ADMINISTRATOR' as const];
     public options = [{
         name: 'channel',
         description: 'Where to post the message',
