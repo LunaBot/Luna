@@ -58,20 +58,47 @@ export interface CommandOption {
 }
 
 export class Command {
-    public name: string = 'command';
-    public command: string = 'command';
-    public timeout: number = 5000;
-    public description: string = 'A basic command';
-    public hidden: boolean = false;
-    public owner: boolean = false;
-    public examples: string[] = [];
-    public roles: string[] = [];
     /**
-     * Discord permissions needed to use this command.
+     * Human friendly name.
+     */
+    public name: string = 'command';
+    /**
+     * What should we look for to trigger this?
+     */
+    public command: string = 'command';
+    /**
+     * How long should we wait before returning timeout message?
+     */
+    public timeout: number = 5000;
+    /**
+     * What does this command do?
+     */
+    public description: string = 'A basic command';
+    /**
+     * Should we hide this command from the "commands" menu?
+     */
+    public hidden: boolean = false;
+    /**
+     * Is this command only for the bot owner?
+     */
+    public internal: boolean = false;
+    /**
+     * How is this command used?
+     */
+    public examples: string[] = [];
+    /**
+     * What Discord permissions are needed to use this command?
      */
     public permissions: PermissionString[] = [];
+    /**
+     * What Discord options are needed to use this command?
+     */
     public options: CommandOption[] = [];
 
+    /**
+     * Well known times.
+     * Try to avoid using random timeouts.
+     */
     static TIMEOUTS = {
         ONE_SECOND,
         FIVE_SECONDS,
@@ -82,16 +109,25 @@ export class Command {
         TEN_MINUTES
     };
 
+    /**
+     * Is this command enabled?
+     */
     public async isEnabled(serverId: Server['id']) {
         return database.query(sql`SELECT enabled FROM commands WHERE serverId=${serverId} AND command=${this.command};`).then((commands: any) => {
             return commands[0]?.enabled ?? false;
         });
     }
 
+    /**
+     * Handle "message" commands.
+     */
     messageHandler(_prefix: string, _message: Message, _args: string[]): Promise<CommandResult | undefined> | CommandResult | undefined | void {
         throw new Error('Not implemented');
     }
 
+    /**
+     * Handle "interaction" commands.
+     */
     interactionHandler(_prefix: string, _interaction: Interaction): Promise<CommandResult | undefined> | CommandResult | undefined | void {
         throw new Error('Not implemented');
     }
