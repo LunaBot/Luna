@@ -1,4 +1,4 @@
-import { Message, User } from 'discord.js';
+import { Message, MessageEmbed, User } from 'discord.js';
 import { ApplicationCommandOptionType, Command } from '@/command';
 import { client } from '@/client';
 import { AppError } from '@/errors';
@@ -24,7 +24,7 @@ export class Avatar extends Command {
 
     async messageHandler(_prefix: string, message: Message, args: string[]) {
         // Check cache first only if it's missing do a fetch
-        const user = message.mentions.users.first() ?? args[0] ? (client.users.cache.get(args[0]) ?? await client.users.fetch(args[0])) : undefined;
+        const user = message.mentions.users.first() ?? (args[0] ? (client.users.cache.get(args[0]) ?? await client.users.fetch(args[0])) : undefined);
 
         // Couldn't resolve user
         if (!user && args.length >= 1) {
@@ -40,6 +40,16 @@ export class Avatar extends Command {
     }
 
     async handler(user: User) {
-        return user.displayAvatarURL({ dynamic: true });
-    } 
+        const iconUrl = user.displayAvatarURL({ dynamic: true, size: 256 });
+        const avatarUrl = user.displayAvatarURL({ dynamic: true, size: 1024 });
+        return new MessageEmbed({
+            author: {
+                name: user.username,
+                iconURL: iconUrl
+            },
+            image: {
+                url: avatarUrl
+            }
+        });
+    }
 };
