@@ -111,7 +111,7 @@ export class User {
             // Return new user
             return new User(users[0]);
         } catch (error) {
-            throw new AppError(`Failed to create user ${id}`);
+            throw new AppError(`Failed to create user ${id} in ${serverId}`);
         }
     }
 
