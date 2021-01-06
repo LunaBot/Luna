@@ -7,7 +7,7 @@ import { AppError } from '@/errors';
 type DataManager = (response: Response) => Promise<any>;
 
 export class Image extends Command {
-    public name = 'image';
+    public name = 'Image';
     public command = 'image';
     public timeout = Command.TIMEOUTS.FIVE_SECONDS;
     public description = 'Get an image';
