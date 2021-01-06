@@ -26,6 +26,19 @@ export class Mute extends Command {
         name: 'length',
         description: 'How long to mute the member for',
         type: ApplicationCommandOptionType.STRING,
+    }, {
+        name: 'type',
+        description: 'Mute type? Hard/soft?',
+        type: ApplicationCommandOptionType.SUB_COMMAND_GROUP,
+        options: [{
+            name: 'soft',
+            description: 'Adds mute role',
+            type: ApplicationCommandOptionType.SUB_COMMAND
+        }, {
+            name: 'hard',
+            description: 'Adds mute role and strips ALL other roles',
+            type: ApplicationCommandOptionType.SUB_COMMAND
+        }]
     }];
 
     async messageHandler(prefix: string, message: Message, args: string[]) {
@@ -53,7 +66,9 @@ export class Mute extends Command {
             const muteRole = message.guild.roles.cache.find(role => role.name.toLowerCase() === 'muted') ?? await message.guild.roles.create({
                 data: {
                     name: 'Muted',
-                    mentionable: false
+                    mentionable: false,
+                    // Put this to the top of the list so it can be found easy
+                    hoist: true
                 }
             });
 
