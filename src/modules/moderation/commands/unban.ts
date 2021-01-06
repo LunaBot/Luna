@@ -1,6 +1,8 @@
 import { ApplicationCommandOptionType, Command } from '@/command';
 import type { GuildMember, Interaction, Message } from 'discord.js';
 import { AppError } from '@/errors';
+import { getUserFromMention } from '@/utils';
+import { client } from '@/client';
 
 export class Unban extends Command {
     public name = 'Unban';
@@ -27,10 +29,17 @@ export class Unban extends Command {
         // Who are we?
         const member = message.member!;
         // Who are we unbanning?
-        const memberToUnban = message.mentions.members?.first();
+        const user = message.mentions.users?.first() || await getUserFromMention(args[0]);
+
+        // Make sure we have a user
+        if (!user) {
+            throw new AppError('Please mention a user to unban them.');
+        }
+
         // Why are we unbanning them?
         const reason = args.slice(1).join(' ');
-        return this.handler(member, memberToUnban, reason);
+
+        return this.handler(member, user.id, reason);
     }
 
     async interactionHandler(_prefix: string, interaction: Interaction) {
@@ -38,33 +47,36 @@ export class Unban extends Command {
         const member = interaction.member!;
         // Who are we unbanning?
         // Make sure to fetch them as they may not be cached
-        const memberToUnban = await interaction.guild.members.fetch(interaction.options?.find(option => option.name === 'member')?.value!);
+        const userIdToUnban = await interaction.guild.members.fetch(interaction.options?.find(option => option.name === 'member')?.value!).then(_ => _.id);
         // Why are we unbanning them?
         const reason = interaction.options?.find(option => option.name === 'reason')?.value;
 
-        return this.handler(member, memberToUnban, reason);
+        return this.handler(member, userIdToUnban, reason);
     }
 
-    async handler(member: GuildMember, memberToUnban?: GuildMember, reason?: string) {
-        // Make sure we have a memberToUnban
-        if (!memberToUnban) {
-            throw new AppError('Please mention a member to unban them.');
+    async handler(member: GuildMember, userIdToUnban?: GuildMember['id'], reason?: string) {
+        // Make sure we have a userIdToUnban
+        if (!userIdToUnban) {
+            throw new AppError('No memberToBan provided!');
         }
 
         // Don't unban yourself
-        if (member.id === memberToUnban.id) {
+        if (member.id === userIdToUnban) {
             throw new AppError(`You can't unban yourself.`);
         }
 
         // Make sure we give a reason
         if (!reason) {
-            throw new AppError('Please include a reason for unbanning <@%s>.', member.user.id);
+            throw new AppError('Please include a reason for unbanning <@%s>.', userIdToUnban);
         }
 
         try {
-            // Unban member
-            await member.guild.members.unban(memberToUnban.id, reason);
-            return `<@${member.user.id}> unbanned <@${memberToUnban.user.id}> with reason "${reason}"`
+            // Get user 
+            const user = await client.users.fetch(userIdToUnban);
+
+            // Unban user
+            await member.guild.members.unban(user, reason);
+            return `<@${member.user.id}> unbanned <@${user.id}> with reason "${reason}"`;
         } catch (error) {
             return `Failed unbanning member: ${JSON.stringify(error, null, 2)}`;
         }

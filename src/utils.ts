@@ -4,6 +4,7 @@ import fs from 'fs';
 import Vue from 'vue';
 import { createRenderer } from 'vue-server-renderer';
 import { envs } from '@/envs';
+import { client } from './client';
 
 export const promiseTimeout = (promise: Promise<any>, ms: number) => {
 	// Create a promise that rejects in <ms> milliseconds
@@ -88,3 +89,17 @@ export const createVueEndpoint = ({
 export const sleep = (seconds: number) => new Promise<void>(resolve => {
     setTimeout(() => resolve(), seconds * 1000);
 });
+
+export const getUserFromMention = async (mention: string) => {
+	if (!mention) return;
+
+	if (mention.startsWith('<@') && mention.endsWith('>')) {
+		let userId = mention.slice(2, -1);
+
+		if (userId.startsWith('!')) {
+			userId = userId.slice(1);
+		}
+
+		return client.users.fetch(userId);
+	}
+};
