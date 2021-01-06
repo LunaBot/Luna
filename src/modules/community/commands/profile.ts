@@ -11,7 +11,11 @@ export class Profile extends Command {
     public hidden = false;
     public owner = false;
     public examples = [ '!profile' ];
-    public roles = [ '@everyone' ];
+    public roles = [];
+
+    async messageHandler(prefix: string, message: Message, args: string[]) {
+        return this.handler(prefix, message, args);
+    }
 
     // !profile
     // !profile @OmgImAlexis#1546
