@@ -29,6 +29,10 @@ export class Level extends Command {
     return `Global level ${level}. Global experience ${experience}.`;
   }
 
+  async messageHandler(prefix: string, message: Message, args: string[]) {
+    return this.handler(prefix, message, args);
+  }
+
   async handler(_prefix: string, message: Message, _args: string[]) {
     const userId = message.author.id;
 
