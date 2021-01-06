@@ -22,7 +22,7 @@ export * from './guild-member-add';
 // export * from './guildMemberSpeaking';
 // export * from './guild-member-update';
 // export * from './guildUpdate';
-// export * from './inviteCreate';
+export * from './invite-create';
 // export * from './inviteDelete';
 // export * from './interaction-create';
 export * from './mentioned';
