@@ -31,12 +31,6 @@ export const message = async (message: Message) => {
     }
   }
 
-  // Skip non allowed channels
-  // @todo: make this dynamic from db
-  if (message.channel.id === '776990572052742175') {
-    return;
-  }
-
   // If the person mentioned is the bot
   // Only trigger on `@AutoMod test` not `test @AutoMod`
   // We don't need this triggering mid-sentence
