@@ -20,7 +20,7 @@ export const guildCreate = async (guild: Guild) => {
             value: `Thanks for using <@${client.user?.id}>`
         }, {
             name: 'Get started!',
-            value: `You can start by using \`${server.prefix}\``
+            value: `You can start by using \`${server.prefix}setup\``
         }, {
             name: 'Support',
             value: `https://discord.gg/F9EbdNF4T3`
