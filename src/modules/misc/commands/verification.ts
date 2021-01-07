@@ -1,5 +1,5 @@
 import { sql } from '@databases/pg';
-import { v4 } from 'uuid';
+import { v4 as uuid } from 'uuid';
 import { Command } from '@/command';
 import { database } from '@/database';
 import { AppError } from '@/errors';
@@ -86,7 +86,7 @@ export class Verification extends Command {
      * @memberof Verification
      */
     private async createCommand(serverId: string, command: string) {
-        await database.query(sql`INSERT INTO verifications(id,serverId,command) VALUES (${v4()},${serverId},${command});`);
+        await database.query(sql`INSERT INTO verifications(id,serverId,command) VALUES (${uuid()},${serverId},${command});`);
         return `\`${command}\` verification created!`;
     }
 
