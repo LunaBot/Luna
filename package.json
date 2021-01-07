@@ -28,7 +28,7 @@
     "dedent": "^0.7.0",
     "discord-canvas": "^1.4.1",
     "discord-slash-commands-client": "^1.1.1",
-    "discord.js": "git+https://github.com/MatteZ02/discord.js.git",
+    "discord.js": "^12.5.1",
     "discord.js-menu": "^2.3.1",
     "discord.js-rate-limiter": "^1.0.5",
     "dotenv": "^8.2.0",
