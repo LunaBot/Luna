@@ -67,6 +67,11 @@ export class Command {
      */
     public command: string = 'command';
     /**
+     * Is this command currently broken?
+     * If so it'll only show up for the bot owner.
+     */
+    public broken = false;
+    /**
      * How long should we wait before returning timeout message?
      */
     public timeout: number = 5000;
