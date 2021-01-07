@@ -1,7 +1,7 @@
 import { Interaction, Message, MessageEmbed } from 'discord.js';
 import { ApplicationCommandOptionType, Command } from '@/command';
 import { config } from '@/config';
-import { moduleManager } from '@/module-manager';
+import { Module, moduleManager } from '@/module-manager';
 import { database } from '@/database';
 import { AppError } from '@/errors';
 import { sql } from '@databases/pg';
@@ -18,6 +18,10 @@ export class Modules extends Command {
     public options = [{
         name: 'list',
         description: 'List all of the automod modules',
+        type: ApplicationCommandOptionType.SUB_COMMAND,
+    }, {
+        name: 'compact-list',
+        description: 'Compact list all of the automod modules',
         type: ApplicationCommandOptionType.SUB_COMMAND,
     }, {
         name: 'info',
@@ -65,20 +69,24 @@ export class Modules extends Command {
         }, interaction.guild.id);
     }
 
-    async handler({ command, module: _module }: { command?: string, module?: string }, serverId: string) {
+    async handler(options: { command?: string, module?: string }, serverId: string) {
+        // Bail on no command.
+        if (!options) return this.infoHandler(serverId);
+
         const handlers = {
-            enable: () => this.enableModule(serverId, _module),
-            disable: () => this.disableModule(serverId, _module),
+            enable: () => this.enableModule(serverId, options.module),
+            disable: () => this.disableModule(serverId, options.module),
             list: () => this.listHandler(serverId),
-            info: () => this.infoHandler(serverId, _module),
+            info: () => this.infoHandler(serverId, options.module),
+            'compact-list': () => this.compactListHandler(serverId),
         };
 
         // Invalid sub command
-        if (command !== undefined && !Object.keys(handlers).includes(command as keyof typeof handlers)) {
+        if (options.command !== undefined && !Object.keys(handlers).includes(options.command as keyof typeof handlers)) {
             throw new AppError('Invalid sub command!');
         }
 
-        return handlers[command as keyof typeof handlers || 'list']();
+        return handlers[options.command as keyof typeof handlers || 'list']();
     }
 
     // !modules enable
@@ -97,6 +105,11 @@ export class Modules extends Command {
 
         // Set enabled in DB
         await database.query(sql`UPDATE modules SET enabled=${true} WHERE serverId=${serverId} AND name=${foundModule.name}`);
+
+        // Enable commands for this module
+        await Promise.all(foundModule.commands.map(command => {
+            
+        }));
 
         return `Enabled ${moduleName} module!`;
     }
@@ -122,6 +135,7 @@ export class Modules extends Command {
     }
 
     // !modules
+    // !modules list
     async listHandler(serverId: string) {
         // Get all modules from db
         const modules = await moduleManager.getEnabledModules(serverId);
@@ -139,6 +153,26 @@ export class Modules extends Command {
             .setURL(config.PUBLIC_URL)
             .setAuthor('Modules')
             .addFields(fields);
+
+        return embed;
+    }
+
+    // !modules compact-list
+    async compactListHandler(serverId: string) {
+        // Convert module to string
+        const moduleToString = (modules: Module[]) => modules.map(_module => `\`${_module.name}\``).join(', ');
+
+        // Get all modules from db
+        const installedModules = await moduleManager.getInstalledModules();
+        const enabledModules = await moduleManager.getEnabledModules(serverId);
+
+        // Create embeds
+        const embed = new MessageEmbed()
+            .setColor('#0099ff')
+            .setURL(config.PUBLIC_URL)
+            .setAuthor('Modules')
+            .addField('Installed', moduleToString(installedModules))
+            .addField('Enabled', moduleToString(enabledModules));
 
         return embed;
     }
