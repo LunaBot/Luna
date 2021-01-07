@@ -10,23 +10,73 @@ import { envs } from './envs';
 const isCommandFilter = (command: unknown): command is Command => command instanceof Command;
 
 interface ModuleOptions {
+    /**
+     * v4 UUID
+     */
     id: string;
+    /**
+     * Human friendly name.
+     */
     name: string;
+    /**
+     * What is this module for?
+     */
     description: string;
+    /**
+     * If this module is enabled globally.
+     */
+    enabled: boolean;
+    /**
+     * Is this module used only for the bot owner?
+     */
     internal: boolean;
+    /**
+     * Is this module currently broken?
+     * If so only show it to the bot owner.
+     */
+    broken: boolean;
     commands: typeof Command [];
     events: [];
     endpoints: [];
 }
 
 export class Module {
+    /**
+     * v4 UUID
+     */
     public id: string;
+    /**
+     * Human friendly name.
+     */
     public name: string;
+    /**
+     * What is this module for?
+     */
     public description: string;
+    /**
+     * If this module is enabled globally.
+     */
+    public enabled = false;
+    /**
+     * Is this module currently broken?
+     * If so only show it to the bot owner.
+     */
+    public broken = false;
+    /**
+     * Is this module used only for the bot owner?
+     */
     public internal: boolean;
+    /**
+     * All the commands this module comes with.
+     */
     public commands: Command[];
-    public enabled = true;
+    /**
+     * All the events this module subscribes to from the "discord.js" client instance.
+     */
     public events: { name: string; handler: never; }[] = [];
+    /**
+     * All the "express.js" routers this modules has.
+     */
     public endpoints: { name: string; endpoint: never; }[] = [];
 
     constructor(options: ModuleOptions) {
@@ -37,6 +87,7 @@ export class Module {
         this.name = options.name;
         this.description = options.description;
         this.internal = options.internal ?? false;
+        this.enabled = options.enabled ?? false;
         this.commands = Object.values(options.commands ?? {}).map(Command => new Command());
         this.events = Object.entries(options.events ?? {}).map(([name, handler]) => ({ name, handler }));
         this.endpoints = Object.entries(options.endpoints ?? {}).map(([name, endpoint]) => ({ name, endpoint }));
@@ -141,8 +192,7 @@ class ModuleManager {
             enabled: boolean,
             serverId: string
         }[] = await database.query(sql`SELECT * FROM modules WHERE enabled=${true} AND serverId=${serverId}`);
-
-        return installedModules.map(enabledModule => {
+        const modules = installedModules.map(enabledModule => {
             const foundModule = enabledModules.find(_module => _module.name === enabledModule.name);
             return foundModule ? {
                 ...foundModule,
@@ -152,6 +202,8 @@ class ModuleManager {
                 enabled: false
             };
         }) as Module[];
+
+        return modules.filter(_module => _module.enabled);
     }
 
     public async getInstalledModules() {
