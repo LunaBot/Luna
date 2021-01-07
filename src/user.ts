@@ -9,9 +9,7 @@ import {
     AppError,
     CommandPermissionError,
     InvalidCommandError,
-    MultiLinePermissionError
 } from './errors';
-import { UserExperience } from './events/message/user-experience';
 import { isTextChannelMessage } from './guards';
 import { LevelManager } from './levels';
 import { log } from './log';
@@ -24,13 +22,12 @@ interface UserOptions {
     displayName: string;
     displayImage: string;
     serverId: string;
-    experience: number;
+
     messages: number;
 };
 
 // In milliseconds
 const FIVE_SECONDS = 5000;
-const FIVE_MINUTES = 1000 * 60 * 5;
 
 const rateLimiterUser = new RateLimiter(1, FIVE_SECONDS);
 const rateLimiterMessage = new RateLimiter(1, FIVE_SECONDS);
@@ -207,12 +204,17 @@ export class User {
             }
 
             // Check if user is rate limited
-            const limited = rateLimiterUser.take(message.author!.id);
+            const limited = rateLimiterUser.take(`${message.author!.id}_${commandName}`);
             if (limited) {
                 // Only send rate limit message once every n seconds
-                const canSendMessage = !rateLimiterMessage.take(message.author!.id);
+                const canSendMessage = !rateLimiterMessage.take(`${message.author!.id}_${commandName}`);
                 if (!canSendMessage) return;
-                await message.channel.send(`You're doing that do often, please try again later!`);
+                await message.channel.send(new MessageEmbed({
+                    author: {
+                        name: 'Rate Limited!'
+                    },
+                    description: `You're trying to run this command too often, try again in 5s.`
+                }))
                 return;
             }
 
