@@ -28,6 +28,7 @@ const log = moduleLogger.createChild({
 });
 
 export const guildMemberUpdate = async (oldMember: GuildMember, newMember: GuildMember) => {
+    const isMembershipScreeningEnabled = oldMember.guild.features.includes('MEMBER_VERIFICATION_GATE_ENABLED');
     const autoRoles = await database.query<AutoRole>(sql`SELECT * FROM autoRoles WHERE enabled=true AND serverId=${oldMember.guild.id}`);
 
     // No auto roles setup
@@ -36,8 +37,8 @@ export const guildMemberUpdate = async (oldMember: GuildMember, newMember: Guild
         return;
     }
 
-    // Member passed membership screening
-    if (oldMember.pending && !newMember.pending) {
+    // Member passed membership screening or the server doesn't have it enabled
+    if (!isMembershipScreeningEnabled || (isMembershipScreeningEnabled && oldMember.pending && !newMember.pending)) {
         log.silly('%s has now passed the membership screening.', newMember.user.username);
 
         // Find role in discord.js cache
