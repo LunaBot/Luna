@@ -7,9 +7,9 @@ import { AutoRole, RoleAndAction } from '../types';
 import { isRoleAndAction } from '../guards';
 import { log } from '@/log';
 
-export const guildMemberUpdate = async (oldMember: GuildMember, newMember: GuildMember) => {
-    const isMembershipScreeningEnabled = oldMember.guild.features.includes('MEMBER_VERIFICATION_GATE_ENABLED');
-    const autoRoles = await database.query<AutoRole>(sql`SELECT * FROM autoRoles WHERE enabled=true AND serverId=${oldMember.guild.id}`);
+export const guildMemberUpdate = async (_oldMember: GuildMember, newMember: GuildMember) => {
+    const isMembershipScreeningEnabled = newMember.guild.features.includes('MEMBER_VERIFICATION_GATE_ENABLED');
+    const autoRoles = await database.query<AutoRole>(sql`SELECT * FROM autoRoles WHERE enabled=true AND serverId=${newMember.guild.id}`);
 
     // No auto roles setup
     if (autoRoles.length === 0) {
@@ -28,7 +28,7 @@ export const guildMemberUpdate = async (oldMember: GuildMember, newMember: Guild
         log.silly('%s has now passed the membership screening.', newMember.user.username);
     }
 
-    // Find role in discord.js cache
+    // Find role in cache
     const processedAutoRoles = await Promise.all(autoRoles.map(async autoRole => {
         const roles = await Promise.all(autoRole.roles.map(async roleIdOrName => {
             // Remove the +/- from the start of the role
