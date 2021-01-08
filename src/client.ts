@@ -1,6 +1,7 @@
 import Statcord from 'statcord.js';
 import { Client, Structures } from 'discord.js';
-import { envs } from './envs';
+import { envs } from '@/envs';
+import { log } from '@/log';
 
 Structures.extend('GuildMember', GuildMember => {
   class CoolGuild extends GuildMember {
@@ -30,4 +31,16 @@ export const statcord = new Statcord.Client({
   postCpuStatistics: true, /* Whether to post memory statistics or not, defaults to true */
   postMemStatistics: true, /* Whether to post memory statistics or not, defaults to true */
   postNetworkStatistics: true, /* Whether to post memory statistics or not, defaults to true */
+});
+
+statcord.on('autopost-start', () => {
+  // Emitted when statcord autopost starts
+  log.info('Started autopost');
+});
+
+statcord.on('post', status => {
+  // status = false if the post was successful
+  // status = "Error message" or status = Error if there was an error
+  if (!status) log.info('Successful post');
+  else log.error('StatCordError', status);
 });
