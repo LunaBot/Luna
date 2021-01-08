@@ -30,6 +30,9 @@ export const envs = {
     },
     STATCORD: {
         API_KEY: process.env.STATCORD_API_KEY ?? '',
+        CPU_STATS: process.env.STATCORD_CPU_STATS?.toLowerCase() === 'true',
+        MEMORY_STATS: process.env.STATCORD_MEMORY_STATS?.toLowerCase() === 'true',
+        NETWORK_STATS: process.env.STATCORD_NETWORK_STATS?.toLowerCase() === 'true',
     }
 };
 

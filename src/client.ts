@@ -28,9 +28,9 @@ export const client = new Client();
 export const statcord = new Statcord.Client({
   client,
   key: envs.STATCORD.API_KEY,
-  postCpuStatistics: true, /* Whether to post memory statistics or not, defaults to true */
-  postMemStatistics: true, /* Whether to post memory statistics or not, defaults to true */
-  postNetworkStatistics: true, /* Whether to post memory statistics or not, defaults to true */
+  postCpuStatistics: envs.STATCORD.CPU_STATS, /* Whether to post memory statistics or not, defaults to true */
+  postMemStatistics: envs.STATCORD.MEMORY_STATS, /* Whether to post memory statistics or not, defaults to true */
+  postNetworkStatistics: envs.STATCORD.NETWORK_STATS, /* Whether to post memory statistics or not, defaults to true */
 });
 
 statcord.on('autopost-start', () => {
