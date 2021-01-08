@@ -103,7 +103,7 @@ export const ready = async () => {
     await pMapSeries(servers, async serverId => {
         // Add slash commands to server
         // await addCommands(interactionsClient, serverId);
-        log.info(`Server: ${serverId} has slashCommands enabled.`);
+        log.silly(`Server: ${serverId} has slashCommands enabled.`);
 
         // Wait for 1s
         await sleep(1000);
