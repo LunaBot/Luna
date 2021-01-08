@@ -16,13 +16,14 @@ import { log } from './log';
 import { moduleManager } from './module-manager';
 import { Server } from './servers';
 import { promiseTimeout } from './utils';
+import { statcord } from '@/client';
 
 interface UserOptions {
     id: string;
     displayName: string;
     displayImage: string;
     serverId: string;
-
+    experience: number;
     messages: number;
 };
 
