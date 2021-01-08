@@ -1,6 +1,7 @@
 import uuidAPIKey from 'uuid-apikey';
 
 export const envs = {
+    DEBUG: process.env.DEBUG,
     ENVIRONMENT: process.env.ENVIRONMENT ?? 'UNKNOWN',
     NODE_ENV: process.env.NODE_ENV,
     WEB: {
@@ -27,6 +28,9 @@ export const envs = {
         API_KEY: process.env.ADMIN_API_KEY ?? uuidAPIKey.create().apiKey,
         HIDE_KEYS: process.env.ADMIN_HIDE_KEYS ?? false,
     },
+    STATCORD: {
+        API_KEY: process.env.STATCORD_API_KEY ?? '',
+    }
 };
 
 export type Envs = typeof envs;
