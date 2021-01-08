@@ -1,6 +1,6 @@
 import git from 'git-rev-sync';
 import humanizeDuration from 'humanize-duration';
-import { client } from '@/client';
+import { client, statcord } from '@/client';
 import { config } from '@/config';
 import { database } from '@/database';
 import { envs } from '@/envs';
@@ -9,6 +9,9 @@ import { log } from '@/log';
 import { sql } from '@databases/pg';
 
 export const ready = async () => {    
+    // Let statcord know
+    statcord.autopost();
+
     const environment = envs.ENVIRONMENT.toLowerCase();
     const username = client.user?.username
     const potentialUsername = `AutoMod - ${environment.substring(0, 1).toUpperCase()}${environment.substring(1).toLowerCase()}`;

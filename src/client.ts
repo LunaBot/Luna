@@ -1,4 +1,6 @@
+import Statcord from 'statcord.js';
 import { Client, Structures } from 'discord.js';
+import { envs } from './envs';
 
 Structures.extend('GuildMember', GuildMember => {
   class CoolGuild extends GuildMember {
@@ -20,3 +22,12 @@ Structures.extend('GuildMember', GuildMember => {
 });
 
 export const client = new Client();
+
+// Create statcord client
+export const statcord = new Statcord.Client({
+  client,
+  key: envs.STATCORD.API_KEY,
+  postCpuStatistics: true, /* Whether to post memory statistics or not, defaults to true */
+  postMemStatistics: true, /* Whether to post memory statistics or not, defaults to true */
+  postNetworkStatistics: true, /* Whether to post memory statistics or not, defaults to true */
+});
