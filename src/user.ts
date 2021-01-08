@@ -230,6 +230,9 @@ export class User {
             // Check we have permission to proceed
             await this.processPermissions(commandName, server, message.member!, command);
 
+            // Let statcord know we used a command
+            await statcord.postCommand(command.command, message.author!.id);
+
             // Ensure we have all the needed options
             const options = command.options.filter(option => option.required);
             if (options.length >= 1) {
