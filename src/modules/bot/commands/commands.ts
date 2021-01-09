@@ -1,12 +1,14 @@
 import { Menu } from 'discord.js-menu';
 import joinUrl from 'url-join';
-import { Channel, Interaction, Message, MessageEmbed, User } from 'discord.js';
-import { Command } from '@/command';
+import pFilter from 'p-filter';
+import { Channel, GuildMember, Interaction, Message, MessageEmbed } from 'discord.js';
+import { ApplicationCommandOptionType, Command } from '@/command';
 import { Server } from '@/servers';
 import { moduleManager } from '@/module-manager';
 import dedent from 'dedent';
 import { isTextChannelMessage } from '@/guards';
 import { config } from '@/config';
+import { CommandPermissionError } from '@/errors';
 
 interface Field {
     name: string;
@@ -18,29 +20,96 @@ export class Commands extends Command {
     public name = 'Commands';
     public command = 'commands';
     public timeout = Command.TIMEOUTS.FIVE_SECONDS;
-    public description = 'Print all commands you have access to.';
+    public description = 'Manage commands.';
     public hidden = false;
     public owner = false;
     public examples = [];
     public permissions = [];
+    public options = [{
+        name: 'list',
+        description: 'List all of the automod commands',
+        type: ApplicationCommandOptionType.SUB_COMMAND,
+    }, {
+        name: 'info',
+        description: 'Info on a specific command',
+        type: ApplicationCommandOptionType.SUB_COMMAND,
+        options: [{
+            name: 'command',
+            description: 'Name of the command',
+            type: ApplicationCommandOptionType.STRING,
+            required: true,
+        }]
+    }, {
+        name: 'enable',
+        description: 'Enable a command',
+        type: ApplicationCommandOptionType.SUB_COMMAND,
+        options: [{
+            name: 'command',
+            description: 'Name of the command',
+            type: ApplicationCommandOptionType.STRING,
+            required: true,
+        }]
+    }, {
+        name: 'disable',
+        description: 'Disable a command',
+        type: ApplicationCommandOptionType.SUB_COMMAND,
+        options: [{
+            name: 'command',
+            description: 'Name of the command',
+            type: ApplicationCommandOptionType.STRING,
+            required: true,
+        }]
+    }];
 
     async messageHandler(_prefix: string, message: Message, _args: string[]) {
         if (isTextChannelMessage(message)) {
-            return this.handler({}, message.guild.id, message.channel, message.author!);
+            return this.handler({}, message.guild.id, message.channel, message.member!);
         }
     }
 
     async interactionHandler(_prefix: string, interaction: Interaction) {
-        return this.handler({}, interaction.guild.id, interaction.channel, interaction.author!);
+        return this.handler({}, interaction.guild.id, interaction.channel, interaction.member!);
     }
 
-    async handler({}, serverId: string, channel: Channel, user: User) {
+    async handler({}, serverId: string, channel: Channel, member: GuildMember) {
         // Get all enabled commands
-        const commands = await moduleManager.getEnabledCommands(serverId);
+        const commands = await moduleManager.getEnabledCommands(serverId).then(commands => {
+            const _commands = commands
+                .filter(command => !command.broken)
+                .filter(command => {
+                    // No permissions listed
+                    if (command.permissions.length == 0) {
+                        return true;
+                    }
+
+                    // Check we have permission to run this
+                    return command.permissions.some(permission => member.hasPermission(permission));
+                });
+
+                // Check we have the needed roles to run this
+                return pFilter(_commands, async command => {
+                    // Has a denied role
+                    const deniedRoles = await command.getDeniedRoles(serverId);
+                    const isDenied = deniedRoles.some(deniedRole => member.roles.cache.find(role => role.name.toLowerCase() === deniedRole.toLowerCase()));
+                    if (isDenied) {
+                        return false;
+                    }
+
+                    // Has an allowed role
+                    const allowedRoles = await command.getAllowedRoles(serverId);
+                    const isAllowed = allowedRoles.some(allowedRole => member.roles.cache.find(role => role.name.toLowerCase() === allowedRole.toLowerCase()));
+
+                    return isAllowed;
+                });
+        });
 
         // Create embeds
         const server = await Server.findOrCreate({ id: serverId });
-        const fields = commands.map(command => {
+        // Either return commands or just "help" and "commands"
+        const fields = (commands.length >= 1 ? commands : [
+            moduleManager.getCommand('help')!,
+            moduleManager.getCommand('commands')!,
+        ]).map(command => {
             return {
                 name: command.name,
                 value: dedent`
@@ -98,7 +167,7 @@ export class Commands extends Command {
          * 3) An array of Page objects, each being a unique page of the menu
          * 4) How long, in milliseconds, you want the menu to wait for new reactions
          */
-        let helpMenu = new Menu(channel, user.id, createPages(fields), 300000)
+        let helpMenu = new Menu(channel, member.id, createPages(fields), 300000)
 
         /* Run Menu.start() when you're ready to send the menu in chat.
          * Once sent, the menu will automatically handle everything else.
