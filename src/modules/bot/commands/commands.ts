@@ -90,15 +90,23 @@ export class Commands extends Command {
                 return pFilter(_commands, async command => {
                     // Has a denied role
                     const deniedRoles = await command.getDeniedRoles(serverId);
-                    const isDenied = deniedRoles.some(deniedRole => member.roles.cache.find(role => role.name.toLowerCase() === deniedRole.toLowerCase()));
+                    const isDenied = deniedRoles.some(deniedRole => member.roles.cache.find(role => {
+                        const nameMatches = role.name.toLowerCase() === deniedRole.toLowerCase();
+                        const idMatches = role.id === deniedRole;
+                        return idMatches || nameMatches;
+                    }));
                     if (isDenied) {
                         return false;
                     }
 
                     // Has an allowed role
                     const allowedRoles = await command.getAllowedRoles(serverId);
-                    const isAllowed = allowedRoles.some(allowedRole => member.roles.cache.find(role => role.name.toLowerCase() === allowedRole.toLowerCase()));
-
+                    const anyoneCanUse = allowedRoles.length === 1 && allowedRoles[0] === '*';
+                    const isAllowed = anyoneCanUse || allowedRoles.some(allowedRole => member.roles.cache.find(role => {
+                        const nameMatches = role.name.toLowerCase() === allowedRole.toLowerCase();
+                        const idMatches = role.id === allowedRole;
+                        return idMatches || nameMatches;
+                    }));
                     return isAllowed;
                 });
         });
