@@ -17,6 +17,11 @@ export const guildMemberUpdate = async (_oldMember: GuildMember, newMember: Guil
         return;
     }
 
+    // They already have at least one role
+    // The reason we check for 2 roles is that
+    // every discord user has the `@everyone` role
+    if (newMember.roles.cache.size >= 2) return;
+
     // If screening is enabled on the server
     if (isMembershipScreeningEnabled && newMember.pending) {
         // Bail since they haven't passed the screening and it's currenty enabled
