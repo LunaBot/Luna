@@ -78,7 +78,7 @@ export class Commands extends Command {
                     fields,
                     ...(pages.length >= 2 ? {
                         footer: {
-                            text: `Page ${index + 1}/${Math.ceil(fields.length / 10) + 1}`
+                            text: `Page ${index + 1}/${pages.length}`
                         }
                     } : {})
                 }),
