@@ -1,6 +1,7 @@
 import { sql } from '@databases/pg';
 import type { Message, APIMessageContentResolvable, MessageOptions, MessageAdditions, Interaction, PermissionString } from 'discord.js';
 import { database } from './database';
+import { AppError } from './errors';
 import { Server } from './servers';
 
 const ONE_SECOND = 1000;
@@ -118,8 +119,20 @@ export class Command {
      * Is this command enabled?
      */
     public async isEnabled(serverId: Server['id']) {
-        return database.query(sql`SELECT enabled FROM commands WHERE serverId=${serverId} AND command=${this.command};`).then((commands: any) => {
+        return database.query<{ enabled: boolean }>(sql`SELECT enabled FROM commands WHERE serverId=${serverId} AND command=${this.command};`).then(commands => {
             return commands[0]?.enabled ?? false;
+        });
+    }
+
+    public async getAllowedRoles(serverId: Server['id']) {
+        return database.query<{ allowedroles: string[] }>(sql`SELECT allowedRoles FROM commands WHERE serverId=${serverId} AND command=${this.command};`).then(commands => {
+            return commands[0]?.allowedroles ?? [];
+        });
+    }
+
+    public async getDeniedRoles(serverId: Server['id']) {
+        return database.query<{ deniedroles: string[] }>(sql`SELECT deniedRoles FROM commands WHERE serverId=${serverId} AND command=${this.command};`).then(commands => {
+            return commands[0]?.deniedroles ?? [];
         });
     }
 
@@ -127,13 +140,13 @@ export class Command {
      * Handle "message" commands.
      */
     messageHandler(_prefix: string, _message: Message, _args: string[]): Promise<CommandResult | undefined> | CommandResult | undefined | void {
-        throw new Error('Not implemented');
+        throw new AppError(`% is missing it's messageHandler.`, this.command);
     }
 
     /**
      * Handle "interaction" commands.
      */
     interactionHandler(_prefix: string, _interaction: Interaction): Promise<CommandResult | undefined> | CommandResult | undefined | void {
-        throw new Error('Not implemented');
+        throw new AppError(`% is missing it's interactionHandler.`, this.command);
     }
 };
