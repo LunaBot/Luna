@@ -91,6 +91,10 @@ const updateCommands = async (client: SlashCommandsClient, serverId: Server['id'
 const sleep = (ms: number)=> new Promise<void>(resolve => setTimeout(() => resolve(), ms));
 
 export const ready = async () => {
+    // Only install/delete slash commands on ready if we're in the production environment
+    // There's no point in doing this if we're using the test/dev bot
+    if (envs.NODE_ENV !== 'production') return;
+
     // Create interactions client
     const interactionsClient = new SlashCommandsClient(envs.BOT.TOKEN, client.user?.id!);
 
