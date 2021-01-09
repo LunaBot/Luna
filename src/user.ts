@@ -293,14 +293,15 @@ export class User {
         const deniedRoles = await command.getDeniedRoles(server.id);
         const isDenied = deniedRoles.some(deniedRole => member.roles.cache.find(role => role.name.toLowerCase() === deniedRole.toLowerCase()));
         if (isDenied) {
-            return false;
+            throw new AppError(`You don't have permission to use \`${commandName}\`!`);
         }
 
         // Has an allowed role
         const allowedRoles = await command.getAllowedRoles(server.id);
         const isAllowed = allowedRoles.some(allowedRole => member.roles.cache.find(role => role.name.toLowerCase() === allowedRole.toLowerCase()));
-
-        return isAllowed;
+        if (!isAllowed) {
+            throw new AppError(`You don't have permission to use \`${commandName}\`!`);
+        }
     }
 
     public async processMessage(message: Message) {
