@@ -30,7 +30,7 @@ export class Test extends Command {
             const embeds = await this.parseJSON(args.slice(1).join(' ').trim());
             return this.handler(Array.isArray(embeds) ? embeds : [embeds]);
         } catch (error) {
-            return '```' + error + '```';
+            return '```\n' + error + '\n```';
         }
     }
 
