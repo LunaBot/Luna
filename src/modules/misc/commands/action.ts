@@ -79,12 +79,13 @@ class Member {
 }
 
 export class PerformAction extends Command {
-    public name = 'action';
+    public name = 'Action';
     public command = 'action';
     public timeout = Command.TIMEOUTS.FIVE_SECONDS;
     public description = 'Performs an action towards another member';
     public hidden = true;
     public owner = false;
+    public broken = true;
     public examples = [ '!action hug @everyone' ];
     public roles = [ '@everyone' ];
     public allowedActions = [ 'hug' ];
@@ -139,15 +140,13 @@ export class PerformAction extends Command {
     }
 
     private getMember(memberId: string) {
-        const resolvedId = this.getIdFromMessage(memberId) ?? memberId;
-        const member = this.cache.members[resolvedId];
-        return member ?? this.addMember(resolvedId);
+        const member = this.cache.members[memberId];
+        return member ?? this.addMember(memberId);
     }
 
     private addMember(memberId: string) {
-        const resolvedId = this.getIdFromMessage(memberId) ?? memberId;
-        const member = new Member(resolvedId);
-        this.cache.members[resolvedId] = member;
+        const member = new Member(memberId);
+        this.cache.members[memberId] = member;
         return member;
     }
 
@@ -187,7 +186,7 @@ export class PerformAction extends Command {
         if (!memberId.startsWith('<@') || memberId.startsWith('@')) {
             const allArgs = args.join(' ').toLocaleLowerCase();
             if (allArgs.includes('himself') || allArgs.includes('herself') || allArgs.includes('myself') || allArgs.includes('themselves')) {
-                return `@automod spanks you`;
+                return `@automod hugs you`;
             }
             return `I could be wrong but are you sure "${memberId}" is a human?`;
         }
@@ -203,9 +202,9 @@ export class PerformAction extends Command {
         }
 
         // Increase action
-        // const [_, ...leftOverArgs] = args;
-        // const amountOfTimes = args[1] !== undefined ? (parseInt(leftOverArgs.join(' ').trim().split(' ')[0], 10) || 1) : 1;
-        // this.cache.members[memberId].count += amountOfTimes;
-        // return `*spanks* ${args[0]} ${amountOfSpanks} time${amountOfSpanks === 1 ? '' : 's'}`;
+        const [_, ...leftOverArgs] = args;
+        const amountOfTimes = args[1] !== undefined ? (parseInt(leftOverArgs.join(' ').trim().split(' ')[0], 10) || 1) : 1;
+        this.cache.members[memberId].count += amountOfTimes;
+        return `*hugs* ${args[0]} ${amountOfHugs} time${amountOfHugs === 1 ? '' : 's'}`;
     }
 };
