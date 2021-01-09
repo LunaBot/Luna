@@ -281,16 +281,26 @@ export class User {
             throw new AppError(`The \`${commandName}\` command is disabled!`);
         }
 
-        // Don't check permissions if this is the owner of the bot
-        if (envs.OWNER.ID !== member?.id) {
-            // Just run it!
-            if (command?.permissions.length >= 1) {
-                // Check we have permission to run this
-                if (!command?.permissions.some(permission => member?.hasPermission(permission as any))) {
-                    throw new CommandPermissionError(server.prefix, commandName);
-                }
+        // If the command needs permissions lets check them
+        if (command?.permissions.length >= 1) {
+            // Check we have Discord permissions to run this
+            if (!command?.permissions.some(permission => member?.hasPermission(permission as any))) {
+                throw new CommandPermissionError(server.prefix, commandName);
             }
         }
+
+        // Has a denied role
+        const deniedRoles = await command.getDeniedRoles(server.id);
+        const isDenied = deniedRoles.some(deniedRole => member.roles.cache.find(role => role.name.toLowerCase() === deniedRole.toLowerCase()));
+        if (isDenied) {
+            return false;
+        }
+
+        // Has an allowed role
+        const allowedRoles = await command.getAllowedRoles(server.id);
+        const isAllowed = allowedRoles.some(allowedRole => member.roles.cache.find(role => role.name.toLowerCase() === allowedRole.toLowerCase()));
+
+        return isAllowed;
     }
 
     public async processMessage(message: Message) {
