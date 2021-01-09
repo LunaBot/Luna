@@ -10,7 +10,7 @@ export class Modules extends Command {
     public name = 'Modules';
     public command = 'modules';
     public timeout = Command.TIMEOUTS.FIVE_SECONDS;
-    public description = 'List all of the AutoMod modules.';
+    public description = 'Manage modules.';
     public hidden = false;
     public owner = false;
     public examples = [];
