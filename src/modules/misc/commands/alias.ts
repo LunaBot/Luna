@@ -2,20 +2,20 @@ import { Message } from 'discord.js';
 import { Command } from '@/command';
 
 export class Alias extends Command {
-    public name = 'alias';
+    public name = 'Alias';
     public command = 'alias';
     public timeout = Command.TIMEOUTS.FIVE_SECONDS;
     public description = 'Manages command aliases';
     public hidden = true;
     public owner = true;
+    public broken = true;
     public examples = [ '!alias' ];
     public roles = [];
 
     async handler(_prefix: string, _message: Message, args: string[]) {
         const [ subCommand, alias, ...command ] = args;
         // !alias create cat
-        if (args[0] === 'create') {
-            const alias = args[1];
+        if (subCommand === 'create') {
             return `Alias created for ${alias} pointing to ${command}`;
         }
     } 
