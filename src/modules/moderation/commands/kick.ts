@@ -1,6 +1,7 @@
 import { ApplicationCommandOptionType, Command } from '@/command';
-import type { GuildMember, Interaction, Message } from 'discord.js';
+import { Channel, GuildMember, Interaction, Message, MessageEmbed } from 'discord.js';
 import { AppError } from '@/errors';
+import { AuditLog, Infraction } from '@/audit-log';
 
 export class Kick extends Command {
     public name = 'Kick';
@@ -30,7 +31,7 @@ export class Kick extends Command {
         const memberToKick = message.mentions.members?.first();
         // Why are we kicking them?
         const reason = args.slice(1).join(' ');
-        return this.handler(member, memberToKick, reason);
+        return this.handler(message.channel, member, memberToKick, reason);
     }
 
     async interactionHandler(_prefix: string, interaction: Interaction) {
@@ -41,31 +42,56 @@ export class Kick extends Command {
         // Why are we kicking them?
         const reason = interaction.options?.find(option => option.name === 'reason')?.value;
 
-        return this.handler(member, memberToKick, reason);
+        return this.handler(interaction.channel, member, memberToKick, reason);
     }
 
-    async handler(member: GuildMember, memberToKick?: GuildMember, reason?: string) {
+    async handler(channel: Channel, moderator: GuildMember, memberToKick?: GuildMember, reason?: string) {
         // Make sure we have a memberToKick
         if (!memberToKick) {
             throw new AppError('Please mention a member to kick them.');
         }
 
         // Don't kick yourself
-        if (member.id === memberToKick.id) {
+        if (moderator.id === memberToKick.id) {
             throw new AppError(`You can't kick yourself.`);
         }
 
         // Make sure we give a reason
         if (!reason) {
-            throw new AppError('Please include a reason for kicking <@%s>.', member.user.id);
+            throw new AppError('Please include a reason for kicking <@%s>.', moderator.user.id);
         }
 
         try {
+            // Create infraction
+            const auditLog = new AuditLog(memberToKick.guild.id);
+            const infraction = new Infraction({
+                channelId: channel.id,
+                moderatorId: moderator.id,
+                userId: memberToKick.id,
+                type: 'kick',
+                reason,
+                silent: false,
+            });
+
+            // Save infraction to DB
+            await auditLog.addInfraction(infraction);
+
+            // Send embed to audit log
+            await auditLog.postAuditLogEmbeds();
+            
+            // Build embed before kicking member
+            const embed = new MessageEmbed({
+                description: `:rotating_light: **${memberToKick.user.username}#${memberToKick.user.discriminator}** was kicked! :rotating_light:`
+            });
+
             // Kick member
             await memberToKick.kick(reason);
-            return `<@${member.user.id}> kicked <@${memberToKick.user.id}> with reason "${reason}"`
+
+            // Send public embed to channel this was run in
+            return embed;
         } catch (error) {
-            return `Failed kicking member: ${JSON.stringify(error, null, 2)}`;
+            console.log(error);
+            throw new AppError('Failed kicking member: %s', error.message);
         }
     }
 };
