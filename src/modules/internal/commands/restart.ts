@@ -8,7 +8,8 @@ export class Restart extends Command {
     public command = 'restart';
     public timeout = Command.TIMEOUTS.FIVE_SECONDS;
     public description = 'Restart AutoMod';
-    public hidden = false;
+    public hidden = true;
+    public internal = true;
     public options = [];
     public permissions = [];
     public examples = ['!restart'];
