@@ -244,22 +244,13 @@ export class User {
             }
 
             // Run the command
-            const commandPromise = Promise.resolve(command.messageHandler ? command.messageHandler(server.prefix, message, args) : command.handler(server.prefix, message, args));
+            const commandPromise = Promise.resolve(command.messageHandler ? command.messageHandler(server.prefix, message as Message, args) : command.handler(server.prefix, message, args));
             const result = await promiseTimeout(commandPromise, command.timeout ?? FIVE_SECONDS);
 
             await this.processResult(result, message.channel, message.member!);
         } catch (error) {
-            // Reply with error
-            if (process.env.DEBUG) {
-                // Show debugging to owner
-                if (envs.OWNER.ID === message.member?.id) {
-                    await message.channel.send('```json\n' + JSON.stringify(error, null, 2) + '\n```');
-                    return;
-                }
-            }
-
-            log.error(error);
-            await message.channel.send(error.message);
+            const appError = new AppError(error);
+            await message.channel.send(appError.toEmbed());
         }
     }
 
@@ -338,18 +329,8 @@ export class User {
             // Respond with command output
             await channel.send(result as string);
         } catch (error) {
-            log.error(error);
-
-            // Reply with error
-            if (process.env.DEBUG) {
-                // Show debugging to owner
-                if (envs.OWNER.ID === member?.id) {
-                    await channel.send('```json\n' + JSON.stringify(error, null, 2) + '\n```');
-                    return;
-                }
-            }
-
-            await channel.send(error.message);
+            const appError = new AppError(error);
+            await channel.send(appError.toEmbed());
         }
     }
 };
