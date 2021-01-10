@@ -7,7 +7,8 @@ export interface AutoRole {
     timer: number;
 }
 
-export interface RoleAndAction {
-    role: Role,
-    action: 'add' | 'remove'
+export interface RoleSummary {
+    role: Role;
+    action: 'add' | 'remove';
+    missing: boolean;
 };
