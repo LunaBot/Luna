@@ -143,16 +143,21 @@ export class Bot extends Command {
         return embeds.map(embed => new MessageEmbed(embed));
     }
 
-    async prefixHandler(options: { prefix: string }, serverId: string) {
+    async prefixHandler(options: { prefix: string }, serverId: string, member: GuildMember) {
+        const server = await Server.findOrCreate({ id: serverId });
+        // Print current prefix
+        if (!options.prefix) {
+            return `Prefix is currently set to \`${server.prefix}\``;
+        }
+
+        // We only allow the owner todo this
+        if (member.id !== envs.OWNER.ID) {
+            throw new AppError('The prefix can only be updated by the owner!');
+        }
+
         // We need no more than 1 character
         if (typeof options.prefix === 'string' && options.prefix.length >= 2) {
             throw new AppError('Prefix can only be a single character!');
-        }
-
-        // Print current prefix
-        const server = await Server.findOrCreate({ id: serverId });
-        if (!options.prefix) {
-            return `Prefix is currently set to \`${server.prefix}\``;
         }
 
         // Update prefix
