@@ -2,7 +2,7 @@ import { Logger } from 'logger';
 
 export const log = new Logger({
     prefix: 'AutoMod',
-    prefixSeperator: ':'
+    prefixSeperator: '] ['
 });
 
 export const moduleLogger = log.createChild();
