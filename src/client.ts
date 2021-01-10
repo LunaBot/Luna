@@ -1,7 +1,11 @@
 import Statcord from 'statcord.js';
+import { Logger } from 'logger';
 import { Client, Structures } from 'discord.js';
 import { envs } from '@/envs';
-import { log } from '@/log';
+
+const log = new Logger({
+  prefix: 'StatCord'
+});
 
 Structures.extend('GuildMember', GuildMember => {
   class CoolGuild extends GuildMember {
@@ -39,8 +43,6 @@ statcord.on('autopost-start', () => {
 });
 
 statcord.on('post', status => {
-  // status = false if the post was successful
-  // status = "Error message" or status = Error if there was an error
-  if (!status) log.info('Successful post');
-  else log.error('StatCordError', status);
+  if (!status) log.info('Posted status');
+  else log.error(status as Error);
 });
