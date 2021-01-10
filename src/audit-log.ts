@@ -176,9 +176,9 @@ export class Infraction {
         this.userId = options.userId;
         this.moderatorId = options.moderatorId;
         this.type = options.type;
-        this.reason = options.reason ?? 'No reason given.';
-        this.silent = options.silent ?? false;
-        this.id = options.id ?? uuid();
-        this.removedRoles = options.removedRoles ?? [];
+        this.reason = options.reason || 'No reason given.';
+        this.silent = options.silent || false;
+        this.id = options.id || uuid();
+        this.removedRoles = options.removedRoles || [];
     }
 };
