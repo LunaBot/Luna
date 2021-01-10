@@ -8,7 +8,7 @@ import { AuditLog, Infraction } from '@/audit-log';
 export class Release extends Command {
     public name = 'Release';
     public command = 'release';
-    public timeout = Command.TIMEOUTS.FIVE_SECONDS;
+    public timeout = Command.TIMEOUTS.THIRTY_SECONDS;
     public description = 'Release a member from jail.';
     public hidden = false;
     public owner = false;
