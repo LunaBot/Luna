@@ -6,7 +6,7 @@ import { AuditLog, Infraction } from '@/audit-log';
 export class Jail extends Command {
     public name = 'Jail';
     public command = 'jail';
-    public timeout = Command.TIMEOUTS.FIVE_SECONDS;
+    public timeout = Command.TIMEOUTS.ONE_MINUTE;
     public description = 'Jail a member.';
     public hidden = false;
     public owner = false;
@@ -19,6 +19,7 @@ export class Jail extends Command {
     }, {
         name: 'reason',
         description: 'Reason to jail the member',
+        required: false,
         type: ApplicationCommandOptionType.STRING,
     }];
 
@@ -56,11 +57,6 @@ export class Jail extends Command {
         // Don't jail yourself
         if (moderator.id === memberToJail.id) {
             throw new AppError(`You can't jail yourself.`);
-        }
-
-        // Make sure we give a reason
-        if (!reason) {
-            throw new AppError('Please include a reason for jailing <@%s>.', memberToJail.user.id);
         }
 
         try {
