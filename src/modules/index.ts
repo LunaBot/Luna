@@ -8,3 +8,4 @@ export * as Moderation from './moderation';
 export * as Panels from './panels';
 export * as SlashCommands from './slash-commands';
 export * as Test from './test';
+export * as Void from './void';
