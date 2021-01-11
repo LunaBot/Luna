@@ -109,7 +109,20 @@ export class AuditLog {
                 }
             }),
             ban: (channel: Channel, member: GuildMember, moderator: GuildMember, reason: string) => new MessageEmbed({
-
+                color: 16556627,
+                timestamp: new Date(),
+                author: {
+                    name: `${moderator.displayName} (ID: ${moderator.id})`,
+                    icon_url: moderator.user.displayAvatarURL({ format: 'png' }) ?? 'https://cdn.discordapp.com/embed/avatars/0.png',
+                },
+                description: `:rotating_light: **Banned:**  <@!${member.id}>\n:receipt: **Channel:** <#${channel.id}>`,
+                thumbnail: {
+                    url: member.user.displayAvatarURL({ format: 'png' }) ?? 'https://cdn.discordapp.com/embed/avatars/0.png',
+                },
+                footer: {
+                    text: member.guild.name,
+                    icon_url: member.guild.iconURL({ format: 'png' }) ?? 'https://cdn.discordapp.com/embed/avatars/0.png',
+                }
             }),
             release: (channel: Channel, member: GuildMember, moderator: GuildMember, _reason: string) => new MessageEmbed({
                 color: 16556627,
