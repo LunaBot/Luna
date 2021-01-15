@@ -19,7 +19,7 @@ interface Field {
 export class Commands extends Command {
     public name = 'Commands';
     public command = 'commands';
-    public timeout = Command.TIMEOUTS.FIVE_SECONDS;
+    public timeout = Command.TIMEOUTS.THIRTY_SECONDS;
     public description = 'Manage commands.';
     public hidden = false;
     public owner = false;
