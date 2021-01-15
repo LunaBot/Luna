@@ -2,7 +2,6 @@ import { ApplicationCommandOptionType, Command } from '@/command';
 import { Channel, GuildMember, Interaction, Message, MessageEmbed } from 'discord.js';
 import { AppError } from '@/errors';
 import { AuditLog, Infraction } from '@/audit-log';
-import { sleep } from '@/utils';
 import { isTextChannel } from '@/guards';
 
 export class Ban extends Command {
