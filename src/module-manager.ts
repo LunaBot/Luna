@@ -209,6 +209,10 @@ class ModuleManager {
     public async getInstalledModules() {
         return this.modules;
     }
+
+    public async getInstalledModule(name: string) {
+        return this.modules.find(_module => _module.name.toLowerCase() === name.toLowerCase());
+    }
 };
 
 export const moduleManager = new ModuleManager(resolvePath(__dirname, 'modules'));
