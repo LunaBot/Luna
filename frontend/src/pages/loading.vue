@@ -3,17 +3,19 @@
 </template>
 
 <script>
-export default {
+import { defineComponent } from 'vue';
+
+export default defineComponent({
   name: 'LoadingPage',
   props: {
-    redirect: String
+    redirect: String,
   },
   mounted() {
     if (this.redirect) {
       this.$router.push({
-        path: this.redirect
+        path: this.redirect,
       });
     }
-  }
-};
+  },
+});
 </script>

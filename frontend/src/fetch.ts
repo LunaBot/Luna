@@ -1,6 +1,5 @@
 import { attach } from 'interception';
 import { router } from './router';
-import store from './store';
 
 const { register, fetch } = attach(window.fetch);
 
