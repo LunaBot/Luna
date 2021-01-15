@@ -24,7 +24,7 @@
     "axios": "^0.21.1",
     "better-errors": "^0.1.2",
     "body-parser": "^1.19.0",
-    "canvacord": "github:DevSnowflake/canvacord#develop",
+    "canvacord": "github:DevSnowflake/canvacord#3bda4b0a7920ef573ee034350cd1e6b2c293afb3",
     "chalk": "^4.1.0",
     "connect-history-api-fallback": "^1.6.0",
     "cookie-parser": "^1.4.5",
