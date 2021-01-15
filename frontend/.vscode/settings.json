@@ -1,0 +1,9 @@
+{
+    "files.exclude": {
+        "**/node_modules": true,
+        "**/.DS_Store": true,
+        "**/dist": true,
+        "**/dist-ssr": true,
+        "**/*.local": true
+    }
+}
