@@ -8,6 +8,10 @@ import { isOwnerOfGuild } from '@/middleware';
 
 const api = router();
 
+api.get('/health', (_request, response) => {
+    response.sendStatus(200);
+});
+
 /**
  * Middleware to only allow OWNERs to update server details
  */
