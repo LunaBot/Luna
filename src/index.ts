@@ -30,13 +30,13 @@ const startWebEndpoints = async () => {
         }
 
         const name = error.name ?? 'Error';
-        const code = error.statusCode ?? 500;
+        const code = error.code ?? 500;
         const message = error.message ?? 'Internal Server Error';
         response.status(code);
-        
+
         // Production
         if (envs.NODE_ENV === 'production') {
-            response.send({ status: { code, message }, error: { name, message } });
+            response.send({ status: { code, message: httpStatuses[code] }, error: { name, message } });
             return;
         }
 
