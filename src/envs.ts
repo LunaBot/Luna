@@ -4,6 +4,11 @@ export const envs = {
     DEBUG: process.env.DEBUG,
     ENVIRONMENT: process.env.ENVIRONMENT ?? 'UNKNOWN',
     NODE_ENV: process.env.NODE_ENV,
+    CLIENT: {
+        ID: process.env.CLIENT_ID ?? '',
+        SECRET: process.env.CLIENT_SECRET ?? '',
+        CALLBACK_URL: process.env.CLIENT_CALLBACK_URL ?? '',
+    },
     WEB: {
         PORT: process.env.PORT ?? 52952,
     },
