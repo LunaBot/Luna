@@ -10,7 +10,7 @@
     "@voerro/vue-tagsinput": "^2.4.3",
     "cross-fetch": "^3.0.6",
     "direct-vuex": "github:OmgImAlexis/direct-vuex#master",
-    "interception": "file:interception-1.0.0.tgz",
+    "interception": "github:OmgImAlexis/interception#main",
     "node-fetch": "^2.6.1",
     "tailwindcss": "^2.0.2",
     "vue": "^3.0.5",
