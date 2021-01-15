@@ -17,5 +17,12 @@ declare module 'discord.js' {
         content: string;
         createdTimestamp: number;
         options: { value: string; name: string }[] | null;
-    }    
+    }
+}
+
+// Add discord "user" to request.user
+declare namespace Express {
+    export interface Request {
+        user?: import('passport-discord').Profile;
+    }
 }
