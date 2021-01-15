@@ -140,13 +140,13 @@ export class Command {
      * Handle "message" commands.
      */
     messageHandler(_prefix: string, _message: Message, _args: string[]): Promise<CommandResult | undefined> | CommandResult | undefined | void {
-        throw new AppError(`% is missing it's messageHandler.`, this.command);
+        throw new AppError(`%s is missing it's messageHandler.`, this.command);
     }
 
     /**
      * Handle "interaction" commands.
      */
     interactionHandler(_prefix: string, _interaction: Interaction): Promise<CommandResult | undefined> | CommandResult | undefined | void {
-        throw new AppError(`% is missing it's interactionHandler.`, this.command);
+        throw new AppError(`%s is missing it's interactionHandler.`, this.command);
     }
 };
