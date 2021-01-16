@@ -51,6 +51,7 @@
     "jsdiscordperms": "github:PgBiel/jsdiscordperms",
     "json5": "^2.1.3",
     "logger": "github:unraid/logger#master",
+    "long": "^4.0.0",
     "ml-sentiment": "^2.0.7",
     "njstrace": "^1.2.0",
     "number-to-color": "^0.4.1",
