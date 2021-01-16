@@ -82,6 +82,11 @@ export class Commands extends Command {
                         return true;
                     }
 
+                    // Owner
+                    if (member.guild.owner?.id === member.id) {
+                        return true;
+                    }
+
                     // Check we have permission to run this
                     return command.permissions.some(permission => member.hasPermission(permission));
                 });
