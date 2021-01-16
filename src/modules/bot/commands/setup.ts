@@ -95,7 +95,7 @@ export class Setup extends Command {
             // Mark setup finished
             await database.query(sql`UPDATE servers SET setup=${true} WHERE id=${serverId}`);
 
-            return 'Setup finished!';
+            return 'Setup finished! Please visit https://automod.gg to change additional settings.';
         }
     }
 
