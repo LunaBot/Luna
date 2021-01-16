@@ -281,6 +281,11 @@ export class User {
             throw new AppError(`The \`${commandName}\` command is disabled!`);
         }
 
+        // Skip checks as they're the owner
+        if (member.id === member.guild.owner?.id) {
+            return;
+        }
+
         // If the command needs permissions lets check them
         if (command?.permissions.length >= 1) {
             // Check we have Discord permissions to run this
