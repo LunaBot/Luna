@@ -7,3 +7,4 @@ servers.json
 .env
 ca-certificate.crt
 .nyc_output
+data
