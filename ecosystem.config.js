@@ -19,7 +19,7 @@ module.exports = {
       user: 'xo',
       host: '165.227.220.113',
       key: '~/.ssh/deploy.key',
-      ref: 'feat/v2',
+      ref: 'origin/feat/v2',
       repo: 'https://github.com/automodbot/automod',
       path: '/home/xo/code/automodbot/automod',
       'post-deploy': 'npm ci',
