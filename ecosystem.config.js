@@ -16,7 +16,7 @@ module.exports = {
   ],
   deploy: {
     production: {
-      user: 'username',
+      user: 'xo',
       host: '165.227.220.113',
       key: 'deploy.key',
       ref: 'feat/v2',
