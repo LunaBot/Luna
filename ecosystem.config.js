@@ -8,7 +8,7 @@ module.exports = {
       autorestart: true,
       max_restarts: 50,
       watch: false,
-      max_memory_restart: '400MB',
+      max_memory_restart: '400M',
       env: {
         PORT: 3000
       },
