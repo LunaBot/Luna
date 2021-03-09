@@ -4,8 +4,7 @@
   "description": "",
   "scripts": {
     "start": "node ./src/index.js",
-    "build": "exit 0",
-    "deploy": "pm2 deploy ecosystem.config.js production"
+    "build": "exit 0"
   },
   "keywords": [],
   "author": "Alexis Tyler <xo@wvvw.me>",
