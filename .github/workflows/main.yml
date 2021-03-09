@@ -31,4 +31,4 @@ jobs:
         run: npm i -g pm2
 
       - name: Deploy
-        run: ~/.npm-global/node_modules/.bin/pm2 deploy ecosystem.config.js production
+        run: ~/.npm-global/bin/pm2 deploy ecosystem.config.js production
