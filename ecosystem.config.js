@@ -18,7 +18,7 @@ module.exports = {
     production: {
       user: 'xo',
       host: '165.227.220.113',
-      key: 'deploy.key',
+      key: '~/.ssh/deploy.key',
       ref: 'feat/v2',
       repo: 'https://github.com/automodbot/automod',
       path: '/home/xo/code/automodbot/automod',
