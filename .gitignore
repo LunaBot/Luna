@@ -7,4 +7,3 @@ servers.json
 .env
 ca-certificate.crt
 .nyc_output
-src/**/*.js
