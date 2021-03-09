@@ -1,4 +1,4 @@
-name: CI - Master
+name: CI - Main
 
 on:
   push:
