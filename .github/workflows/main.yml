@@ -26,7 +26,9 @@ jobs:
           SSH_KNOWN_HOSTS: ${{secrets.SSH_KNOWN_HOSTS}}
 
       - name: Install PM2
-        run: npm i pm2
+        env:
+          NPM_CONFIG_PREFIX: "~/.npm-global"
+        run: npm i -g pm2
 
       - name: Deploy
-        run: ./node_modules/.bin/pm2 deploy ecosystem.config.js production
+        run: ~/.npm-global/node_modules/.bin/pm2 deploy ecosystem.config.js production
