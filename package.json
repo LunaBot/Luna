@@ -3,8 +3,9 @@
   "version": "0.0.1",
   "description": "",
   "scripts": {
-    "start": "node ./src/index.js",
-    "build": "exit 0"
+    "prestart": "npm run build",
+    "start": "node ./dist/index.js",
+    "build": "tsup ./src/index.ts"
   },
   "keywords": [],
   "author": "Alexis Tyler <xo@wvvw.me>",
