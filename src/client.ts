@@ -20,13 +20,30 @@ Structures.extend('GuildMember', GuildMember => class GuildMemberWithPending ext
 
 const client = new Client();
 
+client.modules = new Collection(Object.values(moduleImports).map(module => [module.name, module]));
+client.commands = new Collection();
+client.logger = logger;
+
+const defaultCustomer = {
+    membership: 'free'
+};
+
+client.customers = new Enmap({
+	name: 'customers',
+	fetchAll: false,
+	autoFetch: true,
+	cloneLevel: 'deep',
+	// @ts-expect-error
+	autoEnsure: defaultCustomer
+});
+
 const defaultSettings = {
-  prefix: '!',
-  modLogChannel: 'audit-log',
-  modRole: 'Mod',
-  adminRole: 'Admin',
-  welcomeChannel: 'welcome',
-  welcomeMessage: 'Say hello to {user}, everyone!'
+    prefix: '!',
+    modLogChannel: 'audit-log',
+    modRole: 'Mod',
+    adminRole: 'Admin',
+    welcomeChannel: 'welcome',
+    welcomeMessage: 'Say hello to {user}, everyone!'
 };
 
 client.settings = new Enmap({
@@ -38,9 +55,12 @@ client.settings = new Enmap({
 	autoEnsure: defaultSettings
 });
 
-client.commands = new Collection();
-client.logger = logger;
-client.modules = new Collection(Object.values(moduleImports).map(module => [module.name, module]));
+client.points = new Enmap({
+    name: 'points',
+    fetchAll: false,
+	autoFetch: true,
+	cloneLevel: 'deep'
+})
 
 export {
     client,

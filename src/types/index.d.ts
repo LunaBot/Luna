@@ -3,13 +3,19 @@ import type Enmap from 'enmap';
 import type { Command } from '../command';
 import type { Logger } from 'logger';
 import type { Module } from '../module';
+import { defaultSettings, defaultCustomer } from '../client';
 
 declare module "discord.js" {
     export interface Client {
-        commands: Collection<string, Command>;
-        settings: Enmap<string, any>;
-        logger: Logger;
+        // Runtime
         modules: Collection<string, Module>;
+        commands: Collection<string, Command>;
+        logger: Logger;
+
+        // Database
+        settings: Enmap<string, typeof defaultSettings>;
+        customers: Enmap<string, typeof defaultCustomer>;
+        points: Enmap<string, any>;
     }
     export interface GuildMember {
 		pending: boolean;
