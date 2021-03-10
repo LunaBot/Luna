@@ -17,7 +17,7 @@ class Help implements Command {
         // Send help
         await message.channel.send(new MessageEmbed({
             title: 'Help',
-            description: `Use \`${guildConfig.prefix}report\` to report any bugs.`,
+            description: `Use \`${guildConfig.prefix}report <message>\` to report any bugs.`,
             fields: client.modules.filter(module => Object.keys(module.commands).length >= 1).map(module => {
                 return {
                     name: `**__${module.name}__**`,
