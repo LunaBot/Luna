@@ -40,9 +40,15 @@ class WalkieTalkie implements Command {
                 avatar: 'https://cdn.discordapp.com/embed/avatars/0.png',
             });
 
+            // Created webhook
+            client.logger.debug(`Created webhook ${webhook.id}`);
+
+            // Set channel id and webhook id/token
+            client.settings.set(message.guild.id, message.channel.id, 'walkieTalkie.channel');
             client.walkieTalkies.set(message.guild.id, webhook.id, 'id');
             client.walkieTalkies.set(message.guild.id, webhook.token, 'token');
-            client.logger.debug(`Created webhook ${webhook.id}`);
+
+            // Reply to user
             message.channel.send('Enabled walkie-talkie!');
         }
 
