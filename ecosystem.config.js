@@ -26,10 +26,7 @@ module.exports = {
 			repo: 'https://github.com/automodbot/automod',
 			path: '/home/xo/code/automodbot/automod',
 			'pre-deploy': 'git reset --hard',
-			'post-deploy': 'unset NODE_ENV && pnpm install && npm run build && pm2 startOrGracefulReload ecosystem.config.js --env production',
-			env: {
-				NODE_ENV: 'production'
-			}
+			'post-deploy': 'pnpm install && npm run build && pm2 startOrGracefulReload ecosystem.config.js --env production'
 		}
 	}
 };
