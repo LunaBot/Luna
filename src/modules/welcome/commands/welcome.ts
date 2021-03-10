@@ -2,6 +2,7 @@ import { Command } from '../../../command';
 import type { Message, Client } from 'discord.js';
 
 class Welcome implements Command {
+    public id = 'WELCOME';
     public name = 'welcome';
 
     run(client: Client, message: Message) {

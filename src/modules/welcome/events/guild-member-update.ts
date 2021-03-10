@@ -5,10 +5,11 @@ import { sendWelcomeMessage } from '../../../utils';
 // This executes when a member updates
 export const guildMemberUpdate = async (client: Client, oldMember: GuildMember, newMember: GuildMember) => {
 	// First, ensure the settings exist
-	client.settings.ensure(newMember.guild.id, defaultSettings);
+    // @ts-expect-error
+	client.settings.ensure(newMember.guild.id);
 
     // Member passed membership screening
     if (oldMember.pending && !newMember.pending) {
-		sendWelcomeMessage(newMember);
+		  sendWelcomeMessage(newMember);
     }
 };

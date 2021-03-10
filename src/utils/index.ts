@@ -53,3 +53,5 @@ export const sendWelcomeMessage = (member: GuildMember) => {
 	const welcomeChannel = member.guild.channels.cache.find(channel => isTextChannel(channel) && channel.name === client.settings.get(member.guild.id, 'welcomeChannel')) as TextChannel;
 	welcomeChannel.send(welcomeMessage).catch(console.error);
 };
+
+export const sleep = (number: number) => new Promise<void>(resolve => setTimeout(() => resolve(), number));

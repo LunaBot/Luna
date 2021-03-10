@@ -20,6 +20,9 @@ client.on('guildDelete', guild => {
 
 client.on('message', async message => {
 	try {
+		// Mark when we first see this
+		message.startedProcessingTimestamp = new Date();
+
 		// This stops if it's not a guild, and we ignore all bots.
 		if (!message.guild || message.author.bot || !message.member) {
 			return;
@@ -49,7 +52,7 @@ client.on('message', async message => {
 		if (!command) return;
 
 		// Run the command
-		command.run(client, message, args);
+		await Promise.resolve(command.run(client, message, args));
 	} catch (error) {
 		const embed = new MessageEmbed({
 			color: colours.RED,
