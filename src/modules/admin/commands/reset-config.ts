@@ -7,7 +7,7 @@ import { defaultSettings } from '../../../client';
 class ResetConfig implements Command {
     public name = 'reset-config';
 
-    run(client: Client, message: Message) {
+    run(client: Client, message: Message): void {
         // Bail unless we're in a guild and a member run this
         if (!message.guild || !message.member) return;
 
