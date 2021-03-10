@@ -7,7 +7,7 @@ export * from './small-stack';
 export const isOwner = (guild: Guild, member: GuildMember) => guild.ownerID === member.id;
 export const isAdmin = (guild: Guild, member: GuildMember) => {
     const guildConfig = client.settings.get(guild.id);
-    const adminRole = guild.roles.cache.find(role => role.name === guildConfig.adminRole);
+    const adminRole = guild.roles.cache.find(role => role.name === guildConfig?.roles.admin);
     return adminRole ? member.roles.cache.has(adminRole.id) : false;
 };
 
@@ -17,6 +17,10 @@ export const resolvePlaceholders = ({
     string: string, guild: Guild, member: GuildMember, channel?: GuildChannel
 }) => {
     let resolvedString = string;
+
+    // Bail if there's no string to process
+    if (!resolvedString) return;
+
     resolvedString = resolvedString.replace('{user}', `<@${member.user.id}>`);
     resolvedString = resolvedString.replace('{user.id}', member.user.id);
     resolvedString = resolvedString.replace('{user.discriminator}', member.user.discriminator);
