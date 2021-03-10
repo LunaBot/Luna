@@ -21,7 +21,7 @@ class BotInfo implements Command {
             fields: [
                 {
                     name: 'Process uptime',
-                    value: process.uptime(),
+                    value: `${Math.floor(process.uptime())}ms`,
                     inline: true
                 },
                 {
