@@ -1,15 +1,20 @@
 dependencies:
+  chalk: 4.1.0
   clean-stack: 3.0.1
   discord.js: 12.5.1
   dotenv: 8.2.0
   enmap: 5.8.4
   express: 4.17.1
   extract-stack: 2.0.0
+  number-to-color: 0.5.0
+  string-to-color: 2.2.2
   trace-cleaner: 1.2.3
 devDependencies:
   eslint: 7.21.0
   eslint-config-xo: 0.35.0_eslint@7.21.0
   eslint-plugin-unicorn: 28.0.2_eslint@7.21.0
+  is-secret: 1.2.1
+  traverse: 0.6.6
   tsup: 4.6.1_typescript@4.2.3
   typescript: 4.2.3
 lockfileVersion: 5.2
@@ -665,6 +670,10 @@ packages:
     dev: true
     resolution:
       integrity: sha512-MKGMzyfeuutC/ZJ1cba9NqcNpfeqMUcYmyF1ZFY6/Cn7CNSAKx6a+s48sqLqyAiZuaP2TcqMhoo+dlwFnVxT9w==
+  /colornames/1.1.1:
+    dev: false
+    resolution:
+      integrity: sha1-+IiQMGhcfE/54qVZ9Qd+t2qBb5Y=
   /combined-stream/1.0.8:
     dependencies:
       delayed-stream: 1.0.0
@@ -1399,6 +1408,12 @@ packages:
       node: '>= 0.4.0'
     resolution:
       integrity: sha512-f2dvO0VU6Oej7RkWJGrehjbzMAjFp5/VKPp5tTpWIV4JHHZK1/BxbFRtf/siA2SWTe09caDmVtYYzWEIbBS4zw==
+  /hex-rgb/4.2.0:
+    dev: false
+    engines:
+      node: '>=6'
+    resolution:
+      integrity: sha512-I7DkKeQ2kR2uyqgbxPgNgClH/rfs1ioKZhZW8VTIAirsxCR5EyhYeywgZbhMScgUbKCkgo6bb6JwA0CLTn9beA==
   /hosted-git-info/2.8.8:
     dev: true
     resolution:
@@ -1568,6 +1583,10 @@ packages:
       node: '>=0.12.0'
     resolution:
       integrity: sha512-41Cifkg6e8TylSpdtTpeLVMqvSBEVzTttHvERD741+pnZ8ANv0004MRL43QKPDlK9cGvNp6NZWZUBlbGXYxxng==
+  /is-secret/1.2.1:
+    dev: true
+    resolution:
+      integrity: sha512-VtBantcgKL2a64fDeCmD1JlkHToh3v0bVOhyJZ5aGTjxtCgrdNcjaC9GaaRFXi19gA4/pYFpnuyoscIgQCFSMQ==
   /isarray/1.0.0:
     dev: false
     resolution:
@@ -1647,6 +1666,18 @@ packages:
       node: '>=8'
     resolution:
       integrity: sha512-t7hw9pI+WvuwNJXwk5zVHpyhIqzg2qTlklJOf0mVxGSbe3Fp2VieZcduNYjaLDoy6p9uGpQEGWG87WpMKlNq8g==
+  /lodash.padend/4.6.1:
+    dev: false
+    resolution:
+      integrity: sha1-U8y6BH0G4VjTEfRdpiX05J5vFm4=
+  /lodash.trimstart/4.5.1:
+    dev: false
+    resolution:
+      integrity: sha1-j/TexTLYJIavWVc8OURZFOlEp/E=
+  /lodash.words/4.2.0:
+    dev: false
+    resolution:
+      integrity: sha1-Xs/q+Oz4rKqODIOGKV8Zk8nPQDY=
   /lodash/4.17.21:
     resolution:
       integrity: sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==
@@ -1847,6 +1878,10 @@ packages:
       node: '>=0.10.0'
     resolution:
       integrity: sha1-CXtgK1NCKlIsGvuHkDGDNpQaAR0=
+  /number-to-color/0.5.0:
+    dev: false
+    resolution:
+      integrity: sha512-NaYLKuXMeRg3zZjNQ+Stqhrnt2xdc71MgOnvYEZwpURLOyJkzutg5lJdK5MzcOFB6ll9n3kTya5rCVnlrxJ5iw==
   /object-assign/4.1.1:
     engines:
       node: '>=0.10.0'
@@ -2212,6 +2247,12 @@ packages:
       node: '>=0.10.0'
     resolution:
       integrity: sha512-U9nH88a3fc/ekCF1l0/UP1IosiuIjyTh7hBvXVMHYgVcfGvt897Xguj2UOLDeI5BG2m7/uwyaLVT6fbtCwTyzw==
+  /rgb-hex/3.0.0:
+    dev: false
+    engines:
+      node: '>=8'
+    resolution:
+      integrity: sha512-8h7ZcwxCBDKvchSWbWngJuSCqJGQ6nDuLLg+QcRyQDbX9jMWt+PpPeXAhSla0GOooEomk3lCprUpGkMdsLjKyg==
   /rimraf/3.0.2:
     dependencies:
       glob: 7.1.6
@@ -2406,6 +2447,17 @@ packages:
       node: '>= 0.6'
     resolution:
       integrity: sha1-Fhx9rBd2Wf2YEfQ3cfqZOBR4Yow=
+  /string-to-color/2.2.2:
+    dependencies:
+      colornames: 1.1.1
+      hex-rgb: 4.2.0
+      lodash.padend: 4.6.1
+      lodash.trimstart: 4.5.1
+      lodash.words: 4.2.0
+      rgb-hex: 3.0.0
+    dev: false
+    resolution:
+      integrity: sha512-XeA2goP7PNsSlz8RRn6KhYswnMf5Tl+38ajfy8n4oZJyMGC4qqKgHNHsZ/3qwvr42NRIjf9eSr721SyetDeMkA==
   /string-width/1.0.2:
     dependencies:
       code-point-at: 1.1.0
@@ -2585,6 +2637,10 @@ packages:
     dev: false
     resolution:
       integrity: sha512-Z1HJl6mP7i1kY+J8eQFxXLvYKYxCy6JnMRYJWlYHovGGXc3R/Q2K+kFcwB9YdYoqPQTbpZ2bizmjzcA/ROp4OQ==
+  /traverse/0.6.6:
+    dev: true
+    resolution:
+      integrity: sha1-y99WD9e5r2MlAv7UD5GMFX6pcTc=
   /ts-interface-checker/0.1.13:
     dev: true
     resolution:
@@ -2749,6 +2805,7 @@ packages:
     resolution:
       integrity: sha512-yr2icI4glYaNG+KWONODapy2/jDdMSDnrONSjblABjD9B4Z5LgiircSt8m8sRZFNi08kG9Sm0uSHtEmP3zaEGg==
 specifiers:
+  chalk: ^4.1.0
   clean-stack: ^3.0.1
   discord.js: ^12.5.1
   dotenv: ^8.2.0
@@ -2758,6 +2815,10 @@ specifiers:
   eslint-plugin-unicorn: ^28.0.2
   express: ^4.17.1
   extract-stack: ^2.0.0
+  is-secret: ^1.2.1
+  number-to-color: ^0.5.0
+  string-to-color: ^2.2.2
   trace-cleaner: ^1.2.3
+  traverse: ^0.6.6
   tsup: ^4.6.1
   typescript: ^4.2.3

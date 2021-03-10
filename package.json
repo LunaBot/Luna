@@ -4,6 +4,7 @@
   "description": "",
   "scripts": {
     "start": "node ./dist/index.js",
+    "start-debug": "tsup ./src/index.ts > /dev/null && LOG_LEVEL=silly LOG_TRANSPORT=console node dist/index.js",
     "build": "tsup ./src/index.ts"
   },
   "keywords": [],
@@ -13,19 +14,23 @@
     "node": ">=14.0.0"
   },
   "dependencies": {
+    "chalk": "^4.1.0",
     "clean-stack": "^3.0.1",
     "discord.js": "^12.5.1",
     "dotenv": "^8.2.0",
     "enmap": "^5.8.4",
     "express": "^4.17.1",
     "extract-stack": "^2.0.0",
-    "logger": "github:unraid/logger#master",
+    "number-to-color": "^0.5.0",
+    "string-to-color": "^2.2.2",
     "trace-cleaner": "^1.2.3"
   },
   "devDependencies": {
     "eslint": "^7.21.0",
     "eslint-config-xo": "^0.35.0",
     "eslint-plugin-unicorn": "^28.0.2",
+    "is-secret": "^1.2.1",
+    "traverse": "^0.6.6",
     "tsup": "^4.6.1",
     "typescript": "^4.2.3"
   }

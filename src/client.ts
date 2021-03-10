@@ -1,6 +1,6 @@
 import { Client, Structures, Collection } from 'discord.js';
 import Enmap from 'enmap';
-import { Logger } from 'logger';
+import { logger } from './logger';
 
 Structures.extend('GuildMember', GuildMember => class GuildMemberWithPending extends GuildMember {
     pending = false;
@@ -39,7 +39,7 @@ client.settings = new Enmap({
 
 client.commands = new Collection();
 
-client.logger = new Logger();
+client.logger = logger;
 
 export {
     client,
