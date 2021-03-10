@@ -6,11 +6,14 @@ module.exports = {
 			time: true,
 			instances: 1,
 			autorestart: true,
+			// eslint-disable-next-line
 			max_restarts: 50,
 			watch: false,
+			// eslint-disable-next-line
 			max_memory_restart: '400M',
 			env: {
-				PORT: 3000
+				PORT: 3000,
+				LOG_LEVEL: 'debug'
 			}
 		}
 	],
