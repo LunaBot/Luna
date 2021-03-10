@@ -1,5 +1,5 @@
 dependencies:
-  canvacord: github.com/OmgImAlexis/canvacord/44accfb79f2f9162e9037463544febf66feebdc0
+  canvacord: github.com/OmgImAlexis/canvacord/d31fef2a0f29f5bb77210459d392b1337f1a1b13
   chalk: 4.1.0
   clean-stack: 3.0.1
   discord.js: 12.5.1
@@ -3006,7 +3006,7 @@ packages:
       node: '>= 6'
     resolution:
       integrity: sha512-yr2icI4glYaNG+KWONODapy2/jDdMSDnrONSjblABjD9B4Z5LgiircSt8m8sRZFNi08kG9Sm0uSHtEmP3zaEGg==
-  github.com/OmgImAlexis/canvacord/44accfb79f2f9162e9037463544febf66feebdc0:
+  github.com/OmgImAlexis/canvacord/d31fef2a0f29f5bb77210459d392b1337f1a1b13:
     dependencies:
       '@canvacord/assets': 1.0.2
       '@canvacord/emoji-parser': 1.0.1
@@ -3019,7 +3019,7 @@ packages:
     prepare: true
     requiresBuild: true
     resolution:
-      tarball: https://codeload.github.com/OmgImAlexis/canvacord/tar.gz/44accfb79f2f9162e9037463544febf66feebdc0
+      tarball: https://codeload.github.com/OmgImAlexis/canvacord/tar.gz/d31fef2a0f29f5bb77210459d392b1337f1a1b13
     version: 6.0.0-dev
 specifiers:
   canvacord: github:OmgImAlexis/canvacord#develop
