@@ -15,7 +15,7 @@ class Help implements Command {
         message.channel.send(new MessageEmbed({
             title: 'Help',
             description: `Use \`${guildConfig.prefix}report\` to report any bugs.`,
-            fields: client.modules.map(module => {
+            fields: client.modules.filter(module => Object.keys(module.commands).length >= 1).map(module => {
                 return {
                     name: `**__${module.name}__**`,
                     value: `${Object.values(module.commands).map(command => '`' + guildConfig.prefix + command.name + '`').join('\n')}`
