@@ -6,6 +6,7 @@ dependencies:
   enmap: 5.8.4
   express: 4.17.1
   extract-stack: 2.0.0
+  ml-sentiment: 2.0.7
   number-to-color: 0.5.0
   string-to-color: 2.2.2
   trace-cleaner: 1.2.3
@@ -1666,6 +1667,17 @@ packages:
       node: '>=8'
     resolution:
       integrity: sha512-t7hw9pI+WvuwNJXwk5zVHpyhIqzg2qTlklJOf0mVxGSbe3Fp2VieZcduNYjaLDoy6p9uGpQEGWG87WpMKlNq8g==
+  /lodash-compat/3.10.2:
+    dev: false
+    resolution:
+      integrity: sha1-xpQBKKnTD46QLNLPmf0Muk7PwYM=
+  /lodash-fp/0.10.4:
+    dependencies:
+      lodash-compat: 3.10.2
+    deprecated: This package is discontinued. See https://github.com/lodash/lodash/wiki/FP-Guide.
+    dev: false
+    resolution:
+      integrity: sha1-KnjGVLJaDEZ1OiCqeG32Qcf4Lmc=
   /lodash.padend/4.6.1:
     dev: false
     resolution:
@@ -1784,6 +1796,12 @@ packages:
     hasBin: true
     resolution:
       integrity: sha512-vVqVZQyf3WLx2Shd0qJ9xuvqgAyKPLAiqITEtqW0oIUjzo3PePDd6fW9iFz30ef7Ysp/oiWqbhszeGWW2T6Gzw==
+  /ml-sentiment/2.0.7:
+    dependencies:
+      lodash-fp: 0.10.4
+    dev: false
+    resolution:
+      integrity: sha1-+LWaha0sQQfDMtCvtd6okntBHoE=
   /ms/2.0.0:
     dev: false
     resolution:
@@ -2816,6 +2834,7 @@ specifiers:
   express: ^4.17.1
   extract-stack: ^2.0.0
   is-secret: ^1.2.1
+  ml-sentiment: ^2.0.7
   number-to-color: ^0.5.0
   string-to-color: ^2.2.2
   trace-cleaner: ^1.2.3

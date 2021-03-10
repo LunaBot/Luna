@@ -21,6 +21,7 @@
     "enmap": "^5.8.4",
     "express": "^4.17.1",
     "extract-stack": "^2.0.0",
+    "ml-sentiment": "^2.0.7",
     "number-to-color": "^0.5.0",
     "string-to-color": "^2.2.2",
     "trace-cleaner": "^1.2.3"
