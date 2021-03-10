@@ -41,7 +41,7 @@ class BotInfo implements Command {
                 },
                 {
                     name: 'Creator',
-                    value: `<@OmgImAlexis>`,
+                    value: `<@107834314439294976>`,
                     inline: false
                 },
                 {
