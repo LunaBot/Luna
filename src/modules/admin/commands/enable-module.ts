@@ -41,12 +41,12 @@ class EnableModule implements Command {
 
         // Enable module
         if (state === 'enable') {
-		    client.settings.set(message.guild.id, true, `modules.${moduleName}.enabled`);
+		    client.settings.set(message.guild.id, true, `${moduleName}.enabled`);
         }
 
         // Disable module
         if (state === 'disable') {
-            client.settings.set(message.guild.id, false, `modules.${moduleName}.enabled`);
+            client.settings.set(message.guild.id, false, `${moduleName}.enabled`);
         }
 
 		// Let the user know all is good.
