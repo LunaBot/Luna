@@ -39,11 +39,27 @@ client.customers = new Enmap({
 
 const defaultSettings = {
     prefix: '!',
-    modLogChannel: 'audit-log',
-    modRole: 'Mod',
-    adminRole: 'Admin',
-    welcomeChannel: 'welcome',
-    welcomeMessage: 'Say hello to {user}, everyone!'
+    roles: {
+        admin: 'Admin',
+        mod: 'Mod',
+    },
+    welcome: {
+        enabled: false,
+        channel: 'welcome',
+        message: 'Say hello to {user}, everyone!',
+    },
+    autoRole: {
+        enabled: false,
+    },
+    auditLog: {
+        enabled: false,
+        channel: 'audit-log',
+        events: ['messageContentEdited']
+    },
+    walkieTalkie: {
+        enabled: false,
+        channel: 'walkie-talkie'
+    }
 };
 
 client.settings = new Enmap({
@@ -55,6 +71,21 @@ client.settings = new Enmap({
 	autoEnsure: defaultSettings
 });
 
+const defaultWalkieTalkie = {
+    enabled: true,
+    id: '',
+    token: ''
+};
+
+client.walkieTalkies = new Enmap({
+	name: 'walkieTalkies',
+	fetchAll: false,
+	autoFetch: true,
+	cloneLevel: 'deep',
+	// @ts-expect-error
+	autoEnsure: defaultWalkieTalkie
+});
+
 client.points = new Enmap({
     name: 'points',
     fetchAll: false,
@@ -64,5 +95,6 @@ client.points = new Enmap({
 
 export {
     client,
-    defaultSettings
+    defaultSettings,
+    defaultWalkieTalkie
 };
