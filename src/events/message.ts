@@ -12,11 +12,16 @@ export const message = async (client: Client, message: Message) => {
 			return;
 		}
 
+		// If the user mentions the bot reply with it's info
+		if (client.user?.id && message.mentions.has(client.user?.id)) {
+			// Run the help command
+			await Promise.resolve(client.commands.get('help')?.run(client, message, []));
+		}
+
 		// We get the value, and autoEnsure guarantees we have a value already.
 		const guildConfig = client.settings.get(message.guild.id)!;
 
-		// Now we can use the values! We stop processing if the message does not
-		// start with our prefix for this guild.
+		// Bail if the message doesn't start with our prefix for this guild
 		if (message.content.indexOf(guildConfig.prefix) !== 0) {
 			client.logger.silly('Prefix "%s" not found in "%s"', guildConfig.prefix, message.content)
 			return;
@@ -38,10 +43,9 @@ export const message = async (client: Client, message: Message) => {
 		// Run the command
 		await Promise.resolve(command.run(client, message, args));
 	} catch (error) {
-		const embed = new MessageEmbed({
+		await message.reply(new MessageEmbed({
 			color: colours.RED,
 			description: `**Error**: ${error.message}`
-		});
-		message.reply(embed);
+		}));
 	}
 }
