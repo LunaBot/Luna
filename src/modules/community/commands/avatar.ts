@@ -4,7 +4,6 @@ import { CommandError } from '../../../errors';
 import { MessageEmbed } from 'discord.js';
 
 class Avatar implements Command {
-    public id = 'AVATAR';
     public name = 'avatar';
 
     async run(client: Client, message: Message, args: string[]) {

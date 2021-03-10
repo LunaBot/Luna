@@ -3,7 +3,6 @@ import * as commands from './commands';
 import * as events from './events';
 
 class Admin implements Module {
-    public id = 'ADMIN';
     public name = 'admin';
 
     public commands = commands;

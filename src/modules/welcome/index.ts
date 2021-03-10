@@ -3,7 +3,6 @@ import * as commands from './commands';
 import * as events from './events';
 
 class Welcome implements Module {
-    public id = 'WELCOME';
     public name = 'welcome';
 
     public commands = commands;
