@@ -38,7 +38,7 @@ class Whois implements Command {
                 inline: true
             }, {
                 name: 'Mention',
-                value: `<@${user.tag}>`,
+                value: `<@${user.id}>`,
                 inline: true
             }, {
                 name: 'User ID',
