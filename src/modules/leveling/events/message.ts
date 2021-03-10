@@ -1,8 +1,11 @@
 import type { Client, Message } from 'discord.js';
+import { TextChannel } from 'discord.js';
 import ml from 'ml-sentiment';
 import { experienceToLevel } from '../../../utils';
 
-// Cap value between min and max.
+/**
+ * Cap value between min and max.
+ */
 const capValue = (number: number, min: number, max: number) => Math.max(min, Math.min(number, max));
 
 /**
@@ -15,7 +18,21 @@ const getExperience = (client: Client, message: Message) => {
     const experience = capValue(1 + (baseXp * sentimentPercentage), -20, 20);
     client.logger.silly('%s gained %s exp for "%s"', message.author.tag, experience, message.content);
     return experience;
-}
+};
+
+const annoucements = {
+    async dm(client: Client, message: Message, annoucement: string) {
+        await message.author.dmChannel?.send(annoucement);
+    },
+    async reply(client: Client, message: Message, annoucement: string) {
+        await message.reply(annoucement);
+    },
+    async channel(client: Client, message: Message, annoucement: string) {
+        const guildConfig = client.settings.get(message.guild!.id)!;
+        const channel = message.guild?.channels.cache.get(guildConfig.leveling.announcement.channel)!;
+        await (channel as TextChannel).send(annoucement);
+    }
+};
 
 export const message = async (client: Client, message: Message) => {
     // This stops if it's not a guild, and we ignore all bots.
@@ -49,7 +66,15 @@ export const message = async (client: Client, message: Message) => {
 
     // Act upon level up by sending a message and updating the user's level in enmap.
     if (client.points.get(pointsKey, 'level') < curLevel) {
-        message.reply(`You've leveled up to level **${curLevel}**! Ain't that dandy?`);
+        // Update points
         client.points.set(pointsKey, curLevel, 'level');
+
+        // Bail if it's disabled
+        if (!guildConfig.leveling.announcement.enabled) return;
+
+        // Announce level up!
+        if (Object.keys(annoucements).includes(guildConfig.leveling.announcement.channel)) {
+            annoucements[guildConfig.leveling.announcement.channel](`You've leveled up to level **${curLevel}**! Ain't that dandy?`);
+        }
     }
 };

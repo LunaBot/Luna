@@ -24,7 +24,6 @@ export const message = async (client: Client, message: Message) => {
 
     // Send message to others in network
     client.logger.info('Forwarding to network: %s', message.content);
-
     await Promise.all([...client.walkieTalkies.entries()].map(async ([guildId, { id, token }]) => {
         // Don't send the message to the guild where it was sent from
         if (guildId === message.guild?.id) return;

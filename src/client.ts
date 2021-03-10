@@ -59,6 +59,13 @@ const defaultSettings = {
     walkieTalkie: {
         enabled: false,
         channel: 'walkie-talkie'
+    },
+    leveling: {
+        enabled: true,
+        announcement: {
+            enabled: false,
+            channel: 'dm'
+        }
     }
 };
 
