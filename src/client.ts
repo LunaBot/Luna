@@ -86,7 +86,7 @@ const defaultWalkieTalkie = {
 
 client.walkieTalkies = new Enmap({
 	name: 'walkieTalkies',
-	fetchAll: false,
+	fetchAll: true,
 	autoFetch: true,
 	cloneLevel: 'deep',
 	// @ts-expect-error
@@ -95,7 +95,7 @@ client.walkieTalkies = new Enmap({
 
 client.points = new Enmap({
     name: 'points',
-    fetchAll: false,
+    fetchAll: true,
 	autoFetch: true,
 	cloneLevel: 'deep'
 })
