@@ -3,9 +3,15 @@ import type { Message, Client } from 'discord.js';
 import { isAdmin, isOwner, sleep } from '../../../utils';
 import { CommandError } from '../../../errors';
 import { TextChannel } from 'discord.js';
+import { Collection } from 'discord.js';
 
 class Clear implements Command {
     public name = 'clear';
+    public paramaters = new Collection(Object.entries({
+        amount: {
+            type: 'number' as const
+        }
+    }));
 
     async run(client: Client, message: Message, args: string[]): Promise<void> {
         // Bail unless we're in a guild and a member ran this

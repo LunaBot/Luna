@@ -2,9 +2,18 @@ import { Command } from '../../../command';
 import type { Message, Client } from 'discord.js';
 import { isAdmin, isOwner } from '../../../utils';
 import { CommandError } from '../../../errors';
+import { Collection } from 'discord.js';
 
 class SetConfig implements Command {
     public name = 'set-config';
+    public paramaters = new Collection(Object.entries({
+        property: {
+            type: 'string' as const
+        },
+        value: {
+            type: 'string' as const
+        }
+    }));
 
     run(client: Client, message: Message, args: string[]): void {
         // Bail unless we're in a guild and a member ran this

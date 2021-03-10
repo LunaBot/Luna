@@ -2,9 +2,18 @@ import { Command } from '../../../command';
 import type { Message, Client } from 'discord.js';
 import { isAdmin, isOwner } from '../../../utils';
 import { CommandError } from '../../../errors';
+import { Collection } from 'discord.js';
 
 class EnableModule implements Command {
     public name = 'enable-module';
+    public paramaters = new Collection(Object.entries({
+        moduleName: {
+            type: 'number' as const
+        },
+        enabled: {
+            type: 'boolean' as const
+        }
+    }));
 
     run(client: Client, message: Message, args: string[]): void {
         // Bail unless we're in a guild and a member ran this

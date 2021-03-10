@@ -2,9 +2,16 @@ import { Command } from '../../../command';
 import type { Message, Client } from 'discord.js';
 import { CommandError } from '../../../errors';
 import { MessageEmbed } from 'discord.js';
+import { Collection } from 'discord.js';
 
 class Avatar implements Command {
     public name = 'avatar';
+    public paramaters = new Collection(Object.entries({
+        user: {
+            type: 'mention' as const,
+            optional: true
+        }
+    }));
 
     async run(client: Client, message: Message, args: string[]) {
         // Bail unless we're in a guild and a member ran this

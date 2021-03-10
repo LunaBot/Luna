@@ -3,9 +3,15 @@ import type { Message, Client } from 'discord.js';
 import { MessageEmbed } from 'discord.js';
 import { isOwner, isAdmin } from '../../../utils';
 import { CommandError } from '../../../errors';
+import { Collection } from 'discord.js';
 
 class Whois implements Command {
     public name = 'whois';
+    public paramaters = new Collection(Object.entries({
+        user: {
+            type: 'mention' as const
+        }
+    }));
 
     async run(client: Client, message: Message, args: string[]): Promise<void> {
         // Bail unless we're in a guild and a member ran this

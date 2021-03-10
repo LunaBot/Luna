@@ -3,6 +3,7 @@ import type { Message, Client } from 'discord.js';
 import { isAdmin, isOwner } from '../../../utils';
 import { CommandError } from '../../../errors';
 import { TextChannel } from 'discord.js';
+import { Collection } from 'discord.js';
 
 const deleteWebhook = async (client: Client, message: Message, webHookId?: string) => {
     // Bail if empty
@@ -18,6 +19,11 @@ const deleteWebhook = async (client: Client, message: Message, webHookId?: strin
 
 class WalkieTalkie implements Command {
     public name = 'walkie-talkie';
+    public paramaters = new Collection(Object.entries({
+        enabled: {
+            type: 'boolean' as const
+        }
+    }));
 
     async run(client: Client, message: Message, args: string[]) {
         // Bail unless we're in a guild and a member ran this
