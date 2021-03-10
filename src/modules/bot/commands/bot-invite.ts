@@ -2,7 +2,7 @@ import { Command } from '../../../command';
 import type { Message, Client } from 'discord.js';
 import { MessageEmbed } from 'discord.js';
 import { colours } from '../../../utils';
-import { dedent } from 'dedent';
+import dedent from 'dedent';
 import { CommandError } from '../../../errors';
 
 class BotInvite implements Command {
