@@ -31,7 +31,7 @@ export const loadModules = async (client: Client) => {
             }
 
             // Add command to client for access later
-            client.commands.set(command.name, command.run);
+            client.commands.set(command.name, command);
         }));
     }));
 };
