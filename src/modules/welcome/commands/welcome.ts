@@ -6,7 +6,7 @@ class Welcome implements Command {
     public name = 'welcome';
 
     run(client: Client, message: Message) {
-        // Bail unless we're in a guild and a member run this
+        // Bail unless we're in a guild and a member ran this
         if (!message.guild || !message.member) return;	
     }
 };
