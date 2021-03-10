@@ -37,7 +37,7 @@ class SetConfig implements Command {
 		client.settings.set(message.guild.id, value.join(' '), prop);
 
 		// Let the user know all is good.
-		message.channel.send(`Guild \`${prop}\` has been changed to "${value.join(' ')}".`);
+		message.channel.send(`Guild \`${prop}\` has been changed to \`${value.join(' ')}\`.`);
 	}
 };
 
