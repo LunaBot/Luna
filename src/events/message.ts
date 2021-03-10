@@ -12,8 +12,9 @@ export const message = async (client: Client, message: Message) => {
 			return;
 		}
 
-		// If the user mentions the bot reply with it's info
-		if (client.user?.id && message.mentions.has(client.user?.id)) {
+		// If the user mentions the bot DIRECTLY then reply with it's info
+		// For example `@Bot` but not `I think @Bot is a good bot!`
+		if (client.user?.id && message.mentions.has(client.user?.id) && message.content.trim().startsWith('<')) {
 			// Run the help command
 			await Promise.resolve(client.commands.get('help')?.run(client, message, []));
 		}
