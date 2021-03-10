@@ -33,7 +33,7 @@ class Level implements Command {
             .setAvatar(message.member?.user.displayAvatarURL({ format: 'png' }))
             .setCurrentXP(experience)
             .setLevel(currentLevel)
-            .setRequiredXP(nextLevelXp - experience)
+            .setRequiredXP(nextLevelXp)
             .setRank(rank)
             // @ts-expect-error
             .setFontSize('26px')
