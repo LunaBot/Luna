@@ -4,15 +4,16 @@ import { isAdmin, isOwner } from '../../../utils';
 import { CommandError } from '../../../errors';
 import { TextChannel } from 'discord.js';
 
-const deleteWebhooks = async (client: Client, message: Message, webHookName: string) => {
+const deleteWebhook = async (client: Client, message: Message, webHookId?: string) => {
+    // Bail if empty
+    if (!webHookId) return;
+    
     // Get our webhook
     const webhooks = await (message.channel as TextChannel).fetchWebhooks();
-    const myWebhooks = webhooks.filter((webhook: any) => webhook.owner.id === client?.user?.id && webhook.name === 'WalkieTalkie');
+    const myWebhook = webhooks.filter((webhook: any) => webhook.owner.id === client?.user?.id && webHookId === webhook.id);
 
-    // Bail if we don't have any to delete
-    if (myWebhooks.size === 0) return;
-
-    for (let [id, webhook] of myWebhooks) await webhook.delete(`Requested by ${message.author.tag}`);
+    // Delete webhook
+    myWebhook.delete(`Requested by ${message.author.tag}`);
 };
 
 class WalkieTalkie implements Command {
@@ -58,7 +59,7 @@ class WalkieTalkie implements Command {
             if (!client.settings.get(message.guild.id, 'walkieTalkie.enabled')) throw new CommandError('Walkie talkie is already disabled!');
 
             // Delete webhook
-            await deleteWebhooks(client, message, 'WalkieTalkie');
+            await deleteWebhook(client, message, client.walkieTalkies.get(message.guild.id)?.id);
 
             // Remove walkie talkie
             client.walkieTalkies.delete(message.guild.id);
