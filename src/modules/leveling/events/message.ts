@@ -1,5 +1,6 @@
 import type { Client, Message } from 'discord.js';
 import ml from 'ml-sentiment';
+import { experienceToLevel } from '../../../utils';
 
 // Cap value between min and max.
 const capValue = (number: number, min: number, max: number) => Math.max(min, Math.min(number, max));
@@ -25,7 +26,7 @@ export const message = async (client: Client, message: Message) => {
     // Bail if it's a command
     const guildConfig = client.settings.get(message.guild.id)!;
     if (message.content.indexOf(guildConfig.prefix) === 0) {
-        client.logger.debug('%s gained 0 exp for "%s" as it looks like a command.', message.author.tag, message.content);
+        client.logger.silly('%s gained 0 exp for "%s" as it looks like a command.', message.author.tag, message.content);
         return;
     }
 
@@ -44,7 +45,7 @@ export const message = async (client: Client, message: Message) => {
     client.points.math(pointsKey, '+', experience, 'points');
 
     // Calculate the user's current level
-    const curLevel = Math.floor(0.1 * Math.sqrt(client.points.get(pointsKey, 'points')));
+    const curLevel = experienceToLevel(client.points.get(pointsKey, 'points'));
 
     // Act upon level up by sending a message and updating the user's level in enmap.
     if (client.points.get(pointsKey, 'level') < curLevel) {

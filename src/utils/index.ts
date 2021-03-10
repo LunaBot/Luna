@@ -44,7 +44,7 @@ export const isTextChannel = (channel: GuildChannel): channel is TextChannel => 
 export const sendWelcomeMessage = (member: GuildMember) => {
 	// Get the welcome message and resolve all the placeholders
 	const welcomeMessage = resolvePlaceholders({
-		string: client.settings.get(member.guild.id, 'welcomeMessage'),
+		string: client.settings.get(member.guild.id, 'welcomeMessage')!,
 		guild: member.guild,
 		member
 	});
@@ -55,3 +55,17 @@ export const sendWelcomeMessage = (member: GuildMember) => {
 };
 
 export const sleep = (number: number) => new Promise<void>(resolve => setTimeout(() => resolve(), number));
+
+export const capitalizeFirstLetter = (string: string) => string.charAt(0).toUpperCase() + string.slice(1);
+
+export const levelToExperience = (level: number) => {
+    let experience = 0;
+    for (let i = 1; i < level; i++) experience += Math.floor(i + 300 * Math.pow(2, i / 7));
+    return Math.floor(experience / 4);
+};
+
+export const experienceToLevel = (experience: number) => {
+    let level = 0;
+    while (levelToExperience(level) < experience) level++;
+    return level;
+};
