@@ -7,6 +7,8 @@
         "**/.ultra.cache.json": true,
         "**/.DS_Store": true,
         "**/.env": true,
-        "**/ca-certificate.crt": true
+        "**/ca-certificate.crt": true,
+        "**/.nyc_output": true,
+        "**/data": true
     }
 }
