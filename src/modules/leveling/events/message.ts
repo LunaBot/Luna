@@ -59,10 +59,10 @@ export const message = async (client: Client, message: Message) => {
     });
 
     const experience = getExperience(client, message);
-    client.points.math(pointsKey, '+', experience, 'points');
+    client.points.math(pointsKey, '+', experience, 'experience');
 
     // Calculate the user's current level
-    const curLevel = experienceToLevel(client.points.get(pointsKey, 'points'));
+    const curLevel = experienceToLevel(client.points.get(pointsKey, 'experience'));
 
     // Act upon level up by sending a message and updating the user's level in enmap.
     if (client.points.get(pointsKey, 'level') < curLevel) {

@@ -19,14 +19,14 @@ class Level implements Command {
         client.points.ensure(pointsKey, {
             user: message.author.id,
             guild: message.guild.id,
-            points: 0,
+            experience: 0,
             level: 1
         });
 
         // Build the rank card
-        const leaderboard = [...client.points.entries()].reduce((a, e) => e[1] > a[1] ? e : a);
+        const leaderboard = [...client.points.entries()].sort((a, b) => a[1].points - b[1].points);
         const rank = leaderboard.findIndex(user => user[0] === pointsKey);
-        const experience = Math.floor(client.points.get(pointsKey, 'points'));
+        const experience = Math.floor(client.points.get(pointsKey, 'experience'));
         const currentLevel = experienceToLevel(experience);
         const nextLevelXp = levelToExperience(currentLevel + 1);
         const embed = new canvacord.Rank()
