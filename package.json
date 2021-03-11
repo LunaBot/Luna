@@ -15,6 +15,7 @@
   },
   "dependencies": {
     "@databases/pg": "^5.0.0",
+    "camelcase": "^6.2.0",
     "canvacord": "github:OmgImAlexis/canvacord#develop",
     "chalk": "^4.1.0",
     "clean-stack": "^3.0.1",

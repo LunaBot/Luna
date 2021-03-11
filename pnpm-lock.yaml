@@ -1,5 +1,6 @@
 dependencies:
   '@databases/pg': 5.0.0
+  camelcase: 6.2.0
   canvacord: github.com/OmgImAlexis/canvacord/d31fef2a0f29f5bb77210459d392b1337f1a1b13
   chalk: 4.1.0
   clean-stack: 3.0.1
@@ -732,6 +733,12 @@ packages:
       node: '>=6'
     resolution:
       integrity: sha512-P8BjAsXvZS+VIDUI11hHCQEv74YT67YUi5JJFNWIqL235sBmjX4+qx9Muvls5ivyNENctx46xQLQ3aTuE7ssaQ==
+  /camelcase/6.2.0:
+    dev: false
+    engines:
+      node: '>=10'
+    resolution:
+      integrity: sha512-c7wVvbw3f37nuobQNtgsgG9POC9qMbNuMQmTCqZv23b6MIz0fcYpBiOlv9gEN/hdLdnZTDQhg6e9Dq5M1vKvfg==
   /caniuse-lite/1.0.30001198:
     dev: true
     resolution:
@@ -3347,6 +3354,7 @@ packages:
 specifiers:
   '@databases/pg': ^5.0.0
   '@types/pg': ^7.14.11
+  camelcase: ^6.2.0
   canvacord: github:OmgImAlexis/canvacord#develop
   chalk: ^4.1.0
   clean-stack: ^3.0.1
