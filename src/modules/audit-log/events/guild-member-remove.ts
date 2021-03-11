@@ -1,7 +1,9 @@
 import type { Message, Client, TextChannel } from 'discord.js';
 import { GuildMember } from 'discord.js';
 import { MessageEmbed } from 'discord.js';
+import { capitalizeFirstLetter } from '../../../utils';
 import { createChannel } from '../utils/create-channel';
+import * as duration from 'human-duration';
 
 export const guildMemberRemove = async (client: Client, member: GuildMember, newMember: GuildMember) => {
     // This stops if it's not a guild, and we ignore all bots.
@@ -42,7 +44,14 @@ export const guildMemberRemove = async (client: Client, member: GuildMember, new
                 name: member.user.username,
                 iconURL: member.user.displayAvatarURL({ dynamic: true, size: 64 })
             },
+            thumbnail: {
+                url: member.user.displayAvatarURL({ dynamic: true, size: 128 })
+            },
             description: `:negative_squared_cross_mark: <@${member.user.id}> **left the server**`,
+            fields: [{
+                name: 'Time spent here',
+                value: capitalizeFirstLetter(duration.fmt(new Date().getTime() - (member.joinedTimestamp ?? new Date().getTime())).toString())
+            }],
             timestamp: new Date()
         }));
     } catch (error: unknown) {
