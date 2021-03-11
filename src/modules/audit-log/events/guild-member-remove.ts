@@ -47,7 +47,7 @@ export const guildMemberRemove = async (client: Client, member: GuildMember, new
             thumbnail: {
                 url: member.user.displayAvatarURL({ dynamic: true, size: 128 })
             },
-            description: `:negative_squared_cross_mark: <@${member.user.id}> **left the server**`,
+            description: `⛔️ <@${member.user.id}> **left the server**`,
             fields: [{
                 name: 'Time spent here',
                 value: capitalizeFirstLetter(duration.fmt(new Date().getTime() - (member.joinedTimestamp ?? new Date().getTime())).toString())
