@@ -1,4 +1,5 @@
-import type { Message, Client, TextChannel } from 'discord.js';
+import type { Client, TextChannel } from 'discord.js';
+import { Role } from 'discord.js';
 import { GuildMember } from 'discord.js';
 import { MessageEmbed } from 'discord.js';
 import { createChannel } from '../utils/create-channel';
@@ -49,29 +50,122 @@ export const guildMemberUpdate = async (client: Client, member: GuildMember, new
             }));
         }
 
-        // // Build description
-        // const item = (message.author.bot && message.embeds.length >= 1) ? `${message.embeds.length} embeds` : 'Message';
-        // const description = `:pencil: **Message sent by** <@${message.author.id}> **edited** in <#${message.channel.id}>`;
+        // Nickname changed
+        if (member.nickname !== newMember.nickname) {
+            // Log for debugging
+            logger.silly(`${member.user.tag} changed their nickname from ${member.nickname} to ${newMember.nickname}.`);
 
-        // // Send message to audit log channel
-        // await auditLog.send(new MessageEmbed({
-        //     author: {
-        //         name: message.author.username,
-        //         iconURL: message.author.displayAvatarURL({ dynamic: true, size: 64 })
-        //     },
-        //     description,
-        //     footer: {
-        //         text: `Message ID: ${message.id}`
-        //     },
-        //     fields: [{
-        //         name: 'Old message',
-        //         value: message.content
-        //     }, {
-        //         name: 'New message',
-        //         value: newMessage.content
-        //     }],
-        //     timestamp: new Date()
-        // }));
+            // Send message to audit log channel
+            await auditLog.send(new MessageEmbed({
+                author: {
+                    name: `:pencil: ${member.user.username} **nickname edited**`,
+                    iconURL: member.user.displayAvatarURL({ dynamic: true, size: 64 })
+                },
+                fields: [{
+                    name: 'Old nickname',
+                    value: member.nickname
+                }, {
+                    name: 'New nickname',
+                    value: newMember.nickname
+                }],
+                timestamp: new Date()
+            }));
+        }
+
+        // Username changed
+        if (member.user.username !== newMember.user.username) {
+            // Log for debugging
+            logger.silly(`${member.user.tag} changed their username from ${member.user.username} to ${newMember.user.username}.`);
+
+            // Send message to audit log channel
+            await auditLog.send(new MessageEmbed({
+                author: {
+                    name: member.user.username,
+                    iconURL: member.user.displayAvatarURL({ dynamic: true, size: 64 })
+                },
+                description: `:pencil: ${member.user.username} **username edited**`,
+                fields: [{
+                    name: 'Old username',
+                    value: member.user.username
+                }, {
+                    name: 'New username',
+                    value: newMember.user.username
+                }],
+                timestamp: new Date()
+            }));
+        }
+
+        // Avatar changed
+        if (member.user.avatarURL() !== newMember.user.avatarURL()) {
+            // Log for debugging
+            logger.silly(`${member.user.tag} changed their avatar from ${member.user.avatarURL()} to ${newMember.user.avatarURL()}.`);
+
+            // Send message to audit log channel
+            await auditLog.send(new MessageEmbed({
+                author: {
+                    name: member.user.username,
+                    iconURL: member.user.displayAvatarURL({ dynamic: true, size: 64 })
+                },
+                description: `:pencil: ${member.user.username} **avatar edited**`,
+                fields: [{
+                    name: 'Old avatar',
+                    value: member.user.avatarURL()
+                }, {
+                    name: 'New avatar',
+                    value: newMember.user.avatarURL()
+                }],
+                timestamp: new Date()
+            }));
+        }
+
+        const removedRoles: Role[] = [];
+        const addedRoles: Role[] = [];
+        member.roles.cache.forEach(value => {
+            if (newMember.roles.cache.find(role => role.id === value.id) == null) {
+                removedRoles.push(value);
+            }
+        });
+        newMember.roles.cache.forEach(value => {
+            if (member.roles.cache.find(role => role.id === value.id) == null) {
+                addedRoles.push(value);
+            }
+        });
+
+        // Roles were removed or added
+        if (removedRoles.length >= 1 || addedRoles.length >= 1) {
+            const fields: { name: string, value: string }[] = [];
+            if (removedRoles.length >= 1) {
+                // Log for debugging
+                logger.silly(`Role${removedRoles.length === 1 ? '' : 's'} ${removedRoles} removed from ${member.user.tag}.`);
+
+                // Add to response
+                fields.push({
+                    name: 'Removed roles',
+                    value: removedRoles.map(role => `<@&${role.id}>`).join(' ') ?? '​'
+                });
+            }
+            if (addedRoles.length >= 1) {
+                // Log for debugging
+                logger.silly(`Role${removedRoles.length === 1 ? '' : 's'} ${addedRoles} added to ${member.user.tag}.`);
+
+                // Add to response
+                fields.push({
+                    name: 'New roles',
+                    value: addedRoles.map(role => `<@&${role.id}>`).join(' ') ?? '​'
+                })
+            }
+
+            // Send message to audit log channel
+            await auditLog.send(new MessageEmbed({
+                author: {
+                    name: member.user.username,
+                    iconURL: member.user.displayAvatarURL({ dynamic: true, size: 64 })
+                },
+                description: `:pencil: <@${member.user.id}> **roles have changed**`,
+                fields,
+                timestamp: new Date()
+            }));
+        }
     } catch (error: unknown) {
         logger.error(error as Error);
     }
