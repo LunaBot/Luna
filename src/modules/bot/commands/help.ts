@@ -18,7 +18,11 @@ class Help implements Command {
         await message.channel.send(new MessageEmbed({
             title: 'Help',
             description: `Use \`${guildConfig.prefix}report <message>\` to report any bugs.`,
-            fields: client.modules.filter(module => Object.keys(module.commands).length >= 1).map(module => {
+            fields: client.modules.filter(module => {
+                const isEnabled = Object.keys(guildConfig).includes(module.name) && guildConfig[module.name].enabled;
+                const hasCommands = Object.keys(module.commands).length >= 1;
+                return isEnabled && hasCommands;
+            }).map(module => {
                 return {
                     name: `**__${module.name}__**`,
                     value: `${Object.values(module.commands).map(command => {
