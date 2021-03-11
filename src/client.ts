@@ -25,7 +25,8 @@ client.commands = new Collection();
 client.logger = logger;
 
 const defaultCustomer = {
-    membership: 'free'
+    membership: 'free',
+    banned: false
 };
 
 client.customers = new Enmap({
@@ -116,5 +117,6 @@ client.points = new Enmap({
 export {
     client,
     defaultSettings,
-    defaultWalkieTalkie
+    defaultWalkieTalkie,
+    defaultCustomer
 };
