@@ -2,6 +2,7 @@ import { MessageEmbed } from 'discord.js';
 import type { Message, Client } from 'discord.js';
 import { colours } from '../utils';
 import camelcase from 'camelcase';
+import { TextChannel } from 'discord.js';
 
 export const message = async (client: Client, message: Message) => {
 	try {
@@ -12,6 +13,9 @@ export const message = async (client: Client, message: Message) => {
 		if (!message.guild || message.author.bot || !message.member) {
 			return;
 		}
+
+		// Don't allow the bot in any NSFW channels
+		if ((message.channel as TextChannel).nsfw) return;
 
 		// Create named logger with id and name
 		const logger = client.logger.createChild({
