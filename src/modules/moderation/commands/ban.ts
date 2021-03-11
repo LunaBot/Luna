@@ -43,9 +43,6 @@ class Ban implements Command {
         // Bail if we don't have someone to ban
         if (!memberToBan) throw new CommandError('You need to mention a user to ban them!');
 
-        // Log for debugging
-        logger.silly(`${message.author.tag} banned ${memberToBan.user.tag || memberToBan.user.username}`);
-
         // Find the channel
         const auditLog = message.guild.channels.cache.find(channel => channel.name === (guildConfig.auditLog.channel ?? 'audit-log')) as TextChannel;
 
@@ -78,6 +75,10 @@ class Ban implements Command {
             await memberToBan.ban({
                 reason
             });
+
+
+            // Log for debugging
+            logger.silly(`${message.author.tag} banned ${memberToBan.user.tag || memberToBan.user.username}`);
 
             // Send message to audit log channel
             await auditLog.send(new MessageEmbed({
