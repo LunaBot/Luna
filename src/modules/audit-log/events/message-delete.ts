@@ -1,6 +1,6 @@
 import type { Message, Client, TextChannel } from 'discord.js';
 import { MessageEmbed } from 'discord.js';
-import { createChannel } from '../utils/create-channel';
+import { createAuditLogChannel } from '../utils/create-audit-log-channel';
 
 export const messageDelete = async (client: Client, message: Message) => {
     // This stops if it's not a guild, and we ignore all bots.
@@ -29,7 +29,7 @@ export const messageDelete = async (client: Client, message: Message) => {
 
         // If we can't find the channel then create one called "audit-log"
         if (!auditLog) {
-            await createChannel(client, message);
+            await createAuditLogChannel(client, message);
         }
 
         // Get the last deleted log

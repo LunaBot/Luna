@@ -1,6 +1,6 @@
 import type { Client, Message, OverwriteResolvable, GuildMember } from 'discord.js';
 
-export const createChannel = async (client: Client, message: GuildMember | Message) => {
+export const createAuditLogChannel = async (client: Client, message: GuildMember | Message) => {
     // This stops if it's not a guild, and we ignore all bots.
     // @todo: add the ability for servers to track specific bots or all bot message deletions
     if (!message.guild || (message as GuildMember)?.user?.bot || (message as Message)?.author?.bot) return;
@@ -20,7 +20,7 @@ export const createChannel = async (client: Client, message: GuildMember | Messa
     // Get guild config
     const guildConfig = client.settings.get(message.guild.id)!;
     
-    // Get @everyone role
+    // Get roles
     const everyoneRole = message.guild.roles.cache.find(role => role.name === '@everyone');
     const adminRole = message.guild.roles.cache.find(role => [role.name, role.id].includes(guildConfig.roles.admin));
     const modRole = message.guild.roles.cache.find(role => [role.name, role.id].includes(guildConfig.roles.mod));

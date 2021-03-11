@@ -2,7 +2,7 @@ import type { Client, TextChannel } from 'discord.js';
 import { Role } from 'discord.js';
 import { GuildMember } from 'discord.js';
 import { MessageEmbed } from 'discord.js';
-import { createChannel } from '../utils/create-channel';
+import { createAuditLogChannel } from '../utils/create-audit-log-channel';
 
 export const guildMemberUpdate = async (client: Client, member: GuildMember, newMember: GuildMember) => {
     // This stops if it's not a guild, and we ignore all bots.
@@ -31,7 +31,7 @@ export const guildMemberUpdate = async (client: Client, member: GuildMember, new
 
         // If we can't find the channel then create one called "audit-log"
         if (!auditLog) {
-            await createChannel(client, member);
+            await createAuditLogChannel(client, member);
         }
 
         // Member passed membership screening

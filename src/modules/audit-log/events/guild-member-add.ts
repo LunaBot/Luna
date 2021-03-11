@@ -1,7 +1,7 @@
 import type { Message, Client, TextChannel } from 'discord.js';
 import { GuildMember } from 'discord.js';
 import { MessageEmbed } from 'discord.js';
-import { createChannel } from '../utils/create-channel';
+import { createAuditLogChannel } from '../utils/create-audit-log-channel';
 import ago from 's-ago';
 import { capitalizeFirstLetter } from '../../../utils';
 
@@ -32,7 +32,7 @@ export const guildMemberAdd = async (client: Client, member: GuildMember, newMem
 
         // If we can't find the channel then create one called "audit-log"
         if (!auditLog) {
-            await createChannel(client, member);
+            await createAuditLogChannel(client, member);
         }
 
         // Log for debugging

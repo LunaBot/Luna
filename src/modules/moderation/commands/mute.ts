@@ -3,10 +3,10 @@ import type { Message, Client } from 'discord.js';
 import { isAdmin, isOwner } from '../../../utils';
 import { CommandError } from '../../../errors';
 import { Collection } from 'discord.js';
-import { createRole } from '../utils/create-role';
+import { createMutedRole } from '../utils/create-role';
 import { Role } from 'discord.js';
 import { MessageEmbed } from 'discord.js';
-import { createChannel } from '../../audit-log/utils/create-channel';
+import { createAuditLogChannel } from '../../audit-log/utils/create-audit-log-channel';
 
 class Mute implements Command {
     public name = 'mute';
@@ -49,7 +49,7 @@ class Mute implements Command {
 
         // If we can't find the role then create one called "muted"
         if (!muteRole) {
-            await createRole(client, message);
+            await createMutedRole(client, message);
         }
 
         // Find the role now that it's been created
@@ -60,7 +60,7 @@ class Mute implements Command {
 
         // If we can't find the channel then create one called "audit-log"
         if (!auditLog) {
-            await createChannel(client, message);
+            await createAuditLogChannel(client, message);
         }
 
         // If there's something other than just a mention let's use it as a reason

@@ -2,7 +2,7 @@ import type { Message, Client, TextChannel } from 'discord.js';
 import { GuildMember } from 'discord.js';
 import { MessageEmbed } from 'discord.js';
 import { capitalizeFirstLetter } from '../../../utils';
-import { createChannel } from '../utils/create-channel';
+import { createAuditLogChannel } from '../utils/create-audit-log-channel';
 import * as duration from 'human-duration';
 
 export const guildMemberRemove = async (client: Client, member: GuildMember, newMember: GuildMember) => {
@@ -32,7 +32,7 @@ export const guildMemberRemove = async (client: Client, member: GuildMember, new
 
         // If we can't find the channel then create one called "audit-log"
         if (!auditLog) {
-            await createChannel(client, member);
+            await createAuditLogChannel(client, member);
         }
 
         // Log for debugging
