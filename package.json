@@ -14,6 +14,7 @@
     "node": ">=14.0.0"
   },
   "dependencies": {
+    "@databases/pg": "^5.0.0",
     "canvacord": "github:OmgImAlexis/canvacord#develop",
     "chalk": "^4.1.0",
     "clean-stack": "^3.0.1",
@@ -24,12 +25,16 @@
     "express": "^4.17.1",
     "extract-stack": "^2.0.0",
     "git-rev-sync": "^3.0.1",
+    "human-duration": "^1.0.1",
     "ml-sentiment": "^2.0.7",
     "number-to-color": "^0.5.0",
+    "pg": "^8.5.1",
+    "s-ago": "^2.2.0",
     "string-to-color": "^2.2.2",
     "trace-cleaner": "^1.2.3"
   },
   "devDependencies": {
+    "@types/pg": "^7.14.11",
     "eslint": "^7.21.0",
     "eslint-config-xo": "^0.35.0",
     "eslint-plugin-unicorn": "^28.0.2",
