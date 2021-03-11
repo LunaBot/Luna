@@ -1,5 +1,9 @@
 import Statcord from 'statcord.js';
+import dotEnv from 'dotenv';
 import { client } from './client';
+
+// Load env values
+dotEnv.config();
 
 // Create statcord client
 const statcord = new Statcord.Client({
