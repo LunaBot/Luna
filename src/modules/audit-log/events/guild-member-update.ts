@@ -108,11 +108,8 @@ export const guildMemberUpdate = async (client: Client, member: GuildMember, new
                 },
                 description: `:pencil: ${member.user.username} **avatar edited**`,
                 fields: [{
-                    name: 'Old avatar',
-                    value: member.user.avatarURL()
-                }, {
-                    name: 'New avatar',
-                    value: newMember.user.avatarURL()
+                    name: 'Avatar',
+                    value: `[before](${member.user.avatarURL()}) -> [after](${newMember.user.avatarURL()})`
                 }],
                 timestamp: new Date()
             }));
