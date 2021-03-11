@@ -3,6 +3,7 @@ import { Command } from '../../../command';
 import type { Message, Client } from 'discord.js';
 import { MessageEmbed } from 'discord.js';
 import { colours } from '../../../utils';
+import { fmt as formatDuration } from 'human-duration';
 
 class BotInfo implements Command {
     public name = 'bot-info';
@@ -21,7 +22,7 @@ class BotInfo implements Command {
             fields: [
                 {
                     name: 'Process uptime',
-                    value: `${Math.floor(process.uptime())}ms`,
+                    value: formatDuration(process.uptime() * 1000),
                     inline: true
                 },
                 {
@@ -52,14 +53,14 @@ class BotInfo implements Command {
             ],
             author: {
                 name: 'Automod - Bot Info',
-                icon_url: 'https://cdn.discordapp.com/attachments/794133875311771659/795540788226424842/auto_mod_logo_1.png'
+                icon_url: client.user?.displayAvatarURL({ size: 128 })
             },
             footer: {
                 text: `Message ID: ${message.id}`
             },
             timestamp: new Date(),
             thumbnail: {
-                url: 'https://cdn.discordapp.com/attachments/794133875311771659/795540788226424842/auto_mod_logo_1.png'
+                url: client.user?.displayAvatarURL({ size: 128 })
             }
         }));
 	}
