@@ -42,6 +42,7 @@ const defaultSettings = {
     roles: {
         admin: 'Admin',
         mod: 'Mod',
+        muted: 'Muted',
     },
     admin: {
         enabled: true
