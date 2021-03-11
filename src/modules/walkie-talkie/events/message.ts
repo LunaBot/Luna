@@ -30,6 +30,9 @@ export const message = async (client: Client, message: Message) => {
     // Bail if the content is less than 2 chars
     if (message.content.length <= 2) return;
 
+    // Log for debugging
+    client.logger.debug('Forwarding to network: %s', message.content);
+
     // Send message to others in network
     await Promise.allSettled([...client.walkieTalkies.entries()].filter(([key, walkieTalkie]) => {
         return walkieTalkie.token !== '';
@@ -80,9 +83,6 @@ export const message = async (client: Client, message: Message) => {
             const role = roleFromNetwork ?? roleFromOrigin;
             return `@${zeroWidthCharacter}${role?.name ?? match}`;
         });
-
-        // Log for debugging
-        client.logger.debug('Forwarding to network: %s', cleanMessage);
 
         // Send message
         await webhook.send(cleanMessage);
