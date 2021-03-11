@@ -60,11 +60,11 @@ class Whois implements Command {
                 inline: true
             }, {
                 name: 'Account Creation Date',
-                value: user.createdTimestamp,
+                value: user.createdAt?.toLocaleDateString(),
                 inline: true
             }, {
                 name: 'Join Date',
-                value: member.joinedTimestamp,
+                value: member.joinedAt?.toLocaleDateString(),
                 inline: true
             }, {
                 name: 'Bot/Human',
