@@ -43,22 +43,22 @@ const defaultSettings = {
         admin: 'Admin',
         mod: 'Mod',
     },
-    welcome: {
-        enabled: false,
-        channel: 'welcome',
-        message: 'Say hello to {user}, everyone!',
-    },
-    autoRole: {
-        enabled: false,
+    admin: {
+        enabled: true
     },
     auditLog: {
         enabled: false,
         channel: 'audit-log',
         events: ['messageUpdate']
     },
-    walkieTalkie: {
+    autoRole: {
         enabled: false,
-        channel: 'walkie-talkie'
+    },
+    bot: {
+        enabled: true
+    },
+    commmunity: {
+        enabled: false
     },
     leveling: {
         enabled: true,
@@ -66,6 +66,18 @@ const defaultSettings = {
             enabled: false,
             channel: 'dm'
         }
+    },
+    moderation: {
+        enabled: true
+    },
+    walkieTalkie: {
+        enabled: false,
+        channel: 'walkie-talkie'
+    },
+    welcome: {
+        enabled: false,
+        channel: 'welcome',
+        message: 'Say hello to {user}, everyone!',
     }
 };
 
