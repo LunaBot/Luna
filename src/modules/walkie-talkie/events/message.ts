@@ -60,14 +60,18 @@ export const message = async (client: Client, message: Message) => {
         // @todo: Look into allowing pings but only where that member is current "online"
         //        This would allow chat to "follow" the user across servers
         cleanMessage = cleanMessage.replace(/<@!?(\d+)>/, (_, match) => {
-            const member = client.guilds.cache.get(guildId)?.members.cache.find(member => member.id === match);
-            return `@${zeroWidthCharacter}${member?.nickname ?? member?.user.username}` ?? match;
+            const memberFromNetwork = client.guilds.cache.get(guildId)?.members.cache.find(member => member.id === match);
+            const memberFromOrigin = message.guild?.members.cache.find(member => member.id === match);
+            const member = memberFromNetwork ?? memberFromOrigin;
+            return `@${zeroWidthCharacter}${member?.nickname ?? member?.user.username ?? match}`;
         });
 
         // Resolve roles to their names
         cleanMessage = cleanMessage.replace(/<@&?(\d+)>/, (_, match) => {
-            const member = client.guilds.cache.get(guildId)?.members.cache.find(member => member.id === match);
-            return `@${zeroWidthCharacter}${member?.nickname ?? member?.user.username}` ?? match;
+            const roleFromNetwork = client.guilds.cache.get(guildId)?.roles.cache.find(role => role.id === match);
+            const roleFromOrigin = message.guild?.roles.cache.find(role => role.id === match);
+            const role = roleFromNetwork ?? roleFromOrigin;
+            return `@${zeroWidthCharacter}${role?.name ?? match}`;
         });
 
         // Log for debugging
