@@ -69,7 +69,7 @@ class WalkieTalkie implements Command {
             if (!client.settings.get(message.guild.id, 'walkieTalkie.enabled')) throw new CommandError('Walkie talkie is already disabled!');
 
             // Delete webhook
-            await deleteWebhook(client, message, client.walkieTalkies.get(message.guild.id)?.id);
+            await deleteWebhook(client, message, client.walkieTalkies.get(message.guild.id)?.id).catch(() => {});
 
             // Remove walkie talkie
             client.walkieTalkies.delete(message.guild.id);
