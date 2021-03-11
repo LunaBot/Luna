@@ -10,6 +10,11 @@ export const isAdmin = (guild: Guild, member: GuildMember) => {
     const adminRole = guild.roles.cache.find(role => role.name === guildConfig?.roles.admin);
     return adminRole ? member.roles.cache.has(adminRole.id) : false;
 };
+export const isMod = (guild: Guild, member: GuildMember) => {
+    const guildConfig = client.settings.get(guild.id);
+    const modRole = guild.roles.cache.find(role => role.name === guildConfig?.roles.mod);
+    return modRole ? member.roles.cache.has(modRole.id) : false;
+};
 
 export const resolvePlaceholders = ({
     string, guild, member, channel
