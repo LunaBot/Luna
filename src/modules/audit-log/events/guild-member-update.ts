@@ -45,6 +45,9 @@ export const guildMemberUpdate = async (client: Client, member: GuildMember, new
                     name: member.user.username,
                     iconURL: member.user.displayAvatarURL({ dynamic: true, size: 64 })
                 },
+                thumbnail: {
+                    url: member.user.displayAvatarURL({ dynamic: true, size: 128 })
+                },
                 description: `:white_check_mark: <@${member.user.id}> **passed membership screening**`,
                 timestamp: new Date()
             }));
@@ -60,6 +63,9 @@ export const guildMemberUpdate = async (client: Client, member: GuildMember, new
                 author: {
                     name: `:pencil: ${member.user.username} **nickname edited**`,
                     iconURL: member.user.displayAvatarURL({ dynamic: true, size: 64 })
+                },
+                thumbnail: {
+                    url: member.user.displayAvatarURL({ dynamic: true, size: 128 })
                 },
                 fields: [{
                     name: 'Old nickname',
@@ -83,6 +89,9 @@ export const guildMemberUpdate = async (client: Client, member: GuildMember, new
                     name: member.user.username,
                     iconURL: member.user.displayAvatarURL({ dynamic: true, size: 64 })
                 },
+                thumbnail: {
+                    url: member.user.displayAvatarURL({ dynamic: true, size: 128 })
+                },
                 description: `:pencil: ${member.user.username} **username edited**`,
                 fields: [{
                     name: 'Old username',
@@ -105,6 +114,9 @@ export const guildMemberUpdate = async (client: Client, member: GuildMember, new
                 author: {
                     name: member.user.username,
                     iconURL: member.user.displayAvatarURL({ dynamic: true, size: 64 })
+                },
+                thumbnail: {
+                    url: member.user.displayAvatarURL({ dynamic: true, size: 128 })
                 },
                 description: `:pencil: ${member.user.username} **avatar edited**`,
                 fields: [{
@@ -157,6 +169,9 @@ export const guildMemberUpdate = async (client: Client, member: GuildMember, new
                 author: {
                     name: member.user.username,
                     iconURL: member.user.displayAvatarURL({ dynamic: true, size: 64 })
+                },
+                thumbnail: {
+                    url: member.user.displayAvatarURL({ dynamic: true, size: 128 })
                 },
                 description: `:pencil: <@${member.user.id}> **roles have changed**`,
                 fields,
