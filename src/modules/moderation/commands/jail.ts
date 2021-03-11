@@ -3,6 +3,8 @@ import type { Message, Client } from 'discord.js';
 import { isAdmin, isOwner } from '../../../utils';
 import { CommandError } from '../../../errors';
 import { Collection } from 'discord.js';
+import { mute } from './mute';
+import { createJailCellChannel } from '../utils/create-jail-cell-channel';
 
 class Jail implements Command {
     public name = 'jail';
@@ -23,6 +25,18 @@ class Jail implements Command {
         if (!isOwner(message.guild, message.member) && !isAdmin(message.guild, message.member)) {
             throw new CommandError('You\'re not an admin or the owner, sorry!');
         }
+
+        // Get the user we need to jail
+        const memberToJail = message.mentions.members?.first();
+
+        // Bail if we don't have someone to jail
+        if (!memberToJail) throw new CommandError('You need to mention a user to jail them!');
+
+        // Mute them
+        await mute.run(client, message, args);
+
+        // Jail them
+        await createJailCellChannel(client, message);
     }
 }
 
