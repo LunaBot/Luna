@@ -1,4 +1,4 @@
-import type { Client, Message } from 'discord.js';
+import type { TextChannel, Client, Message } from 'discord.js';
 import { MessageEmbed } from 'discord.js';
 
 export const message = async (client: Client, message: Message) => {
@@ -6,6 +6,9 @@ export const message = async (client: Client, message: Message) => {
     if (!message.guild || message.author.bot || !message.member) {
         return;
     }
+
+    // Don't allow the bot in any NSFW channels
+    if ((message.channel as TextChannel).nsfw) return;
 
     // Get guild config
     const guildConfig = client.settings.get(message.guild.id)!
