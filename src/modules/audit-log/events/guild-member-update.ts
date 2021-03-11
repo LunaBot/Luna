@@ -33,8 +33,21 @@ export const guildMemberUpdate = async (client: Client, member: GuildMember, new
             await createChannel(client, member);
         }
 
-        // Log for debugging
-        logger.silly(`${member.user.tag} updated their ...`);
+        // Member passed membership screening
+        if (member.pending && !newMember.pending) {
+            // Log for debugging
+            logger.silly(`${member.user.tag} passed membership screening.`);
+
+            // Send message to audit log channel
+            await auditLog.send(new MessageEmbed({
+                author: {
+                    name: member.user.username,
+                    iconURL: member.user.displayAvatarURL({ dynamic: true, size: 64 })
+                },
+                description: `:white_check_mark: <@${member.user.id}> **passed membership screening**`,
+                timestamp: new Date()
+            }));
+        }
 
         // // Build description
         // const item = (message.author.bot && message.embeds.length >= 1) ? `${message.embeds.length} embeds` : 'Message';
