@@ -73,7 +73,7 @@ const defaultSettings = {
     },
     walkieTalkie: {
         enabled: false,
-        channel: 'walkie-talkie'
+        channel: ''
     },
     welcome: {
         enabled: false,
