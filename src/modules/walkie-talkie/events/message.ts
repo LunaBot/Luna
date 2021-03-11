@@ -31,15 +31,22 @@ export const message = async (client: Client, message: Message) => {
     if (message.content.length <= 2) return;
 
     // Send message to others in network
-    // @todo: investigate if this needs to be done in series because of the edit to the webhook we do
-    await Promise.all([...client.walkieTalkies.entries()].filter(([, walkieTalkie]) => {
+    await Promise.allSettled([...client.walkieTalkies.entries()].filter(([key, walkieTalkie]) => {
         return walkieTalkie.token !== '';
     }).map(async ([guildId, { id, token }]) => {
         // Don't send the message to the guild where it was sent from
         if (guildId === message.guild?.id) return;
 
         // Get webhook
-        const webhook = await client.fetchWebhook(id, token);
+        const webhook = await client.fetchWebhook(id, token).catch(() => {
+            // Reset id and token if the webhook fails
+            // It's likely been deleted
+            client.walkieTalkies.set(guildId, '', 'id');
+            client.walkieTalkies.set(guildId, '', 'token');
+        });
+
+        // Bail if we're missing out webhook
+        if (!webhook) return;
 
         // Update current user
         await webhook.edit({
