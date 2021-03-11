@@ -1,4 +1,5 @@
 import { client } from '../client';
+import { statcord } from '../statcord';
 
 export const ready = async () => {
 	const guildsCount = client.guilds.cache.size;
@@ -7,5 +8,9 @@ export const ready = async () => {
         type: 'WATCHING'
     });
 
+    // Log for debugging
 	client.logger.info('I am ready!');
+
+    // Start auto posting
+    statcord.autopost();
 };

@@ -3,6 +3,7 @@ import type { Message, Client } from 'discord.js';
 import { colours } from '../utils';
 import camelcase from 'camelcase';
 import { TextChannel } from 'discord.js';
+import { statcord } from '../statcord';
 
 export const message = async (client: Client, message: Message) => {
 	try {
@@ -70,6 +71,9 @@ export const message = async (client: Client, message: Message) => {
 
 		// Bail if module is disabled
 		if (guildConfig[moduleName] && !guildConfig[moduleName].enabled) return;
+
+		// Post command
+		statcord.postCommand(commandName, message.author.id);
 
 		// Run the command
 		await Promise.resolve(command.run(client, message, args));

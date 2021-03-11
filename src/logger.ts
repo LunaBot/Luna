@@ -92,7 +92,7 @@ export class Logger {
         this.log('warn', message, args);
     }
 
-    error(message: Error): void;
+    error(message: Error | string): void;
     error(message: string, ...args: any[]): void;
     error(message: any, ...args: any[]): void {
         this.log('error', message.stack, args);
