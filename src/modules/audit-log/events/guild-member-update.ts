@@ -42,7 +42,7 @@ export const guildMemberUpdate = async (client: Client, member: GuildMember, new
             // Send message to audit log channel
             await auditLog.send(new MessageEmbed({
                 author: {
-                    name: member.user.username,
+                    name: `${member.user.username}${member.user.discriminator}`,
                     iconURL: member.user.displayAvatarURL({ dynamic: true, size: 64 })
                 },
                 thumbnail: {
@@ -61,12 +61,13 @@ export const guildMemberUpdate = async (client: Client, member: GuildMember, new
             // Send message to audit log channel
             await auditLog.send(new MessageEmbed({
                 author: {
-                    name: `:pencil: ${member.user.username} **nickname edited**`,
+                    name: `${member.user.username}${member.user.discriminator}`,
                     iconURL: member.user.displayAvatarURL({ dynamic: true, size: 64 })
                 },
                 thumbnail: {
                     url: member.user.displayAvatarURL({ dynamic: true, size: 128 })
                 },
+                description: `:pencil: ${member.user.username} **nickname edited**`,
                 fields: [{
                     name: 'Old nickname',
                     value: member.nickname
@@ -86,7 +87,7 @@ export const guildMemberUpdate = async (client: Client, member: GuildMember, new
             // Send message to audit log channel
             await auditLog.send(new MessageEmbed({
                 author: {
-                    name: member.user.username,
+                    name: `${member.user.username}${member.user.discriminator}`,
                     iconURL: member.user.displayAvatarURL({ dynamic: true, size: 64 })
                 },
                 thumbnail: {
@@ -112,7 +113,7 @@ export const guildMemberUpdate = async (client: Client, member: GuildMember, new
             // Send message to audit log channel
             await auditLog.send(new MessageEmbed({
                 author: {
-                    name: member.user.username,
+                    name: `${member.user.username}${member.user.discriminator}`,
                     iconURL: member.user.displayAvatarURL({ dynamic: true, size: 64 })
                 },
                 thumbnail: {
@@ -167,7 +168,7 @@ export const guildMemberUpdate = async (client: Client, member: GuildMember, new
             // Send message to audit log channel
             await auditLog.send(new MessageEmbed({
                 author: {
-                    name: member.user.username,
+                    name: `${member.user.username}${member.user.discriminator}`,
                     iconURL: member.user.displayAvatarURL({ dynamic: true, size: 64 })
                 },
                 thumbnail: {
