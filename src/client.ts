@@ -20,7 +20,7 @@ Structures.extend('GuildMember', GuildMember => class GuildMemberWithPending ext
 
 const client = new Client();
 
-client.modules = new Collection(Object.values(moduleImports).map(module => [module.name, module]));
+client.modules = new Collection(Object.values(moduleImports).map(commandModule => [commandModule.name, commandModule]));
 client.commands = new Collection();
 client.logger = logger;
 
@@ -57,7 +57,7 @@ const defaultSettings = {
     bot: {
         enabled: true
     },
-    commmunity: {
+    community: {
         enabled: false
     },
     leveling: {

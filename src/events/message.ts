@@ -1,6 +1,7 @@
 import { MessageEmbed } from 'discord.js';
 import type { Message, Client } from 'discord.js';
 import { colours } from '../utils';
+import camelcase from 'camelcase';
 
 export const message = async (client: Client, message: Message) => {
 	try {
@@ -46,11 +47,24 @@ export const message = async (client: Client, message: Message) => {
 		const command = client.commands.get(commandName);
 
 		// Couldn't find the command, maybe it crashed and unloaded?
-		if (!command) return;
+		if (!command) {
+			logger.silly(`Couldn't find a command called "%s"`, commandName);
+			return;
+		}
+
+		// Get command's module
+		const commandModule = client.modules.find(commandModule => Object.keys(commandModule.commands).includes(camelcase(commandName)));
+
+		// Couldn't find the module, maybe it crashed and unloaded?
+		if (!commandModule) {
+			logger.silly(`Couldn't find a module for the "%s" command.`, commandName);
+			return;
+		}
 
 		// Check if the module is disabled
-		const moduleName = client.modules.find(module => Object.keys(module.commands).includes(commandName))?.name!;
-		// If disabled silently bail
+		const moduleName = camelcase(commandModule.name);
+
+		// Bail if module is disabled
 		if (guildConfig[moduleName] && !guildConfig[moduleName].enabled) return;
 
 		// Run the command

@@ -11,18 +11,18 @@ export const loadModules = async (client: Client) => {
     }));
 
     // Load module events
-    client.logger.debug(`Loading ${client.modules.reduce((eventsCount, _module) => eventsCount + Object.keys(_module.events).length, 0)} module events.`);
-    await Promise.all(client.modules.map(async _module => {
-        await Promise.all(Object.entries(_module.events).map(async ([eventName, event]) => {
+    client.logger.debug(`Loading ${client.modules.reduce((eventsCount, commandModule) => eventsCount + Object.keys(commandModule.events).length, 0)} module events.`);
+    await Promise.all(client.modules.map(async commandModule => {
+        await Promise.all(Object.entries(commandModule.events).map(async ([eventName, event]) => {
             client.logger.debug(`Loading event: ${eventName}`);
             client.on(eventName, (event as any).bind(null, client));
         }));
     }));
 
     // Load module commands
-    client.logger.debug(`Loading ${client.modules.reduce((commandsCount, _module) => commandsCount + Object.keys(_module.commands).length, 0)} module commands.`);
-    await Promise.all(client.modules.map(async _module => {
-        await Promise.all((Object.values(_module.commands) as Command[]).map(async command => {
+    client.logger.debug(`Loading ${client.modules.reduce((commandsCount, commandModule) => commandsCount + Object.keys(commandModule.commands).length, 0)} module commands.`);
+    await Promise.all(client.modules.map(async commandModule => {
+        await Promise.all((Object.values(commandModule.commands) as Command[]).map(async command => {
             client.logger.debug(`Loading command: ${command.name}`);
 
             // Command's already loaded?
