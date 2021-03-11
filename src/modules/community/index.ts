@@ -1,4 +1,4 @@
-import { Module } from "../../module";
+import { Module } from '../../module';
 import * as commands from './commands';
 
 class Community implements Module {

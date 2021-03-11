@@ -1,9 +1,8 @@
 import type { Client, GuildMember } from 'discord.js';
-import { defaultSettings } from '../../../client';
 import { sendWelcomeMessage } from '../../../utils';
 
 // This executes when a member updates
-export const guildMemberUpdate = async (client: Client, oldMember: GuildMember, newMember: GuildMember) => {
+export const guildMemberUpdate = async (client: Client, member: GuildMember, newMember: GuildMember) => {
     // First, ensure the settings exist
     // @ts-expect-error
     const guildConfig = client.settings.ensure(member.guild.id)!;
@@ -12,7 +11,7 @@ export const guildMemberUpdate = async (client: Client, oldMember: GuildMember, 
     if (!guildConfig?.welcome.enabled) return;
 
     // Member passed membership screening
-    if (oldMember.pending && !newMember.pending) {
+    if (member.pending && !newMember.pending) {
         sendWelcomeMessage(newMember);
     }
 };
