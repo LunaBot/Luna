@@ -1,9 +1,10 @@
 import { Command } from '../../../command';
 import type { Message, Client } from 'discord.js';
-import { isAdmin, isOwner } from '../../../utils';
+import { colours, isAdmin, isOwner } from '../../../utils';
 import { CommandError } from '../../../errors';
 import { TextChannel } from 'discord.js';
 import { Collection } from 'discord.js';
+import { MessageEmbed } from 'discord.js';
 
 const deleteWebhook = async (client: Client, message: Message, webHookId?: string) => {
     // Bail if empty
@@ -75,6 +76,14 @@ class WalkieTalkie implements Command {
 
             // Reply to user
             message.channel.send('Disabled walkie-talkie!');
+        }
+
+        // Status command
+        if (state === 'status') {
+            await message.reply(new MessageEmbed({
+                color: colours.RED,
+                description: `**WalkieTalkie status**: ${client.settings.get(message.guild.id, 'walkieTalkie.enabled') ? 'on' : 'off'}`
+            }));
         }
     }
 };
