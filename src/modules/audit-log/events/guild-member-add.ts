@@ -2,6 +2,8 @@ import type { Message, Client, TextChannel } from 'discord.js';
 import { GuildMember } from 'discord.js';
 import { MessageEmbed } from 'discord.js';
 import { createChannel } from '../utils/create-channel';
+import ago from 's-ago';
+import { capitalizeFirstLetter } from '../../../utils';
 
 export const guildMemberAdd = async (client: Client, member: GuildMember, newMember: GuildMember) => {
     // This stops if it's not a guild, and we ignore all bots.
@@ -42,7 +44,14 @@ export const guildMemberAdd = async (client: Client, member: GuildMember, newMem
                 name: member.user.username,
                 iconURL: member.user.displayAvatarURL({ dynamic: true, size: 64 })
             },
-            description: `:white_check_mark: <@${member.user.id}> **joined the server**`,
+            thumbnail: {
+                url: member.user.displayAvatarURL({ dynamic: true, size: 128 })
+            },
+            description: `:inbox_tray: <@${member.user.id}> **joined the server**`,
+            fields: [{
+                name: 'Account creation',
+                value: capitalizeFirstLetter(ago(member.user.createdAt))
+            }],
             timestamp: new Date()
         }));
     } catch (error: unknown) {
