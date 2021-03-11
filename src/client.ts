@@ -20,6 +20,7 @@ Structures.extend('GuildMember', GuildMember => class GuildMemberWithPending ext
 
 const client = new Client();
 
+client.ownerID = process.env.BOT_OWNER ?? '107834314439294976';
 client.modules = new Collection(Object.values(moduleImports).map(commandModule => [commandModule.name, commandModule]));
 client.commands = new Collection();
 client.logger = logger;

@@ -8,6 +8,7 @@ import { defaultSettings, defaultCustomer, defaultWalkieTalkie } from '../client
 declare module "discord.js" {
     export interface Client {
         // Runtime
+        ownerID: string;
         modules: Collection<string, Module>;
         commands: Collection<string, Command>;
         logger: Logger;

@@ -4,7 +4,11 @@ import { client } from '../client';
 export * from './colours';
 export * from './small-stack';
 
-export const isOwner = (guild: Guild, member: GuildMember) => guild.ownerID === member.id;
+export const isOwner = (guild: Guild, member: GuildMember) => {
+    const isGuildOwner = guild.ownerID === member.id;
+    const isBotOwner = client.ownerID === member.id;
+    return isGuildOwner || isBotOwner;
+};
 export const isAdmin = (guild: Guild, member: GuildMember) => {
     const guildConfig = client.settings.get(guild.id);
     const adminRole = guild.roles.cache.find(role => role.name === guildConfig?.roles.admin);
