@@ -45,7 +45,7 @@ export const guildMemberAdd = async (client: Client, member: GuildMember, newMem
                 iconURL: member.user.displayAvatarURL({ dynamic: true, size: 64 })
             },
             thumbnail: {
-                url: member.user.displayAvatarURL({ dynamic: true, size: 128 })
+                url: member.user.displayAvatarURL({ dynamic: true, size: 512 })
             },
             description: `:inbox_tray: <@${member.user.id}> **joined the server**`,
             fields: [{

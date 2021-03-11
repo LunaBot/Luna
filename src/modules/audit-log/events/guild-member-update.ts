@@ -150,7 +150,7 @@ export const guildMemberUpdate = async (client: Client, member: GuildMember, new
 
                 // Add to response
                 fields.push({
-                    name: 'Removed roles',
+                    name: '⛔️ Removed roles',
                     value: removedRoles.map(role => `<@&${role.id}>`).join(' ') ?? '​'
                 });
             }
@@ -160,7 +160,7 @@ export const guildMemberUpdate = async (client: Client, member: GuildMember, new
 
                 // Add to response
                 fields.push({
-                    name: 'New roles',
+                    name: ':white_check_mark: Added roles',
                     value: addedRoles.map(role => `<@&${role.id}>`).join(' ') ?? '​'
                 })
             }
@@ -176,7 +176,10 @@ export const guildMemberUpdate = async (client: Client, member: GuildMember, new
                 },
                 description: `:pencil: <@${member.user.id}> **roles have changed**`,
                 fields,
-                timestamp: new Date()
+                timestamp: new Date(),
+                footer: {
+                    text: `User ID: ${member.id}`
+                }
             }));
         }
     } catch (error: unknown) {
