@@ -1,10 +1,9 @@
 import { Command } from '../../../command';
-import type { Message, Client } from 'discord.js';
+import type { Message, Client, TextChannel } from 'discord.js';
 import { colours, isAdmin, isOwner } from '../../../utils';
 import { CommandError } from '../../../errors';
-import { TextChannel } from 'discord.js';
-import { Collection } from 'discord.js';
-import { MessageEmbed } from 'discord.js';
+import { Collection, MessageEmbed } from 'discord.js';
+import dedent from 'dedent';
 
 const deleteWebhook = async (client: Client, message: Message, webHookId?: string) => {
     // Bail if empty
@@ -39,9 +38,7 @@ class WalkieTalkie implements Command {
         const state = args[0];
         if (['yes', 'true', '1', 'enable', 'enabled', 'on'].includes(state)) {
             // Don't double enable it
-            if (client.settings.get(message.guild.id, 'walkieTalkie.enabled')) throw new CommandError('Walkie talkie is already enabled!');
-
-            client.settings.set(message.guild.id, true, 'walkieTalkie.enabled');
+            if (client.settings.get(message.guild.id, 'walkieTalkie.channel') !== '') throw new CommandError('Walkie talkie is already enabled!');
 
             // Create webhook
             const webhook = await (message.channel as TextChannel).createWebhook('WalkieTalkie', {
@@ -57,7 +54,13 @@ class WalkieTalkie implements Command {
             client.walkieTalkies.set(message.guild.id, webhook.token, 'token');
 
             // Reply to user
-            message.channel.send('Enabled walkie-talkie!');
+            await message.reply(new MessageEmbed({
+                author: {
+                    name: 'WalkieTalkie'
+                },
+                color: colours.GREEN,
+                description: 'Enabled walkie-talkie!'
+            }));
         }
 
         // Disable channel
@@ -71,18 +74,34 @@ class WalkieTalkie implements Command {
             // Remove walkie talkie
             client.walkieTalkies.delete(message.guild.id);
 
-            // Disable module in settings
-            client.settings.set(message.guild.id, false, 'walkieTalkie.enabled');
+            // Clear channel and webhook
+            client.settings.set(message.guild.id, '', 'walkieTalkie.channel');
+            client.walkieTalkies.set(message.guild.id, '', 'id');
+            client.walkieTalkies.set(message.guild.id, '', 'token');
 
             // Reply to user
-            message.channel.send('Disabled walkie-talkie!');
+            await message.reply(new MessageEmbed({
+                author: {
+                    name: 'WalkieTalkie'
+                },
+                color: colours.YELLOW,
+                description: 'Disabled walkie-talkie!'
+            }));
         }
 
         // Status command
         if (state === 'status') {
+            const channel = client.settings.get(message.guild.id, 'walkieTalkie.channel');
+            const description = dedent`
+                **Status**: ${channel !== '' ? 'on' : 'off'}
+                **Channel**: ${channel ? ('<#' + channel + '>') : 'Not set'}
+            `;
             await message.reply(new MessageEmbed({
+                author: {
+                    name: 'WalkieTalkie'
+                },
                 color: colours.RED,
-                description: `**WalkieTalkie status**: ${client.settings.get(message.guild.id, 'walkieTalkie.enabled') ? 'on' : 'off'}`
+                description
             }));
         }
     }
