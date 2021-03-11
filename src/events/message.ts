@@ -12,6 +12,13 @@ export const message = async (client: Client, message: Message) => {
 			return;
 		}
 
+		// Create named logger with id and name
+		const logger = client.logger.createChild({
+			prefix: message.guild.id
+		}).createChild({
+			prefix: message.guild.name
+		});
+
 		// If the user mentions the bot DIRECTLY then reply with it's info
 		// For example `@Bot` but not `I think @Bot is a good bot!`
 		if (client.user?.id && message.mentions.has(client.user?.id) && message.content.trim().startsWith('<')) {
@@ -24,7 +31,7 @@ export const message = async (client: Client, message: Message) => {
 
 		// Bail if the message doesn't start with our prefix for this guild
 		if (message.content.indexOf(guildConfig.prefix) !== 0) {
-			client.logger.silly('Prefix "%s" not found in "%s"', guildConfig.prefix, message.content)
+			logger.silly('Prefix "%s" not found in "%s"', guildConfig.prefix, message.content)
 			return;
 		}
 
@@ -32,7 +39,7 @@ export const message = async (client: Client, message: Message) => {
 		const args = message.content.split(/\s+/g);
 		const commandName = args.shift()?.slice((guildConfig.prefix || ' ').length).toLowerCase();
 
-		client.logger.silly('Prefix "%s" found in trying to run "%s"', guildConfig.prefix, message.content);
+		logger.silly('Prefix "%s" found in trying to run "%s"', guildConfig.prefix, message.content);
 
 		// Unknown command
 		if (!commandName || !client.commands.has(commandName)) return;
@@ -40,6 +47,11 @@ export const message = async (client: Client, message: Message) => {
 
 		// Couldn't find the command, maybe it crashed and unloaded?
 		if (!command) return;
+
+		// Check if the module is disabled
+		const moduleName = client.modules.find(module => Object.keys(module.commands).includes(commandName))?.name!;
+		// If disabled silently bail
+		if (guildConfig[moduleName] && !guildConfig[moduleName].enabled) return;
 
 		// Run the command
 		await Promise.resolve(command.run(client, message, args));

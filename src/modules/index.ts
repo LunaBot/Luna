@@ -1,3 +1,4 @@
+export { auditLog } from './audit-log';
 export { admin } from './admin';
 export { bot } from './bot';
 export { community } from './community';

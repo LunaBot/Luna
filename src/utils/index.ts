@@ -48,14 +48,20 @@ export const isTextChannel = (channel: GuildChannel): channel is TextChannel => 
 export const sendWelcomeMessage = (member: GuildMember) => {
 	// Get the welcome message and resolve all the placeholders
 	const welcomeMessage = resolvePlaceholders({
-		string: client.settings.get(member.guild.id, 'welcomeMessage')!,
+		string: client.settings.get(member.guild.id, 'welcome.message')!,
 		guild: member.guild,
 		member
 	});
 
+    // Bail if we after resolving, the string is empty
+    if (!welcomeMessage) return;
+
 	// Send welcome message to the welcome channel
-	const welcomeChannel = member.guild.channels.cache.find(channel => isTextChannel(channel) && channel.name === client.settings.get(member.guild.id, 'welcomeChannel')) as TextChannel;
-	welcomeChannel.send(welcomeMessage).catch(console.error);
+	const welcomeChannel = member.guild.channels.cache.find(channel => isTextChannel(channel) && channel.name === client.settings.get(member.guild.id, 'welcome.channel')) as TextChannel;
+    if (!welcomeChannel) return;
+
+    // Send welcome message
+	welcomeChannel.send(welcomeMessage);
 };
 
 export const sleep = (number: number) => new Promise<void>(resolve => setTimeout(() => resolve(), number));

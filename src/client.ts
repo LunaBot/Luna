@@ -54,7 +54,7 @@ const defaultSettings = {
     auditLog: {
         enabled: false,
         channel: 'audit-log',
-        events: ['messageContentEdited']
+        events: ['messageUpdate']
     },
     walkieTalkie: {
         enabled: false,

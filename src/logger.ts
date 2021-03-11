@@ -16,7 +16,7 @@ interface Options {
     transport: typeof transports[number];
 }
 
-class Logger {
+export class Logger {
     private prefixes: string[] = [];
     private prefixSeperator = '/';
     private console: typeof console;
@@ -95,7 +95,7 @@ class Logger {
     error(message: Error): void;
     error(message: string, ...args: any[]): void;
     error(message: any, ...args: any[]): void {
-        this.log('error', message, args);
+        this.log('error', message.stack, args);
     }
 
     trace(message: string, ...args: any[]): void {

@@ -1,7 +1,7 @@
 import type { GuildFeatures, Collection} from 'discord.js';
 import type Enmap from 'enmap';
 import type { Command } from '../command';
-import type { Logger } from 'logger';
+import type { Logger } from '../logger';
 import type { Module } from '../module';
 import { defaultSettings, defaultCustomer, defaultWalkieTalkie } from '../client';
 

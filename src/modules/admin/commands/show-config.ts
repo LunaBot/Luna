@@ -2,6 +2,8 @@ import { Command } from '../../../command';
 import type { Message, Client } from 'discord.js';
 import { isAdmin, isOwner } from '../../../utils';
 import { CommandError } from '../../../errors';
+import dedent from 'dedent';
+import { welcome } from '../../welcome';
 
 class ShowConfig implements Command {
     public name = 'show-config';
@@ -16,8 +18,13 @@ class ShowConfig implements Command {
         }
 
         // Get guild's config, if missing we'll return the defaults
-		const guildConfig = client.settings.get(message.guild.id);
-        message.channel.send(`The following are the server's current configuration:\n\`\`\`${JSON.stringify(guildConfig, null, 2)}\`\`\``);
+		const guildConfig = client.settings.get(message.guild.id)!;
+        const header = dedent`
+            Here is the server's current configuration, to update it use \`${guildConfig.prefix}set-config <property> <value>\`.
+            **Tip**: you can edit sub-properties via dot notation e.g. \`${guildConfig.prefix}set-config welcome.enabled true\`
+        `;
+        const config = '```json\n' + JSON.stringify(guildConfig, null, 2) + '```';
+        message.channel.send(`${header}\n${config}`);
     }
 };
 
