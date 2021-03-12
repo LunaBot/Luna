@@ -69,16 +69,18 @@ class Ban implements Command {
                 description: `:woman_police_officer: **You were banned from ${message.guild.name}**`,
                 fields,
                 timestamp: new Date()
-            }))
+            }));
 
             // Try and ban member with reason
             await memberToBan.ban({
                 reason
             });
 
-
             // Log for debugging
             logger.silly(`${message.author.tag} banned ${memberToBan.user.tag || memberToBan.user.username}`);
+
+            // Bail if the module is disabled
+            if (!guildConfig.auditLog.enabled) return;
 
             // Send message to audit log channel
             await auditLog.send(new MessageEmbed({
