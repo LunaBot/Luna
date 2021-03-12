@@ -78,9 +78,14 @@ export const message = async (client: Client, message: Message) => {
 		// Run the command
 		await Promise.resolve(command.run(client, message, args));
 	} catch (error) {
-		await message.reply(new MessageEmbed({
+		const embed = new MessageEmbed({
 			color: colours.RED,
 			description: `**Error**: ${error.message}`
-		}));
+		});
+		try {
+			await message.reply(embed);
+		} catch {
+			await message.reply(embed).catch(() => {});
+		}
 	}
 }
