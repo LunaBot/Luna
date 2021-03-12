@@ -23,8 +23,7 @@ class Whois implements Command {
         }
 
         // First person mentioned
-        const user = message.mentions.users.first();
-        if (!user) throw new CommandError('You must mention a user!');
+        const user = message.mentions.users.first() ?? message.author;
         const member = await message.guild.members.fetch({
             user
         });
