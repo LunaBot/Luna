@@ -4,29 +4,48 @@ module.exports = {
 			name: 'automod',
 			script: 'npm start',
 			time: true,
+			// eslint-disable-next-line
+			append_env_to_name: true,
 			instances: 1,
 			autorestart: true,
 			// eslint-disable-next-line
 			max_restarts: 50,
 			watch: false,
 			// eslint-disable-next-line
-			max_memory_restart: '400M',
+			max_memory_restart: '250M',
 			env: {
-				PORT: 3000,
 				LOG_LEVEL: 'debug'
+			},
+			// eslint-disable-next-line
+			env_free: {
+				LOG_LEVEL: 'info'
+			},
+			// eslint-disable-next-line
+			env_premium: {
+				LOG_LEVEL: 'info'
 			}
 		}
 	],
 	deploy: {
-		production: {
+		free: {
 			user: 'xo',
 			host: '165.227.220.113',
 			key: '~/.ssh/deploy.key',
-			ref: 'origin/feat/v2',
+			ref: 'origin/main',
 			repo: 'https://github.com/automodbot/automod',
-			path: '/home/xo/code/automodbot/automod',
+			path: '/home/xo/code/automodbot/automod/free',
 			'pre-deploy': 'git reset --hard',
-			'post-deploy': 'pnpm install && npm run build && pm2 startOrGracefulReload ecosystem.config.js --env production'
+			'post-deploy': 'pnpm install && npm run build && pm2 startOrGracefulReload ecosystem.config.js --env free'
+		},
+		premium: {
+			user: 'xo',
+			host: '165.227.220.113',
+			key: '~/.ssh/deploy.key',
+			ref: 'origin/main',
+			repo: 'https://github.com/automodbot/automod',
+			path: '/home/xo/code/automodbot/automod/premium',
+			'pre-deploy': 'git reset --hard',
+			'post-deploy': 'pnpm install && npm run build && pm2 startOrGracefulReload ecosystem.config.js --env premium'
 		}
 	}
 };
