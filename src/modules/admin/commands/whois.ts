@@ -4,7 +4,7 @@ import { MessageEmbed } from 'discord.js';
 import { isOwner, isAdmin } from '../../../utils';
 import { CommandError } from '../../../errors';
 import { Collection } from 'discord.js';
-import { colours } from "../../../utils/colours"
+import { colours } from '../../../utils/colours';
 
 class Whois implements Command {
     public name = 'whois';
