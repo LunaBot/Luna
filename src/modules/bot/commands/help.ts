@@ -22,27 +22,33 @@ class Help implements Command {
         // Get command
         const commandName = args[0];
 
+        // Build help sections
+        const helpSections = client.modules.filter(commandModule => {
+            const moduleKey = camelcase(commandModule.name);
+            const isEnabled = Object.keys(guildConfig).includes(moduleKey) && guildConfig[moduleKey].enabled;
+            const hasCommands = Object.keys(commandModule.commands).length >= 1;
+            return isEnabled && hasCommands;
+        }).map(commandModule => {
+            return {
+                name: `**__${commandModule.name}__**`,
+                value: `${Object.values(commandModule.commands).map(command => {
+                    const paramaters = (!command.paramaters || command.paramaters.size === 0) ? '' : (' ' + [...command.paramaters.entries()].map(([key, parameter]) => {
+                        const brackets = parameter.optional ? '[]' : '<>';
+                        return `${brackets[0]}${parameter.type === 'mention' ? '@' : ''}${key}${brackets[1]}`;
+                    }).join(' '));
+                    return '`' + guildConfig.prefix + command.name + paramaters + '`';
+                }).join('\n')}\n\n`
+            };
+        });
+
+        // Add footer onto the last help section
+        helpSections[helpSections.length - 1].value += `Use \`${guildConfig.prefix}${report.name} <message>\` to report any bugs.`
+
         // Send general help
         if (!commandName) {
             await message.channel.send(new MessageEmbed({
                 title: 'Help',
-                fields: client.modules.filter(commandModule => {
-                    const moduleKey = camelcase(commandModule.name);
-                    const isEnabled = Object.keys(guildConfig).includes(moduleKey) && guildConfig[moduleKey].enabled;
-                    const hasCommands = Object.keys(commandModule.commands).length >= 1;
-                    return isEnabled && hasCommands;
-                }).map(commandModule => {
-                    return {
-                        name: `**__${commandModule.name}__**`,
-                        value: `${Object.values(commandModule.commands).map(command => {
-                            const paramaters = (!command.paramaters || command.paramaters.size === 0) ? '' : (' ' + [...command.paramaters.entries()].map(([key, parameter]) => {
-                                const brackets = parameter.optional ? '[]' : '<>';
-                                return `${brackets[0]}${parameter.type === 'mention' ? '@' : ''}${key}${brackets[1]}`;
-                            }).join(' '));
-                            return '`' + guildConfig.prefix + command.name + paramaters + '`';
-                        }).join('\n')}\n\n` + `Use \`${guildConfig.prefix}${report.name} <message>\` to report any bugs.`
-                    };
-                })
+                fields: helpSections
             }));
         }
 
