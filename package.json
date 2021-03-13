@@ -3,47 +3,47 @@
     "version": "0.0.1",
     "description": "",
     "scripts": {
-        "start": "node ./dist/index.js",
-        "start-debug": "tsup ./src/index.ts > /dev/null && LOG_LEVEL=silly LOG_TRANSPORT=console node dist/index.js",
-        "build": "./node_modules/.bin/tsup ./src/index.ts"
+      "start": "node ./dist/index.js",
+      "start-debug": "tsup ./src/index.ts > /dev/null && LOG_LEVEL=silly LOG_TRANSPORT=console node dist/index.js",
+      "build": "./node_modules/.bin/tsup ./src/index.ts"
     },
     "keywords": [],
     "author": "Alexis Tyler <xo@wvvw.me>",
     "license": "MIT",
     "engines": {
-        "node": ">=14.0.0"
+      "node": ">=14.0.0"
     },
     "dependencies": {
-        "@databases/pg": "^5.0.0",
-        "camelcase": "^6.2.0",
-        "canvacord": "github:OmgImAlexis/canvacord#develop",
-        "chalk": "^4.1.0",
-        "clean-stack": "^3.0.1",
-        "dedent": "^0.7.0",
-        "discord-canvas": "^1.4.1",
-        "discord.js": "^12.5.1",
-        "dotenv": "^8.2.0",
-        "enmap": "^5.8.4",
-        "express": "^4.17.1",
-        "extract-stack": "^2.0.0",
-        "git-rev-sync": "^3.0.1",
-        "human-duration": "^1.0.1",
-        "ml-sentiment": "^2.0.7",
-        "number-to-color": "^0.5.0",
-        "pg": "^8.5.1",
-        "s-ago": "^2.2.0",
-        "statcord.js": "^3.1.7",
-        "string-to-color": "^2.2.2",
-        "trace-cleaner": "^1.2.3"
+      "@databases/pg": "^5.0.0",
+      "camelcase": "^6.2.0",
+      "canvacord": "github:OmgImAlexis/canvacord#develop",
+      "chalk": "^4.1.0",
+      "clean-stack": "^3.0.1",
+      "dedent": "^0.7.0",
+      "discord.js": "^12.5.1",
+      "dotenv": "^8.2.0",
+      "enmap": "^5.8.4",
+      "express": "^4.17.1",
+      "extract-stack": "^2.0.0",
+      "git-rev-sync": "^3.0.1",
+      "human-duration": "^1.0.1",
+      "ml-sentiment": "^2.0.7",
+      "number-to-color": "^0.5.0",
+      "pg": "^8.5.1",
+      "s-ago": "^2.2.0",
+      "statcord.js": "^3.1.7",
+      "string-to-color": "^2.2.2",
+      "trace-cleaner": "^1.2.3"
     },
     "devDependencies": {
-        "@types/pg": "^7.14.11",
-        "eslint": "^7.21.0",
-        "eslint-config-xo": "^0.35.0",
-        "eslint-plugin-unicorn": "^28.0.2",
-        "is-secret": "^1.2.1",
-        "traverse": "^0.6.6",
-        "tsup": "^4.6.1",
-        "typescript": "^4.2.3"
+      "@types/pg": "^7.14.11",
+      "eslint": "^7.21.0",
+      "eslint-config-xo": "^0.35.0",
+      "eslint-plugin-unicorn": "^28.0.2",
+      "is-secret": "^1.2.1",
+      "traverse": "^0.6.6",
+      "tsup": "^4.6.1",
+      "typescript": "^4.2.3"
     }
-}
+  }
+  
