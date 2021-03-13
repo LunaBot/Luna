@@ -3,6 +3,7 @@ export { autoRole } from './auto-role';
 export { admin } from './admin';
 export { bot } from './bot';
 export { community } from './community';
+export { internal } from './internal';
 export { leveling } from './leveling';
 export { moderation } from './moderation';
 export { walkieTalkie } from './walkie-talkie';

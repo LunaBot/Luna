@@ -22,13 +22,18 @@ class Help implements Command {
         // Get command
         const commandName = args[0];
 
-        // Build help sections
-        const helpSections = client.modules.filter(commandModule => {
+        // Get all valid modules
+        // This removed modules which are disabled, internal or have no commands
+        const validModules = client.modules.filter(commandModule => {
             const moduleKey = camelcase(commandModule.name);
             const isEnabled = Object.keys(guildConfig).includes(moduleKey) && guildConfig[moduleKey].enabled;
             const hasCommands = Object.keys(commandModule.commands).length >= 1;
-            return isEnabled && hasCommands;
-        }).map(commandModule => {
+            const isInternal = (commandModule as any).internal ?? false;
+            return isEnabled && hasCommands && !isInternal;
+        });
+
+        // Build help sections
+        const helpSections = validModules.map(commandModule => {
             return {
                 name: `**__${commandModule.name}__**`,
                 value: `${Object.values(commandModule.commands).map(command => {
