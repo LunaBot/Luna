@@ -8,6 +8,7 @@ on:
 
 jobs:
   free:
+    environment: free
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -31,6 +32,7 @@ jobs:
         run: ~/.npm-global/bin/pm2 deploy ecosystem.config.js free
 
   premium:
+    environment: premium
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
