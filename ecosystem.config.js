@@ -17,6 +17,10 @@ module.exports = {
 				LOG_LEVEL: 'debug'
 			},
 			// eslint-disable-next-line
+			env_dev: {
+				LOG_LEVEL: 'info'
+			},
+			// eslint-disable-next-line
 			env_free: {
 				LOG_LEVEL: 'info'
 			},
@@ -27,6 +31,16 @@ module.exports = {
 		}
 	],
 	deploy: {
+		dev: {
+			user: 'xo',
+			host: '165.227.220.113',
+			key: '~/.ssh/deploy.key',
+			ref: 'origin/main',
+			repo: 'https://github.com/automodbot/automod',
+			path: '/home/xo/code/automodbot/automod/dev',
+			'pre-deploy': 'git reset --hard',
+			'post-deploy': 'pnpm install && npm run build && pm2 startOrGracefulReload ecosystem.config.js --env dev'
+		},
 		free: {
 			user: 'xo',
 			host: '165.227.220.113',
