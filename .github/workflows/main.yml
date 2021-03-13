@@ -7,6 +7,30 @@ on:
     ]
 
 jobs:
+  dev:
+    environment: dev
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up SSH
+        run: |
+          mkdir -p ~/.ssh/
+          echo "$SSH_PRIVATE_KEY" > ~/.ssh/deploy.key
+          sudo chmod 600 ~/.ssh/deploy.key
+          echo "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
+        shell: bash
+        env:
+          SSH_PRIVATE_KEY: ${{secrets.SSH_PRIVATE_KEY}}
+          SSH_KNOWN_HOSTS: ${{secrets.SSH_KNOWN_HOSTS}}
+
+      - name: Install PM2
+        env:
+          NPM_CONFIG_PREFIX: "~/.npm-global"
+        run: npm i -g pm2
+
+      - name: Deploy
+        run: ~/.npm-global/bin/pm2 deploy ecosystem.config.js dev
+
   free:
     environment: free
     runs-on: ubuntu-latest
