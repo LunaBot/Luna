@@ -12,8 +12,31 @@ class Restart implements Command {
     }
 
     async run(client: Client, message: Message, args: string[]): Promise<void> {
-        // Bail unless we're in the bot's DMs and it's the bot's creator
-        if (message.channel.type !== 'dm' || message.author.id !== client.ownerID) return;
+        // Bail unless we're in the bot's DMs
+        if (message.channel.type !== 'dm') return;
+
+        // Report people who aren't the bot's creator
+        if (message.author.id !== client.ownerID) {
+            // Log command to creator
+            const creator = await client.users.fetch(client.ownerID);
+            await creator?.send(new MessageEmbed({
+                author: {
+                    name: message.author.username,
+                    iconURL: message.author.displayAvatarURL(),
+                },
+                fields: [{
+                    name: 'Illegal command usage',
+                    value: '`' + message.content + '`'
+                }]
+            }));
+
+            // Reply to user that we denied the command
+            await message.channel.send(new MessageEmbed({
+                author: {
+                    name: `Sorry I was told not to talk to strangers. Maybe get to know me first?`
+                }
+            }));
+        }
 
         // Reply to user that we accepted the command
         await message.channel.send(new MessageEmbed({
