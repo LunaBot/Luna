@@ -71,7 +71,7 @@ class Whois implements Command {
                 inline: true
             }, {
                 name: 'Roles',
-                value: member.roles.cache.map(role => role.name === '@everyone' ? role.name : `<@&${role.id}>`).join(' '),
+                value: member.roles.cache.map(role => role.name !== '@everyone' ? role.name : "").join(' ') || "No roles",
                 inline: true
             }]
         }));
