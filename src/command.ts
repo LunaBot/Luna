@@ -8,7 +8,18 @@ export class Command {
     constructor(public name: string) {}
 
     init?(client: Client): void {};
+
+    /**
+     * Main command method
+     */
     run(client: Client, message: Message, args: string[]): void {
         throw new Error('Method not implemented.');
+    }
+
+    /**
+     * Get the help text in this current context
+     */
+    getHelpText(client: Client, message: Message) {
+        throw new Error('Method not implemented');
     }
 };
