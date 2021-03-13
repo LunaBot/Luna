@@ -4,6 +4,7 @@ import { MessageEmbed } from 'discord.js';
 import { isOwner, isAdmin } from '../../../utils';
 import { CommandError } from '../../../errors';
 import { Collection } from 'discord.js';
+import {colours} from "../../../utils/colours"
 
 class Whois implements Command {
     public name = 'whois';
@@ -73,7 +74,8 @@ class Whois implements Command {
                 name: 'Roles',
                 value: member.roles.cache.map(role => role.name !== '@everyone' ? role.name : "").join(' ') || "No roles",
                 inline: true
-            }]
+            }],
+            color: member.displayHexColor || colours.GREEN
         }));
     }
 }
