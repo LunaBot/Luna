@@ -10,6 +10,38 @@ export const message = async (client: Client, message: Message) => {
 		// Mark when we first see this
 		message.startedProcessingTimestamp = new Date();
 
+		// DMing the bot
+		if (message.channel.type === 'dm') {
+			// Set prefix
+			const prefix = '!';
+
+			// Create named logger with id and name
+			const logger = client.logger.createChild({
+				prefix: 'DM'
+			}).createChild({
+				prefix: client.user?.username
+			});
+
+			// Then we use the config prefix to get our arguments and command:
+			const args = message.content.split(/\s+/g);
+			const commandName = args.shift()?.slice(1).toLowerCase();
+
+			logger.silly('Prefix "%s" found in trying to run "%s"', prefix, message.content);
+
+			// Unknown command
+			if (!commandName || !client.commands.has(commandName)) return;
+			const command = client.commands.get(commandName);
+
+			// Couldn't find the command, maybe it crashed and unloaded?
+			if (!command) {
+				logger.silly(`Couldn't find a command called "%s"`, commandName);
+				return;
+			}
+
+			// Run the command
+			await Promise.resolve(command.run(client, message, args));
+		}
+
 		// This stops if it's not a guild, and we ignore all bots.
 		if (!message.guild || message.author.bot || !message.member) {
 			return;
