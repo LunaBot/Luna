@@ -3,7 +3,7 @@ name: CI - Main
 on:
   push:
     branches: [
-      feat/v2
+      main
     ]
 
 jobs:
