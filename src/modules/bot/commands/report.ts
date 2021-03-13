@@ -26,8 +26,7 @@ class Report implements Command {
 		}
 
         // Relay report to the bot's owner
-        // @todo: move the bot owner's id to a dynamic location instead of hardcoding it
-        const dmChannel = message.guild.members.cache.get('107834314439294976');
+        const dmChannel = message.guild.members.cache.get(client.ownerID);
         await dmChannel?.send(new MessageEmbed({
             author: {
                 name: message.author.username,
