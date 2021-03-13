@@ -1,8 +1,6 @@
 import { Command } from '../../../command';
 import type { Message, Client } from 'discord.js';
 import { MessageEmbed } from 'discord.js';
-import { isOwner, isAdmin } from '../../../utils';
-import { CommandError } from '../../../errors';
 import { Collection } from 'discord.js';
 import { colours } from '../../../utils/colours';
 
@@ -17,11 +15,6 @@ class Whois implements Command {
     async run(client: Client, message: Message, args: string[]): Promise<void> {
         // Bail unless we're in a guild and a member ran this
         if (!message.guild || !message.member) return;
-
-    	// Command is owner/admin only
-        if (!isOwner(message.guild, message.member) && !isAdmin(message.guild, message.member)) {
-            throw new CommandError('You\'re not an admin or the owner, sorry!');
-        }
 
         // First person mentioned
         const user = message.mentions.users.first() ?? message.author;
@@ -72,7 +65,7 @@ class Whois implements Command {
                 inline: true
             }, {
                 name: 'Roles',
-                value: member.roles.cache.map(role => role.name !== '@everyone' ? role.name : '').join(' ') ?? 'No roles',
+                value: member.roles.cache.map(role => role.name !== '@everyone' ? `<@${role.id}>` : '').join(' ') ?? 'No roles',
                 inline: true
             }],
             color: member.displayHexColor || colours.GREEN
