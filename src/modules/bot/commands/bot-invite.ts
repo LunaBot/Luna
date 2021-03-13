@@ -8,6 +8,10 @@ import { CommandError } from '../../../errors';
 class BotInvite implements Command {
     public name = 'bot-invite';
 
+    getHelpText(client: Client) {
+        return `Get an invite link to add <@${client.user?.id}>.`;
+    }
+
     async run(client: Client, message: Message, args: string[]): Promise<void> {
         // Bail unless we're in a guild and a member ran this
         if (!message.guild || !message.member) return;

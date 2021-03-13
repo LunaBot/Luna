@@ -8,6 +8,10 @@ import { fmt as formatDuration } from 'human-duration';
 class BotInfo implements Command {
     public name = 'bot-info';
 
+    getHelpText() {
+        return 'Get bot info.';
+    }
+
     async run(client: Client, message: Message, args: string[]): Promise<void> {
         // Bail unless we're in a guild and a member ran this
         if (!message.guild || !message.member) return;
