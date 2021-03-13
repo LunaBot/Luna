@@ -51,11 +51,11 @@ class Whois implements Command {
                 inline: true
             }, {
                 name: 'User status',
-                value: user.presence.status,
+                value: user.presence.status.charAt(0).toUpperCase() + user.presence.status.slice(1),
                 inline: true
             }, {
                 name: 'Game Status',
-                value: user.presence.activities[0],
+                value: user.presence.activities[0] || "No game status",
                 inline: true
             }, {
                 name: 'Account Creation Date',
