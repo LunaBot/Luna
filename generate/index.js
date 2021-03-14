@@ -76,8 +76,8 @@ const generators = {
 		}
 
 		// Bail if the command name is invalid
-		if (!options.commandName.match(/^[a-z]+$/)) {
-			throw new Error(`Invalid command name "${options.commandName}", only lowercase letters are allowed!`);
+		if (!options.commandName.match(/^[-0-9a-z]+$/)) {
+			throw new Error(`Invalid command name "${options.commandName}", only lowercase letters, numbers and hypens are allowed!`);
 		}
 
 		// Get the destination
