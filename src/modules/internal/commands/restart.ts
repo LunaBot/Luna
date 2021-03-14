@@ -36,6 +36,9 @@ class Restart implements Command {
                     name: `Sorry I was told not to talk to strangers. Maybe get to know me first?`
                 }
             }));
+
+            // Bail
+            return;
         }
 
         // Reply to user that we accepted the command
