@@ -17,7 +17,7 @@ function done(err) {
 
 const generators = {
 	// ./index.js module <moduleName>
-	module(options) {
+	module(options, data) {
 		// Bail if the user didn't provide a module name
 		if (!options.moduleName) {
 			throw new Error('Please provide a module name!');
@@ -38,20 +38,12 @@ const generators = {
 
 		// Get module template
 		const source = path.join(__dirname, './templates/module');
-		const data = {
-			Modulename: options.moduleName,
-			modulename: options.moduleName,
-			transforms: {
-				Modulename: data => data.toLowerCase(),
-				modulename: data => data.substring(0, 1).toUpperCase() + data.substring(1).toLowerCase()
-			}
-		};
 
 		// Generate files
 		generify(source, destination, data, onData, done);
 	},
 	// ./index.js <moduleName> <commandName>
-	command(options) {
+	command(options, data) {
 		// Bail if the user didn't provide a module name
 		if (!options.moduleName) {
 			throw new Error('Please provide a module name!');
@@ -90,22 +82,6 @@ const generators = {
 
 		// Get commands template
 		const source = path.join(__dirname, './templates/commands');
-		const data = {
-			Modulename: options.moduleName,
-			modulename: options.moduleName,
-			'module-name': options.moduleName,
-			Commandname: options.commandName,
-			commandname: options.commandName,
-			'command-name': options.commandName,
-			transforms: {
-				Modulename: data => data.substring(0, 1).toUpperCase() + data.substring(1).toLowerCase(),
-				modulename: data => data.toLowerCase(),
-				'module-name': data => paramCase(data),
-				Commandname: data => data.substring(0, 1).toUpperCase() + data.substring(1).toLowerCase(),
-				commandname: data => data.toLowerCase(),
-				'command-name': data => paramCase(data)
-			}
-		};
 
 		// Generate files
 		generify(source, destination, data, onData, done);
@@ -117,16 +93,33 @@ const options = {
 	commandName: process.argv[3]
 };
 
+const data = {
+	Modulename: options.moduleName,
+	modulename: options.moduleName,
+	'module-name': options.moduleName,
+	Commandname: options.commandName,
+	commandname: options.commandName,
+	'command-name': options.commandName,
+	transforms: {
+		Modulename: data => data.substring(0, 1).toUpperCase() + data.substring(1).toLowerCase(),
+		modulename: data => data.toLowerCase(),
+		'module-name': data => paramCase(data),
+		Commandname: data => data.substring(0, 1).toUpperCase() + data.substring(1).toLowerCase(),
+		commandname: data => data.toLowerCase(),
+		'command-name': data => paramCase(data)
+	}
+};
+
 const main = async () => {
 	// Command generator
 	if (options.commandName) {
-		await generators.command(options);
+		await generators.command(options, data);
 		return;
 	}
 
 	// Module generator
 	if (options.moduleName) {
-		await generators.module(options);
+		await generators.module(options, data);
 	}
 };
 
