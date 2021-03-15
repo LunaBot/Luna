@@ -95,7 +95,7 @@ class Kick implements Command {
             logger.silly(`${message.author.tag} kicked ${memberToKick.user.tag ?? memberToKick.user.username}`);
 
             // Let user know it was successful
-            await auditLog.send(new MessageEmbed({
+            await message.channel.send(new MessageEmbed({
                 description: `:woman_police_officer: <@${memberToKick.user?.id}> **was kicked by** <@${message.member.user.id}>`,
                 fields,
                 timestamp: new Date()
