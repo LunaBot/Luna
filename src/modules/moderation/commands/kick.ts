@@ -90,9 +90,16 @@ class Kick implements Command {
         try {
             // Try and kick member with reason
             await memberToKick.kick(reason);
-            
+
             // Log for debugging
-            logger.silly(`${message.author.tag} kicked ${memberToKick.user.tag || memberToKick.user.username}`);
+            logger.silly(`${message.author.tag} kicked ${memberToKick.user.tag ?? memberToKick.user.username}`);
+
+            // Let user know it was successful
+            await auditLog.send(new MessageEmbed({
+                description: `:woman_police_officer: <@${memberToKick.user?.id}> **was kicked by** <@${message.member.user.id}>`,
+                fields,
+                timestamp: new Date()
+            }));
         } catch (error: unknown) {
             await message.channel.send(`Failed kicking **${memberToKick.user.tag}**: ${(error as Error).message}`);
         }
