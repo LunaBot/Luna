@@ -6,7 +6,7 @@ class __Commandname__ implements Command {
 
     async run(client: Client, message: Message, args: string[]): Promise<void> {
         // Bail unless we're in a guild and a member ran this
-        if (!message.guild || !message.member) return;
+        if (!message.guild && !message.member) return; //you used the || operator for "or" and not the && operator for "and"
     }
 }
 
