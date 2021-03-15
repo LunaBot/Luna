@@ -11,12 +11,12 @@ export const isOwner = (guild: Guild, member: GuildMember) => {
 };
 export const isAdmin = (guild: Guild, member: GuildMember) => {
     const guildConfig = client.settings.get(guild.id);
-    const adminRole = guild.roles.cache.find(role => role.name === guildConfig?.roles.admin);
+    const adminRole = guild.roles.cache.find(role => [role.id, role.name].includes(guildConfig?.roles.admin ?? 'Admin'));
     return adminRole ? member.roles.cache.has(adminRole.id) : false;
 };
 export const isMod = (guild: Guild, member: GuildMember) => {
     const guildConfig = client.settings.get(guild.id);
-    const modRole = guild.roles.cache.find(role => role.name === guildConfig?.roles.mod);
+    const modRole = guild.roles.cache.find(role => [role.id, role.name].includes(guildConfig?.roles.mod ?? 'Mod'));
     return modRole ? member.roles.cache.has(modRole.id) : false;
 };
 
