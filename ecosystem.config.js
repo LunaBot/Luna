@@ -18,7 +18,7 @@ module.exports = {
 			},
 			// eslint-disable-next-line
 			env_dev: {
-				LOG_LEVEL: 'info'
+				LOG_LEVEL: 'debug'
 			},
 			// eslint-disable-next-line
 			env_free: {
