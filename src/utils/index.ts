@@ -9,15 +9,41 @@ export const isOwner = (guild: Guild, member: GuildMember) => {
     const isBotOwner = client.ownerID === member.id;
     return isGuildOwner || isBotOwner;
 };
+
 export const isAdmin = (guild: Guild, member: GuildMember) => {
     const guildConfig = client.settings.get(guild.id);
-    const adminRole = guild.roles.cache.find(role => [role.id, role.name].includes(guildConfig?.roles.admin ?? 'Admin'));
-    return adminRole ? member.roles.cache.has(adminRole.id) : false;
+
+    client.logger.debug('Looking for admin role');
+    const adminRole = guild.roles.cache.find(role => {
+        return [role.id, role.name].includes(guildConfig?.roles.admin ?? 'Admin');
+    });
+
+    // Couldn't find a admin role
+    if (!adminRole) {
+        client.logger.debug(`Couldn't find a admin role`);
+        return false;
+    }
+
+    // Found a admin role
+    client.logger.debug('Found admin role "%s"', adminRole.name);
+    return member.roles.cache.has(adminRole.id);
 };
-export const isMod = (guild: Guild, member: GuildMember) => {
+
+export const isMod = async (guild: Guild, member: GuildMember) => {
     const guildConfig = client.settings.get(guild.id);
+
+    client.logger.debug('Looking for mod role');
     const modRole = guild.roles.cache.find(role => [role.id, role.name].includes(guildConfig?.roles.mod ?? 'Mod'));
-    return modRole ? member.roles.cache.has(modRole.id) : false;
+
+    // Couldn't find a mod role
+    if (!modRole) {
+        client.logger.debug(`Couldn't find a mod role`);
+        return false;
+    }
+
+    // Found a mod role
+    client.logger.debug('Found mod role "%s"', modRole.name);
+    return member.roles.cache.has(modRole.id);
 };
 
 export const resolvePlaceholders = ({
