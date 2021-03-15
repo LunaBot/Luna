@@ -63,26 +63,36 @@ class Kick implements Command {
             });
         }
 
+
+        // DM user
         try {
-            // DM user
             await memberToKick.send(new MessageEmbed({
                 description: `:woman_police_officer: **You were kicked from ${message.guild.name}**`,
                 fields,
                 timestamp: new Date()
-            }))
+            }));
+        } catch (error: unknown) {}
 
+        // Send message to audit log channel if auditLog module is enabled
+        if (guildConfig.auditLog.enabled) {
+            try {
+                await auditLog.send(new MessageEmbed({
+                    description: `:woman_police_officer: <@${memberToKick.user?.id}> **was kicked by** <@${message.member.user.id}>`,
+                    fields,
+                    timestamp: new Date()
+                }));
+            } catch (error: unknown) {
+                // If this fails then disable the audit-log
+                guildConfig.auditLog.enabled = false;
+            }
+        }
+
+        try {
             // Try and kick member with reason
             await memberToKick.kick(reason);
             
             // Log for debugging
             logger.silly(`${message.author.tag} kicked ${memberToKick.user.tag || memberToKick.user.username}`);
-
-            // Send message to audit log channel
-            await auditLog.send(new MessageEmbed({
-                description: `:woman_police_officer: <@${memberToKick.user?.id}> **was kicked by** <@${message.member.user.id}>`,
-                fields,
-                timestamp: new Date()
-            }));
         } catch (error: unknown) {
             await message.channel.send(`Failed kicking **${memberToKick.user.tag}**: ${(error as Error).message}`);
         }
