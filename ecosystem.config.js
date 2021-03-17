@@ -1,7 +1,18 @@
+const commonDeploy = {
+	user: 'xo',
+	host: '165.227.220.113',
+	key: '~/.ssh/deploy.key',
+	ref: 'origin/main',
+	repo: 'https://github.com/lunabot/luna',
+	path: '/home/xo/code/lunabot/luna/dev',
+	'pre-deploy': 'git reset --hard',
+	'post-deploy': 'pnpm install && npm run build && pm2 startOrGracefulReload ecosystem.config.js --env dev'
+};
+
 module.exports = {
 	apps: [
 		{
-			name: 'automod',
+			name: 'luna',
 			script: 'npm start',
 			time: true,
 			// eslint-disable-next-line
@@ -32,33 +43,18 @@ module.exports = {
 	],
 	deploy: {
 		dev: {
-			user: 'xo',
-			host: '165.227.220.113',
-			key: '~/.ssh/deploy.key',
-			ref: 'origin/main',
-			repo: 'https://github.com/automodbot/automod',
-			path: '/home/xo/code/automodbot/automod/dev',
-			'pre-deploy': 'git reset --hard',
+			...commonDeploy,
+			path: '/home/xo/code/lunabot/luna/dev',
 			'post-deploy': 'pnpm install && npm run build && pm2 startOrGracefulReload ecosystem.config.js --env dev'
 		},
 		free: {
-			user: 'xo',
-			host: '165.227.220.113',
-			key: '~/.ssh/deploy.key',
-			ref: 'origin/main',
-			repo: 'https://github.com/automodbot/automod',
-			path: '/home/xo/code/automodbot/automod/free',
-			'pre-deploy': 'git reset --hard',
+			...commonDeploy,
+			path: '/home/xo/code/lunabot/luna/free',
 			'post-deploy': 'pnpm install && npm run build && pm2 startOrGracefulReload ecosystem.config.js --env free'
 		},
 		premium: {
-			user: 'xo',
-			host: '165.227.220.113',
-			key: '~/.ssh/deploy.key',
-			ref: 'origin/main',
-			repo: 'https://github.com/automodbot/automod',
-			path: '/home/xo/code/automodbot/automod/premium',
-			'pre-deploy': 'git reset --hard',
+			...commonDeploy,
+			path: '/home/xo/code/lunabot/luna/premium',
 			'post-deploy': 'pnpm install && npm run build && pm2 startOrGracefulReload ecosystem.config.js --env premium'
 		}
 	}

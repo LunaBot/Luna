@@ -51,12 +51,12 @@ class BotInfo implements Command {
                 },
                 {
                     name: 'Support us',
-                    value: 'You can support us by staring our repo on [Github](https://github.com/automodbot/automod).',
+                    value: 'You can support us by staring our repo on [Github](https://github.com/lunabot/luna).',
                     inline: false
                 }
             ],
             author: {
-                name: 'Automod - Bot Info',
+                name: 'Luna - Bot Info',
                 icon_url: client.user?.displayAvatarURL({ size: 128 })
             },
             footer: {

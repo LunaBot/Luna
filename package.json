@@ -1,5 +1,5 @@
 {
-  "name": "automod",
+  "name": "luna",
   "version": "0.0.1",
   "description": "",
   "scripts": {
@@ -10,6 +10,10 @@
   },
   "keywords": [],
   "author": "Alexis Tyler <xo@wvvw.me>",
+  "repository": {
+    "url": "https://github.com/lunabot/luna.git",
+    "type": "git"
+  },
   "license": "MIT",
   "engines": {
     "node": ">=14.0.0"
