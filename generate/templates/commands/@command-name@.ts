@@ -1,7 +1,7 @@
 import { Command } from '../../../command';
 import type { Message, Client } from 'discord.js';
 
-class __Commandname__ implements Command {
+class __CommandName__ extends Command {
     public name = '__commandname__';
 
     async run(client: Client, message: Message, args: string[]): Promise<void> {
@@ -10,4 +10,4 @@ class __Commandname__ implements Command {
     }
 }
 
-export const __commandname__ = new __Commandname__();
+export const __commandName__ = new __CommandName__();
