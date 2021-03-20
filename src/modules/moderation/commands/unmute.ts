@@ -1,4 +1,4 @@
-import { Command } from '../../../command';
+import { Command } from '@lunabot/kaspar';
 import type { Message, Client } from 'discord.js';
 import { isAdmin, isOwner } from '../../../utils';
 import { CommandError } from '../../../errors';
@@ -8,8 +8,7 @@ import { MessageEmbed } from 'discord.js';
 import { createAuditLogChannel } from '../../audit-log/utils/create-audit-log-channel';
 import { TextChannel } from 'discord.js';
 
-class Unmute implements Command {
-    public name = 'unmute';
+class Unmute extends Command {
     public paramaters = new Collection(Object.entries({
         user: {
             type: 'mention' as const

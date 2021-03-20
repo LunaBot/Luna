@@ -1,12 +1,14 @@
-import { Command } from '../../../command';
+import { Command } from '@lunabot/kaspar';
 import type { Message, Client } from 'discord.js';
-import { isAdmin, isOwner, sleep } from '../../../utils';
+import { Collection, TextChannel } from 'discord.js';
+import { sleep } from '../../../utils';
 import { CommandError } from '../../../errors';
-import { TextChannel } from 'discord.js';
-import { Collection } from 'discord.js';
+import { MessageEmbed } from 'discord.js';
 
-class Clear implements Command {
-    public name = 'clear';
+class Clear extends Command {
+    public clientPermissions = [Command.PERMISSIONS.MANAGE_MESSAGES];
+    public userPermissions = [Command.PERMISSIONS.MANAGE_MESSAGES];
+
     public paramaters = new Collection(Object.entries({
         amount: {
             type: 'number' as const

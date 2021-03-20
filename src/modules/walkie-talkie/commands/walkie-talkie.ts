@@ -1,4 +1,4 @@
-import { Command } from '../../../command';
+import { Command } from '@lunabot/kaspar';
 import type { Message, Client, TextChannel } from 'discord.js';
 import { colours, isAdmin, isOwner } from '../../../utils';
 import { CommandError } from '../../../errors';
@@ -17,8 +17,7 @@ const deleteWebhook = async (client: Client, message: Message, webHookId?: strin
     myWebhook.delete(`Requested by ${message.author.tag}`);
 };
 
-class WalkieTalkie implements Command {
-    public name = 'walkie-talkie';
+class WalkieTalkie extends Command {
     public paramaters = new Collection(Object.entries({
         enabled: {
             type: 'boolean' as const

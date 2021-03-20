@@ -1,11 +1,11 @@
-import { Command } from '../../../command';
+import { Command } from '@lunabot/kaspar';
 import type { Message, Client } from 'discord.js';
 import { isAdmin, isOwner } from '../../../utils';
 import { CommandError } from '../../../errors';
 import { defaultSettings } from '../../../client';
 
-class ResetConfig implements Command {
-    public name = 'reset-config';
+class ResetConfig extends Command {
+    public userPermissions = [Command.PERMISSIONS.MANAGE_MESSAGES];
 
     run(client: Client, message: Message): void {
         // Bail unless we're in a guild and a member ran this

@@ -1,4 +1,4 @@
-import { Command } from '../../../command';
+import { Command } from '@lunabot/kaspar';
 import type { Message, Client } from 'discord.js';
 import { Pool } from 'pg';
 import { CommandError } from '../../../errors';
@@ -10,9 +10,7 @@ const db = new Pool({
     }
 });
 
-class ImportLevel implements Command {
-    public name = 'import-level';
-
+class ImportLevel extends Command {
     async run(client: Client, message: Message, args: string[]) {
         // Bail unless we're in a guild and a member ran this
         if (!message.guild || !message.member) return;

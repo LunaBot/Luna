@@ -1,13 +1,10 @@
-import { Command } from '../../../command';
+import { Command } from '@lunabot/kaspar';
 import type { Message, Client } from 'discord.js';
-import { isAdmin, isOwner } from '../../../utils';
-import { CommandError } from '../../../errors';
 import dedent from 'dedent';
-import { welcome } from '../../welcome';
 
-class ShowConfig implements Command {
-    public name = 'show-config';
-
+class ShowConfig extends Command {
+    public userPermissions = [Command.PERMISSIONS.ADMINISTRATOR];
+    
     run(client: Client, message: Message, args: string[]): void {
         // Bail unless we're in a guild and a member ran this
         if (!message.guild || !message.member) return;

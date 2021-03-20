@@ -1,4 +1,4 @@
-import { Command } from '../../../command';
+import { Command } from '@lunabot/kaspar';
 import type { Message, Client } from 'discord.js';
 import { isAdmin, isOwner } from '../../../utils';
 import { CommandError } from '../../../errors';

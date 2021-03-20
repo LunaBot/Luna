@@ -1,4 +1,4 @@
-import { Command } from '../../../command';
+import { Command } from '@lunabot/kaspar';
 import type { Message, Client } from 'discord.js';
 import { isAdmin, isOwner } from '../../../utils';
 import { CommandError } from '../../../errors';
@@ -26,8 +26,9 @@ const ensureType = (property: string, initalValue: any, newValue: any) => {
 	return newValue;
 }
 
-class SetConfig implements Command {
-    public name = 'set-config';
+class SetConfig extends Command {
+    public userPermissions = [Command.PERMISSIONS.ADMINISTRATOR];
+    
     public paramaters = new Collection(Object.entries({
         property: {
             type: 'string' as const

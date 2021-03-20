@@ -1,4 +1,4 @@
-import { Command } from '../../../command';
+import { Command } from '@lunabot/kaspar';
 import type { Message, Client } from 'discord.js';
 import { isAdmin, isOwner } from '../../../utils';
 import { CommandError } from '../../../errors';
@@ -6,8 +6,7 @@ import { Collection } from 'discord.js';
 import { mute } from './mute';
 import { createJailCellChannel } from '../utils/create-jail-cell-channel';
 
-class Jail implements Command {
-    public name = 'jail';
+class Jail extends Command {
     public paramaters = new Collection(Object.entries({
         user: {
             type: 'mention' as const

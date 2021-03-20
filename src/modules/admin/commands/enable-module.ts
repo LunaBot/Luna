@@ -1,11 +1,11 @@
-import { Command } from '../../../command';
+import { Command } from '@lunabot/kaspar';
 import type { Message, Client } from 'discord.js';
-import { isAdmin, isOwner } from '../../../utils';
 import { CommandError } from '../../../errors';
 import { Collection } from 'discord.js';
 
-class EnableModule implements Command {
-    public name = 'enable-module';
+class EnableModule extends Command {
+    public userPermissions = [Command.PERMISSIONS.ADMINISTRATOR];
+
     public paramaters = new Collection(Object.entries({
         moduleName: {
             type: 'number' as const

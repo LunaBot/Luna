@@ -1,4 +1,4 @@
-import { Module } from '../../module';
+import { Module } from '@lunabot/kaspar';
 import * as commands from './commands';
 import * as events from './events';
 

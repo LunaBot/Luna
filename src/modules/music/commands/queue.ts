@@ -1,9 +1,7 @@
-import { Command } from '../../../command';
+import { Command } from '@lunabot/kaspar';
 import type { Message, Client } from 'discord.js';
 
-class Queue implements Command {
-    public name = 'queue';
-
+class Queue extends Command {
     async run(client: Client, message: Message, args: string[]): Promise<void> {
         // Bail unless we're in a guild and a member ran this
         if (!message.guild || !message.member) return;

@@ -1,8 +1,9 @@
-import { Command } from '../../../command';
+import { Command } from '@lunabot/kaspar';
 import type { Message, Client } from 'discord.js';
 
-class 8ball implements Command {
+class EightBall extends Command {
     public name = '8ball';
+    public command = '8ball';
 
     async run(client: Client, message: Message, args: string[]): Promise<void> {
         // Bail unless we're in a guild and a member ran this
@@ -10,4 +11,4 @@ class 8ball implements Command {
     }
 }
 
-export const 8ball = new 8ball();
+export const eightBall = new EightBall();

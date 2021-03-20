@@ -1,5 +1,5 @@
 import type { Client } from 'discord.js';
-import type { Command } from './command';
+import type { Command } from '@lunabot/kaspar';
 
 export class Module {
     public commands: Record<string, Command> = {};

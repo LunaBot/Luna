@@ -1,15 +1,9 @@
-import { Command } from '../../../command';
+import { Command } from '@lunabot/kaspar';
 import type { Message, Client } from 'discord.js';
 import { MessageEmbed } from 'discord.js';
-import { Collection } from 'discord.js';
-import { colours } from '../../../utils/colours';
 
-class Restart implements Command {
-    public name = 'restart';
-
-    getHelpText() {
-        return 'Restarts the bot gracefully!';
-    }
+class Restart extends Command {
+    public description = 'Restarts the bot gracefully!';
 
     async run(client: Client, message: Message, args: string[]): Promise<void> {
         // Bail unless we're in the bot's DMs

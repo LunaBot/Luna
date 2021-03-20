@@ -1,8 +1,9 @@
-import { Command } from '../../../command';
+import { Command } from '@lunabot/kaspar';
 import type { Message, Client } from 'discord.js';
 
-class Deafen implements Command {
-    public name = 'deafen';
+class Deafen extends Command {
+    public clientPermissions = ['DEAFEN_MEMBERS' as const];
+    public userPermissions = ['DEAFEN_MEMBERS' as const];
 
     async run(client: Client, message: Message, args: string[]): Promise<void> {
         // Bail unless we're in a guild and a member ran this
