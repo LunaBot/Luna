@@ -22,7 +22,7 @@ export const loadModules = async (client: Client) => {
     // Load module commands
     client.logger.debug(`Loading ${client.modules.reduce((commandsCount, commandModule) => commandsCount + Object.keys(commandModule.commands).length, 0)} module commands.`);
     await Promise.all(client.modules.map(async commandModule => {
-        await Promise.all((Object.values(commandModule.commands) as Command[]).map(async command => {
+        await Promise.all(Object.values(commandModule.commands).map(async command => {
             client.logger.debug(`Loading command: ${command.name}`);
 
             // Command's already loaded?
