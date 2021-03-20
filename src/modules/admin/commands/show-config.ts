@@ -9,11 +9,6 @@ class ShowConfig extends Command {
         // Bail unless we're in a guild and a member ran this
         if (!message.guild || !message.member) return;
 
-        // Command is owner/admin only
-        if (!isOwner(message.guild, message.member) && !isAdmin(message.guild, message.member)) {
-            throw new CommandError('You\'re not an admin or the owner, sorry!');
-        }
-
         // Get guild's config, if missing we'll return the defaults
 		const guildConfig = client.settings.get(message.guild.id)!;
         const header = dedent`

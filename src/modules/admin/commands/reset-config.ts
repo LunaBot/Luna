@@ -11,11 +11,6 @@ class ResetConfig extends Command {
         // Bail unless we're in a guild and a member ran this
         if (!message.guild || !message.member) return;
 
-    	// Command is owner/admin only
-        if (!isOwner(message.guild, message.member) && !isAdmin(message.guild, message.member)) {
-            throw new CommandError('You\'re not an admin or the owner, sorry!');
-        }
-
         client.settings.set(message.guild.id, defaultSettings);
 
         // Let the user know all is good.

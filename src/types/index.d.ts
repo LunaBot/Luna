@@ -1,8 +1,8 @@
-import type { GuildFeatures, Collection} from 'discord.js';
+import type { GuildFeatures, Collection, PermissionString } from 'discord.js';
 import type Enmap from 'enmap';
-import type { Command } from '../command';
+import type { Command, Module } from '@lunabot/kaspar';
 import type { Logger } from '../logger';
-import type { Module } from '../module';
+import type { Module } from '../kaspar/module';
 import { defaultSettings, defaultCustomer, defaultWalkieTalkie } from '../client';
 
 declare module "discord.js" {
@@ -11,6 +11,7 @@ declare module "discord.js" {
         ownerID: string;
         modules: Collection<string, Module>;
         commands: Collection<string, Command>;
+        triggers: Collection<string, Command>;
         logger: Logger;
 
         // Database

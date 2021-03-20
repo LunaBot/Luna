@@ -33,8 +33,6 @@ class Level extends Command {
             .setLevel(currentLevel)
             .setRequiredXP(nextLevelXp)
             .setRank(rank)
-            // @ts-expect-error
-            .setFontSize('26px')
             .setStatus(message.member?.presence.status || 'dnd')
             .setProgressBar('#FFFFFF', 'COLOR')
             .setUsername(message.member?.user.username, message.member?.displayHexColor)
