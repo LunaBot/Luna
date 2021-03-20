@@ -1,13 +1,11 @@
-import { Command } from '../../../command';
+import { Command } from '@lunabot/kaspar';
 import type { Message, Client } from 'discord.js';
 import { MessageEmbed } from 'discord.js';
 import { colours } from '../../../utils';
 import dedent from 'dedent';
 import { CommandError } from '../../../errors';
 
-class BotInvite implements Command {
-    public name = 'bot-invite';
-
+class BotInvite extends Command {
     getHelpText(client: Client) {
         return `Get an invite link to add <@${client.user?.id}>.`;
     }

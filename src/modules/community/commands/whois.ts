@@ -1,11 +1,10 @@
-import { Command } from '../../../command';
+import { Command } from '@lunabot/kaspar';
 import type { Message, Client } from 'discord.js';
 import { MessageEmbed } from 'discord.js';
 import { Collection } from 'discord.js';
 import { colours } from '../../../utils/colours';
 
-class Whois implements Command {
-    public name = 'whois';
+class Whois extends Command {
     public paramaters = new Collection(Object.entries({
         user: {
             type: 'mention' as const

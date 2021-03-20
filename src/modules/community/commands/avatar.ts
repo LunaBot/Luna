@@ -1,11 +1,10 @@
-import { Command } from '../../../command';
+import { Command } from '@lunabot/kaspar';
 import type { Message, Client } from 'discord.js';
 import { CommandError } from '../../../errors';
 import { MessageEmbed } from 'discord.js';
 import { Collection } from 'discord.js';
 
-class Avatar implements Command {
-    public name = 'avatar';
+class Avatar extends Command {
     public paramaters = new Collection(Object.entries({
         user: {
             type: 'mention' as const,

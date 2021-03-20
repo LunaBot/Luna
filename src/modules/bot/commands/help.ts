@@ -1,16 +1,12 @@
-import { Command } from '../../../command';
+import { Command } from '@lunabot/kaspar';
 import type { Message, Client } from 'discord.js';
 import { MessageEmbed, Collection } from 'discord.js';
 import camelcase from 'camelcase';
 import { report } from './report';
 
-class Help implements Command {
-    public name = 'help';
+class Help extends Command {
+    public description = 'Get help text.';
     public paramaters = new Collection<string, { type: 'string' | 'boolean' | 'number' | 'mention'; }>();
-
-    getHelpText() {
-        return 'Get help text.';
-    }
 
     async run(client: Client, message: Message, args: string[]) {
         // Bail unless we're in a guild and a member ran this

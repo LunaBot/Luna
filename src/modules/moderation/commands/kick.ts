@@ -7,8 +7,10 @@ import { MessageEmbed } from 'discord.js';
 import { createAuditLogChannel } from '../../audit-log/utils/create-audit-log-channel';
 import { TextChannel } from 'discord.js';
 
-class Kick implements Command {
-    public name = 'kick';
+class Kick extends Command {
+    public clientPermissions = ['KICK_MEMBERS' as const];
+    public userPermissions = ['KICK_MEMBERS' as const];
+
     public paramaters = new Collection(Object.entries({
         user: {
             type: 'mention' as const

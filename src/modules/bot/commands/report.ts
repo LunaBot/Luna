@@ -1,11 +1,10 @@
-import { Command } from '../../../command';
+import { Command } from '@lunabot/kaspar';
 import type { Message, Client } from 'discord.js';
 import { Collection } from 'discord.js';
 import { MessageEmbed } from 'discord.js';
 import { CommandError } from '../../../errors';
 
-class Report implements Command {
-    public name = 'report';
+class Report extends Command {
     public paramaters = new Collection(Object.entries({
         message: {
             type: 'string' as const

@@ -1,16 +1,12 @@
 import git from 'git-rev-sync';
-import { Command } from '../../../command';
+import { Command } from '@lunabot/kaspar';
 import type { Message, Client } from 'discord.js';
 import { MessageEmbed } from 'discord.js';
 import { colours } from '../../../utils';
 import { fmt as formatDuration } from 'human-duration';
 
-class BotInfo implements Command {
-    public name = 'bot-info';
-
-    getHelpText() {
-        return 'Get bot info.';
-    }
+class BotInfo extends Command {
+    public description = 'Get bot info.';
 
     async run(client: Client, message: Message, args: string[]): Promise<void> {
         // Bail unless we're in a guild and a member ran this
