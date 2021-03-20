@@ -1,9 +1,9 @@
-import { Module } from '../../module';
+import { Module } from '@lunabot/kaspar';
 import * as commands from './commands';
 import * as events from './events';
 
-class __Modulename__ implements Module {
-    public name = '__modulename__';
+class __ModuleName__ implements Module {
+    public name = '__module-name__';
 
     public commands = commands;
     public events = events;
@@ -11,4 +11,4 @@ class __Modulename__ implements Module {
     constructor() {}
 }
 
-export const __modulename__ = new __Modulename__();
+export const __moduleName__ = new __ModuleName__();
