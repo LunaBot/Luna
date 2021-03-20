@@ -37,7 +37,7 @@
     "number-to-color": "^0.5.0",
     "pg": "^8.5.1",
     "s-ago": "^2.2.0",
-    "statcord.js": "^3.1.7",
+    "statcord.js": "github:omgimalexis/statcord.js#master",
     "string-to-color": "^2.2.2",
     "trace-cleaner": "^1.2.3"
   },
