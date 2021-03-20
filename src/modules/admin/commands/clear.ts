@@ -40,10 +40,12 @@ class Clear extends Command {
         const messageCount = size - 1;
 
 		// Let the user know all is good.
-		const reply = await message.channel.send(`Deleted ${messageCount} message${messageCount === 1 ? '' : 's'}!`);
+		const reply = await message.channel.send(new MessageEmbed({
+            description: `**Deleted \`${messageCount}\` message${messageCount === 1 ? '' : 's'}!**`
+        }));
 
         // Wait 3s
-        await sleep(3000);
+        await sleep(5000);
 
         // Remove message
         await reply.delete();
