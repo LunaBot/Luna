@@ -1,6 +1,6 @@
 dependencies:
   '@databases/pg': 5.0.0
-  '@lunabot/stats': github.com/LunaBot/stats/452594fcd1e5d5f96e17c217fe502ece42d25726
+  '@lunabot/stats': github.com/LunaBot/stats/ab635f457ce212af8fdb3a9b947d36ac326ddc39
   camelcase: 6.2.0
   canvacord: github.com/OmgImAlexis/canvacord/d31fef2a0f29f5bb77210459d392b1337f1a1b13
   chalk: 4.1.0
@@ -5762,7 +5762,7 @@ packages:
     dev: false
     resolution:
       integrity: sha512-PQ2PC7R9rslx84ndNBZB/Dkv8V8fZEpk83RLgXtYd0fwUgEjseMn1Dgajh2x6S8QbZAFa9p2qVCEuYZNgve0dQ==
-  github.com/LunaBot/stats/452594fcd1e5d5f96e17c217fe502ece42d25726:
+  github.com/LunaBot/stats/ab635f457ce212af8fdb3a9b947d36ac326ddc39:
     dependencies:
       apollo-server-express: 2.21.2_graphql@15.5.0
       compression: 1.7.4
@@ -5785,7 +5785,7 @@ packages:
     prepare: true
     requiresBuild: true
     resolution:
-      tarball: https://codeload.github.com/LunaBot/stats/tar.gz/452594fcd1e5d5f96e17c217fe502ece42d25726
+      tarball: https://codeload.github.com/LunaBot/stats/tar.gz/ab635f457ce212af8fdb3a9b947d36ac326ddc39
     version: 0.0.1
   github.com/OmgImAlexis/canvacord/d31fef2a0f29f5bb77210459d392b1337f1a1b13:
     dependencies:
@@ -5863,5 +5863,5 @@ specifiers:
   string-to-color: ^2.2.2
   trace-cleaner: ^1.2.3
   traverse: ^0.6.6
-  tsup: ^4.6.1
+  tsup: ^4.8.19
   typescript: ^4.2.3
