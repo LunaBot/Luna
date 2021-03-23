@@ -20,6 +20,7 @@
   },
   "dependencies": {
     "@databases/pg": "^5.0.0",
+    "@lunabot/stats": "github:LunaBot/stats#main",
     "camelcase": "^6.2.0",
     "canvacord": "github:OmgImAlexis/canvacord#develop",
     "chalk": "^4.1.0",

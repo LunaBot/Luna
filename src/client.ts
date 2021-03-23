@@ -2,6 +2,8 @@ import { Client, Structures, Collection } from 'discord.js';
 import Enmap from 'enmap';
 import { logger } from './logger';
 import * as moduleImports from './modules';
+import dotEnv from 'dotenv';
+import { createClient as createStatsClient } from '@lunabot/stats';
 
 Structures.extend('GuildMember', GuildMember => class GuildMemberWithPending extends GuildMember {
     pending = false;
@@ -113,7 +115,24 @@ client.points = new Enmap({
     fetchAll: true,
 	autoFetch: true,
 	cloneLevel: 'deep'
-})
+});
+
+// Load .env file
+dotEnv.config();
+
+// Create stats client
+export const statsClient = createStatsClient({
+    apiKey: process.env.STATS_API_KEY!,
+    clientID: process.env.CLIENT_ID!,
+    client,
+    silent: false
+});
+
+// @ts-expect-error
+statsClient.log = (level, message, ...optionalParams) => {
+    if (statsClient.options.silent) return;
+    logger[level](message, ...optionalParams);
+}
 
 export {
     client,

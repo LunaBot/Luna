@@ -6,7 +6,7 @@ import { CommandError } from 'errors';
 import { Command } from '@lunabot/kaspar';
 import { defaultSettings } from '../client';
 import { Collection } from 'discord.js';
-import { statcord } from '../statcord';
+import { statsClient } from '../client';
 
 const dmCommand = async (client: Client, message: Message) => {
 	// Set prefix
@@ -167,8 +167,8 @@ export const message = async (client: Client, message: Message) => {
 		// Validiate the member has the needed permissions
 		await checkPermissionsInGuild(client, message, command);
 
-		// Post command
-		statcord.postCommand(commandName, message.author.id);
+		// Tell stats a command was used
+        await statsClient.commandUsed(commandName);
 
 		// Run the command
 		await Promise.resolve(command.run(client, message, args));
