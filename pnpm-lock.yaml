@@ -1,6 +1,6 @@
 dependencies:
   '@databases/pg': 5.0.0
-  '@lunabot/stats': github.com/LunaBot/stats/ab635f457ce212af8fdb3a9b947d36ac326ddc39
+  '@lunabot/stats': github.com/LunaBot/stats/36dcc09c76d7b43ac406654c862321749f9dee25
   camelcase: 6.2.0
   canvacord: github.com/OmgImAlexis/canvacord/d31fef2a0f29f5bb77210459d392b1337f1a1b13
   chalk: 4.1.0
@@ -3296,6 +3296,16 @@ packages:
       graphql: '>=0.11 <=15'
     resolution:
       integrity: sha512-b6TLtWLAmKunD72muL9EeItRGpio9+V3Cx4zJsBkRA+3wxzTWXDvQr9/3qSwJ3D/2abz0ys2KHTM6lB1uH7KIQ==
+  /graphql-ws/4.2.3_graphql@15.5.0:
+    dependencies:
+      graphql: 15.5.0
+    dev: false
+    engines:
+      node: '>=10'
+    peerDependencies:
+      graphql: '>=0.11 <=15'
+    resolution:
+      integrity: sha512-LjHHJptHfV2rs53wk5aixO259tSiePVKVoqSoRgEbCIcEGpJJiwQVfVHlOr//utA0pJwKCo940+DhhV1rCDctA==
   /graphql/15.5.0:
     dev: false
     engines:
@@ -5762,7 +5772,7 @@ packages:
     dev: false
     resolution:
       integrity: sha512-PQ2PC7R9rslx84ndNBZB/Dkv8V8fZEpk83RLgXtYd0fwUgEjseMn1Dgajh2x6S8QbZAFa9p2qVCEuYZNgve0dQ==
-  github.com/LunaBot/stats/ab635f457ce212af8fdb3a9b947d36ac326ddc39:
+  github.com/LunaBot/stats/36dcc09c76d7b43ac406654c862321749f9dee25:
     dependencies:
       apollo-server-express: 2.21.2_graphql@15.5.0
       compression: 1.7.4
@@ -5776,7 +5786,7 @@ packages:
       graphql-jit: 0.5.0_graphql@15.5.0
       graphql-rate-limit: github.com/OmgImAlexis/graphql-rate-limit/e66feddfb7aa956f077932b7d3d11f6826950112_graphql@15.5.0
       graphql-tools: 7.0.4_graphql@15.5.0
-      graphql-ws: 4.2.2_graphql@15.5.0
+      graphql-ws: 4.2.3_graphql@15.5.0
       uuid-apikey: 1.5.2
       ws: 7.4.4
     dev: false
@@ -5785,7 +5795,7 @@ packages:
     prepare: true
     requiresBuild: true
     resolution:
-      tarball: https://codeload.github.com/LunaBot/stats/tar.gz/ab635f457ce212af8fdb3a9b947d36ac326ddc39
+      tarball: https://codeload.github.com/LunaBot/stats/tar.gz/36dcc09c76d7b43ac406654c862321749f9dee25
     version: 0.0.1
   github.com/OmgImAlexis/canvacord/d31fef2a0f29f5bb77210459d392b1337f1a1b13:
     dependencies:
